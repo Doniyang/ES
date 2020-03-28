@@ -1,7 +1,8 @@
 {
   "name": "@es/toolkit",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "a toolkit for js",
+  "private":false,
   "main": "es5/index.js",
   "types": "src/typings/toolkit.d.ts",
   "scripts": {
