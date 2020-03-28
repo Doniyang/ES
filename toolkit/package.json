@@ -1,14 +1,12 @@
 {
   "name": "@es/toolkit",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "a toolkit for js",
   "private":false,
   "main": "es5/index.js",
   "types": "src/typings/toolkit.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "ts:init": "tsc --init",
-    "dev": "tsc"
   },
   "keywords": [
     "typescript",
