@@ -1,0 +1,26 @@
+{
+  "name": "@es/toolkit",
+  "version": "0.0.1",
+  "description": "a toolkit for js",
+  "main": "es5/index.js",
+  "types": "src/typings/toolkit.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ts:init": "tsc --init",
+    "dev": "tsc"
+  },
+  "keywords": [
+    "typescript",
+    "event"
+  ],
+  "author": "niyang",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Doniyang/ES/tree/toolkit"
+  }
+}
