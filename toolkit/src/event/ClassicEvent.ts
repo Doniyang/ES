@@ -82,7 +82,7 @@
      	return this.dataset
      }
      
-     static set data(value:toolkit.mulitOption){
+     set data(value:toolkit.mulitOption){
      	this.dataset=value
      }
 
