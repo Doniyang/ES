@@ -1,3 +1,3 @@
 export default function isString(value:any):boolean{
-	return false
+	return typeof value ==='string'
 }

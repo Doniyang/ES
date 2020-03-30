@@ -1,28 +1,29 @@
 {
-  "name": "@es/toolkit",
+  "name": "@niyang-es/toolkit",
   "version": "0.0.2",
-  "description": "a toolkit for js",
-  "private":false,
-  "main": "es5/index.js",
+  "description": " a toolkit for js ",
+  "main": "es5/index",
   "types": "src/typings/toolkit.d.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-  },
-  "keywords": [
-    "typescript",
-    "event"
-  ],
-  "author": "niyang",
-  "license": "ISC",
+  "dependencies": {},
   "devDependencies": {
     "typescript": "^3.8.3"
   },
-  "dependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ts:init": "tsc --init",
+    "dev": "tsc"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Doniyang/ES.git",
     "directory": "toolkit"
   },
+  "keywords": [
+    "toolkit",
+    "es2016"
+  ],
+  "author": "niyang",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Doniyang/ES/issues"
   },

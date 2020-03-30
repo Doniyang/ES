@@ -1,3 +1,3 @@
 export default function isFunction(fn:any):boolean{
-	return false
+	return typeof fn === 'function' && fn instanceof Function
 }
