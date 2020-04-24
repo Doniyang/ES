@@ -43,7 +43,8 @@ export default class Notifier extends Notification {
     if (this.map.has(name)) {
       const opts: NotifierOptions = !!dataset ? ({ dataset: dataset, fn: fn }) : ({ fn: fn });
       const set: MapSetOptions<string> | undefined = this.map.get(name)
-      return (set as MapSetOptions<string>).has(JSON.stringify(op));
+      if (set === undefined) {return false}
+      return (set as MapSetOptions<string>).has(JSON.stringify(opts));
     } else {
       return false
     }
@@ -52,6 +53,9 @@ export default class Notifier extends Notification {
   * clear all event
   */
   clean() {
+    this.map.forEach((set:MapSetOptions<string>)=>{
+      set.clear()
+    })
     this.map.clear()
   }
   /**
