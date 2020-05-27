@@ -40,13 +40,30 @@ declare namespace iRoll {
     disableTouch?: boolean
   }
   export interface Point {
-    x: number,
-    y: number
+    x?: number
+    y?: number
+    directionX?:number
+    directionY?:number
+    maxX?:number
+    maxY?:number
   }
   export interface Prefix {
-    trident: string
-    gecko: string
-    webkit: string
-    presto: string
+    [key: string]: string
   }
+  export interface Category {
+    [key: string]: number
+  }
+
+  export interface Anmation {
+    style: string,
+    fn: (k: number) => number
+  }
+
+  export interface Offset{
+    height?:number
+    width?:number
+    top?:number
+    left?:number
+  }
+
 }

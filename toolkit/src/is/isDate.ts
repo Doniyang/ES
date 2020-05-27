@@ -1,3 +1,3 @@
-export default function isDate(value:any):boolean{
+export default function isDate(value:any):value is Date{
 	return typeof value ==='object' && value instanceof Date
 }
