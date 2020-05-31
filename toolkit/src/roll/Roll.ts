@@ -414,7 +414,6 @@ export default class Roll {
   public refresh() {
     this.wrapOffset.width = (this.scrollWrapElement as HTMLElement).clientWidth
     this.wrapOffset.height = (this.scrollWrapElement as HTMLElement).clientHeight
-    this.scrollOffset.width = this.scrollingElement.
   }
 
   /**

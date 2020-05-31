@@ -16,7 +16,7 @@ export default class ClassicEvent implements Eventable {
   /**
   * event target
   */
-  readonly target: toolkit.targetOption
+  readonly target: targetOption
   /**
   * event creatted by user or not
   */
@@ -29,10 +29,7 @@ export default class ClassicEvent implements Eventable {
      *event create time
      */
   private timeStamp: number
-  /**
-  *cache event data
-  */
-  private dataset: toolkit.mulitOption
+
   /**
   *stop event default prevent or not
   */
@@ -51,14 +48,13 @@ export default class ClassicEvent implements Eventable {
   */
   private name: string
 
-  constructor(context: toolkit.targetOption, name: string) {
+  constructor(context: targetOption, name: string) {
     this.cancelable = false
     this.bubbles = false
     this.isTrusted = false
     this.target = context
     this.type = 'CustomEvent'
     this.timeStamp = Date.now()
-    this.dataset = null
     this.defaultPrevented = false
     this.immediate = false
     this.isPropagation = false
@@ -78,13 +74,6 @@ export default class ClassicEvent implements Eventable {
     return this.immediate
   }
 
-  get data(): toolkit.mulitOption {
-    return this.dataset
-  }
-
-  set data(value: toolkit.mulitOption) {
-    this.dataset = value
-  }
 
   /**
    * stop  event default
@@ -111,7 +100,6 @@ export default class ClassicEvent implements Eventable {
     *set event as default
     */
   public reset() {
-    this.dataset = null
     this.timeStamp = Date.now()
     this.immediate = false
     this.defaultPrevented = false

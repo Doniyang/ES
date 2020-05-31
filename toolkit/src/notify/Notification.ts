@@ -1,17 +1,17 @@
-export default abstract class Notification{
+export default abstract class Notification<T>{
     /**
       *bind a event to some object
       */
-	abstract on(name:string,fn:toolkit.fnOption,dataset?:toolkit.mulitOption):void;
+	abstract on(name:string,fn:Callbackable<T>):void;
     /**
      * set off event from object 
      */
-	abstract off(name:string,fn:toolkit.fnOption,dataset?:toolkit.mulitOption):void;
+	abstract off(name:string,fn:Callbackable<T>):void;
 
 	/**
 	 *has something
 	 */
-	abstract has(name:string,fn:toolkit.fnOption,dataset?:toolkit.mulitOption):boolean;
+	abstract has(name:string,fn:Callbackable<T>):boolean;
 
 	/**
 	  * clean all notice
@@ -21,5 +21,5 @@ export default abstract class Notification{
 	 /**
 	  *notify event
 	  */
-	 abstract notify(name:string,...args:Array<toolkit.mulitOption>):void 
+	 abstract notify(name:string,...args:Array<argsOption>):void 
 }
