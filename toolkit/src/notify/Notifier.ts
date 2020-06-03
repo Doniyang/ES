@@ -1,8 +1,8 @@
 import Notification from './Notification'
 import ClassicEvent from '../event/ClassicEvent';
 
-export default class Notifier extends Notification {
-  private map: EventMapOptions<string, MapSetOptions<string>>;
+export default class Notifier extends Notification<ClassicEvent> {
+  private map: Map<string,Set<Callbackable<ClassicEvent>>>;
   constructor() {
     super();
     this.map = new Map();
@@ -10,41 +10,35 @@ export default class Notifier extends Notification {
   /**
    * add event listener
    * @param name 
-   * @param fn 
-   * @param dataset 
+   * @param fn  
    */
-  on(name: string, fn: toolkit.fnOption, dataset?: toolkit.mulitOption): void {
-    let set: MapSetOptions<string> | undefined = this.map.get(name);
-    const opts: NotifierOptions = !!dataset ? ({ dataset: dataset, fn: fn }) : ({ fn: fn });
-    if (set === undefined) { this.map.set(name, set = new Set<string>()) }
-    set.add(JSON.stringify(opts))
+  on(name: string, fn: Callbackable<ClassicEvent>): void {
+    let set: Set<Callbackable<ClassicEvent>> | undefined = this.map.get(name);
+    if (set===undefined) { this.map.set(name, set = new Set<Callbackable<ClassicEvent>>()) }
+    (set as Set<Callbackable<ClassicEvent>>).add(fn)
   }
 /**
  * remove event listener
  * @param name 
- * @param fn 
- * @param dataset 
+ * @param fn
  */
-  off(name: string, fn?: toolkit.fnOption, dataset?: toolkit.mulitOption): void {
-    if (fn === undefined) { this.map.delete(name); return void}
-    const set: MapSetOptions<string> | undefined = this.map.get(name)
+  off(name: string, fn?: Callbackable<ClassicEvent>): void {
+    if (fn === undefined) { this.map.delete(name);return;}
+    const set: Set<Callbackable<ClassicEvent>> | undefined = this.map.get(name)
     if (!!set) {
-      const opts: NotifierOptions = !!dataset ? ({ dataset: dataset, fn: fn }) : ({ fn: fn });
-      set.delete(JSON.stringify(opts))
+      (set as Set<Callbackable<ClassicEvent>>).delete((fn as  Callbackable<ClassicEvent>))
     }
   }
   /**
    * event listener or not
    * @param name 
    * @param fn 
-   * @param dataset 
    */
-  has(name: string, fn: toolkit.fnOption, dataset?: toolkit.mulitOption): boolean {
+  has(name: string, fn: Callbackable<ClassicEvent>): boolean {
     if (this.map.has(name)) {
-      const opts: NotifierOptions = !!dataset ? ({ dataset: dataset, fn: fn }) : ({ fn: fn });
-      const set: MapSetOptions<string> | undefined = this.map.get(name)
+      const set: Set<Callbackable<ClassicEvent>> | undefined = this.map.get(name)
       if (set === undefined) {return false}
-      return (set as MapSetOptions<string>).has(JSON.stringify(opts));
+      return (set as Set<Callbackable<ClassicEvent>>).has(fn);
     } else {
       return false
     }
@@ -52,8 +46,8 @@ export default class Notifier extends Notification {
   /**
   * clear all event
   */
-  clean() {
-    this.map.forEach((set:MapSetOptions<string>)=>{
+  clean():void {
+    this.map.forEach((set: Set<Callbackable<ClassicEvent>>)=>{
       set.clear()
     })
     this.map.clear()
@@ -63,12 +57,12 @@ export default class Notifier extends Notification {
    * @param name 
    * @param args 
    */
-  notify(name: string, ...args: Array<toolkit.mulitOption>) {
+  notify(name: string, ...args: Array<argsOption>) {
     if (this.map.has(name)) {
       let event: ClassicEvent = new ClassicEvent(this, name)
-      let sets: MapSetOptions<string> | undefined = this.map.get(name)
+      let set:  Set<Callbackable<ClassicEvent>> | undefined = this.map.get(name)
       if (!event.isStopImmediatePropagation) {
-        this.dispatch(event, sets as MapSetOptions<string>, args)
+        this.dispatch(event, set as Set<Callbackable<ClassicEvent>>, args)
       }
     }
   }
@@ -78,11 +72,9 @@ export default class Notifier extends Notification {
    * @param fnset 
    * @param args 
    */
-  dispatch(evt: ClassicEvent, fnset: MapSetOptions<string>, args: Array<toolkit.mulitOption>): void {
-    for (let notifierStr of fnset) {
-      let notifier = JSON.parse(notifierStr)
-      if (notifier.dataset) { evt.data = notifier.dataset }
-      notifier.fn.apply(this, [evt, ...args])
+  dispatch(evt: ClassicEvent, fnset: Set<Callbackable<ClassicEvent>>, args: Array<argsOption>): void {
+    for (let fn of fnset) {
+      fn.apply(this, [evt, ...args])
       if (evt.isStopPropagation) break;
     }
   }

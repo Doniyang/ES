@@ -5,29 +5,45 @@ export default class Notifier extends Notification {
         super();
         this.map = new Map();
     }
-    on(name, fn, dataset) {
-        const set = this.map.get(name);
-        const opts = !!dataset ? ({ dataset: dataset, fn: fn }) : ({ fn: fn });
+    /**
+     * add event listener
+     * @param name
+     * @param fn
+     */
+    on(name, fn) {
+        let set = this.map.get(name);
         if (set === undefined) {
             this.map.set(name, set = new Set());
         }
-        set.add(JSON.stringify(opts));
+        set.add(fn);
     }
-    off(name, fn, dataset) {
+    /**
+     * remove event listener
+     * @param name
+     * @param fn
+     */
+    off(name, fn) {
         if (fn === undefined) {
-            return this.map.delete(name);
+            this.map.delete(name);
+            return;
         }
         const set = this.map.get(name);
         if (!!set) {
-            const opts = !!dataset ? ({ dataset: dataset, fn: fn }) : ({ fn: fn });
-            set.delete(JSON.stringify(opts));
+            set.delete(fn);
         }
     }
-    has(name, fn, dataset) {
+    /**
+     * event listener or not
+     * @param name
+     * @param fn
+     */
+    has(name, fn) {
         if (this.map.has(name)) {
-            const opts = !!dataset ? ({ dataset: dataset, fn: fn }) : ({ fn: fn });
             const set = this.map.get(name);
-            return set.has(JSON.stringify(op));
+            if (set === undefined) {
+                return false;
+            }
+            return set.has(fn);
         }
         else {
             return false;
@@ -37,25 +53,35 @@ export default class Notifier extends Notification {
     * clear all event
     */
     clean() {
+        this.map.forEach((set) => {
+            set.clear();
+        });
         this.map.clear();
     }
+    /**
+     * fire event hander
+     * @param name
+     * @param args
+     */
     notify(name, ...args) {
         if (this.map.has(name)) {
             let event = new ClassicEvent(this, name);
-            let sets = this.map.get(name);
-            if (!event.isisStopImmediatePropagation) {
-                this.dispatch(event, sets, args);
+            let set = this.map.get(name);
+            if (!event.isStopImmediatePropagation) {
+                this.dispatch(event, set, args);
             }
         }
     }
+    /**
+     * hander event
+     * @param evt
+     * @param fnset
+     * @param args
+     */
     dispatch(evt, fnset, args) {
-        for (let notifierStr of fnset) {
-            let notifier = JSON.parse(notifierStr);
-            if (notifier.dataset) {
-                event.data = notifier.dataset;
-            }
-            notifier.fn.apply(this, [event, ...args]);
-            if (event.isStopPropagation)
+        for (let fn of fnset) {
+            fn.apply(this, [evt, ...args]);
+            if (evt.isStopPropagation)
                 break;
         }
     }

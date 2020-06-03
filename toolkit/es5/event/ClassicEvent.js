@@ -6,7 +6,6 @@ export default class ClassicEvent {
         this.target = context;
         this.type = 'CustomEvent';
         this.timeStamp = Date.now();
-        this.dataset = null;
         this.defaultPrevented = false;
         this.immediate = false;
         this.isPropagation = false;
@@ -23,12 +22,6 @@ export default class ClassicEvent {
     */
     get isStopImmediatePropagation() {
         return this.immediate;
-    }
-    get data() {
-        return this.dataset;
-    }
-    static set data(value) {
-        this.dataset = value;
     }
     /**
      * stop  event default
@@ -52,7 +45,6 @@ export default class ClassicEvent {
       *set event as default
       */
     reset() {
-        this.dataset = null;
         this.timeStamp = Date.now();
         this.immediate = false;
         this.defaultPrevented = false;
