@@ -118,7 +118,7 @@ export default class Roll {
   /**
    * scroll element
    */
-  private scrollingElement: ChildNode  | null
+  private scrollingElement: HTMLElement  | null
 
   private scrollWrapElement: HTMLElement | null
 
