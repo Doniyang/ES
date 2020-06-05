@@ -3,7 +3,7 @@ import isNumber from "../is/isNumber"
 import isBoolean from "../is/isBoolean"
 import Notifier from "src/notify/Notifier"
 
-export default class Roll {
+export default class DigitalScroll {
   /**
    * direction lock threshold
    */
@@ -44,14 +44,7 @@ export default class Roll {
    * resize polling
    */
   readonly resizePolling: number
-  /**
-   * x roll start 
-   */
-  private startX: number
-  /**
-   * y roll start
-   */
-  private startY: number
+
   /**
    * allow x scroll or not
    */
@@ -126,13 +119,8 @@ export default class Roll {
   private enable: boolean
 
   private notify:Notifier
-  
-  private wrapOffset:iRoll.Offset
 
-  private scrollOffset:iRoll.Offset
-
-  private axis:iRoll.Point
-  constructor(wrapper: iRoll.elwrap, options: iRoll.rollOptions) {
+  constructor(wrapper: ScrollKit.ElementWrapper, options: ScrollKit.scrollOptions) {
     this.scrollWrapElement = isString(wrapper) ? document.querySelector(wrapper as string) : (wrapper as HTMLElement)
     this.directionLockThreshold = 5
     this.bounceTime = 700
@@ -144,8 +132,7 @@ export default class Roll {
     this.flickLimitTime = 200
     this.flickLimitDistance = 100
     this.resizePolling = 60
-    this.startX = isNumber(options.startX) ? options.startX as number : 0
-    this.startY = isNumber(options.startY) ? options.startY as number : 0
+    this.rollContext = 
     this.scrollX = isBoolean(options.scrollX) ? options.scrollX as boolean : false
     this.scrollY = isBoolean(options.scrollY) ? options.scrollY as boolean : true
     this.freeScroll = isBoolean(options.freeScroll) ? options.freeScroll as boolean : false
@@ -162,10 +149,7 @@ export default class Roll {
     this.useTransform = isBoolean(options.useTransform) ? options.useTransform as boolean : true
     this.bindToWrapper = isBoolean(options.bindToWrapper) ? options.bindToWrapper as boolean : this.isSupportMouseEvent()
     this.scrollingElement = (this.scrollWrapElement as HTMLElement).firstChild
-   this.axis = {x:0,y:0,directionX:0,directionY:0} 
     this.enable = false;
-    this.wrapOffset={};
-    this.scrollOffset = {}
     this.notify = new Notifier();
     this.initializer();
     this.setRollState(true);

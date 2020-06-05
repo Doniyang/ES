@@ -16,7 +16,7 @@ export default class ClassicEvent implements Eventable {
   /**
   * event target
   */
-  readonly target: targetOption
+  readonly target: EventKit.EventContextOptions
   /**
   * event creatted by user or not
   */
@@ -48,7 +48,7 @@ export default class ClassicEvent implements Eventable {
   */
   private name: string
 
-  constructor(context: targetOption, name: string) {
+  constructor(context: EventKit.EventContextOptions, name: string) {
     this.cancelable = false
     this.bubbles = false
     this.isTrusted = false

@@ -3,7 +3,6 @@
   "version": "0.0.5",
   "description": " a toolkit for js ",
   "main": "es5/index",
-  "types": "src/typings/toolkit.d.ts",
   "dependencies": {},
   "devDependencies": {
     "typescript": "^3.8.3"
