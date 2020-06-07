@@ -1,5 +1,8 @@
 declare namespace ScrollKit {
     type ElementWrapper = string | HTMLElement
+    interface ElementFilter{
+        (el:HTMLElement):boolean
+    }
     interface scrollOptions {
         startX?: number
         startY?: number
@@ -13,7 +16,7 @@ declare namespace ScrollKit {
         momentum?: boolean
         probe?: number
         preventDefault?: boolean
-        preventDefaultException?: object
+        preventDefaultException?: ElementFilter
         HWCompositing?: boolean
         useTransition?: boolean
         useTransform?: boolean

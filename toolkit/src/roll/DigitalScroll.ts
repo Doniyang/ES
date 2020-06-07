@@ -2,7 +2,7 @@ import isString from "../is/isString"
 import isNumber from "../is/isNumber"
 import isBoolean from "../is/isBoolean"
 import Notifier from "src/notify/Notifier"
-
+import ParametricSerializer from './ParametricSerializer';
 export default class DigitalScroll {
   /**
    * direction lock threshold
@@ -63,31 +63,31 @@ export default class DigitalScroll {
    * 0 axis x
    * -1 none
    */
-  private eventPassthrough: number
+  private eventPassthrough: ParametricSerializer<number>
   /**
    * clickable
    */
-  private clickable: boolean
+  private clickable: ParametricSerializer<boolean>
   /**
    * tap
    */
-  private tap: boolean
+  private tap: ParametricSerializer<boolean>
   /**
    * bounce
    */
-  private bounce: boolean
+  private bounce: ParametricSerializer<boolean>
   /**
    * momentum
    */
-  private momentum: boolean
+  private momentum: ParametricSerializer<boolean>
   /**
    * probe
    */
-  private probe: number
+  private probe: ParametricSerializer<number>
   /**
    * prevent default
    */
-  private preventDefault: boolean
+  private preventDefault: ParametricSerializer<boolean>
   /**
    * prevent default exception
    */
@@ -95,19 +95,19 @@ export default class DigitalScroll {
   /**
    * use tramformZ
    */
-  private HWCompositing: boolean
+  private HWCompositing: ParametricSerializer<boolean>
   /**
    * use transition
    */
-  private useTransition: boolean
+  private useTransition: ParametricSerializer<boolean>
   /**
    * use transform
    */
-  private useTransform: boolean
+  private useTransform: ParametricSerializer<boolean>
   /**
    * bind to wrapper
    */
-  private bindToWrapper: boolean
+  private bindToWrapper: ParametricSerializer<boolean>
   /**
    * scroll element
    */
@@ -132,41 +132,73 @@ export default class DigitalScroll {
     this.flickLimitTime = 200
     this.flickLimitDistance = 100
     this.resizePolling = 60
-    this.rollContext = 
-    this.scrollX = isBoolean(options.scrollX) ? options.scrollX as boolean : false
+    /*this.rollContext = */
+   /* this.scrollX = isBoolean(options.scrollX) ? options.scrollX as boolean : false
     this.scrollY = isBoolean(options.scrollY) ? options.scrollY as boolean : true
-    this.freeScroll = isBoolean(options.freeScroll) ? options.freeScroll as boolean : false
-    this.eventPassthrough = isNumber(options.eventPassthrough) ? options.eventPassthrough as number : -1
-    this.clickable = isBoolean(options.clickable) ? options.clickable as boolean : false
-    this.tap = isBoolean(options.tap) ? options.tap as boolean : false
-    this.bounce = isBoolean(options.bounce) ? options.bounce as boolean : true
-    this.momentum = isBoolean(options.momentum) ? options.momentum as boolean : true
-    this.probe = isNumber(options.probe) ? options.probe as number : 0
-    this.preventDefault = isBoolean(options.preventDefault) ? options.preventDefault as boolean : true
+    this.freeScroll = isBoolean(options.freeScroll) ? options.freeScroll as boolean : false*/
+
+    this.eventPassthrough = new ParametricSerializer<number>(-1);
+    this.clickable = new ParametricSerializer(false);
+    this.tap = new ParametricSerializer<boolean>(false)
+    this.bounce = new ParametricSerializer<boolean>(true)
+    this.momentum = new ParametricSerializer<boolean>(true);
+    this.probe = new ParametricSerializer<number>(0)
+    this.preventDefault = new ParametricSerializer<boolean>(true)
     this.preventDefaultException = options.preventDefaultException || { tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/ }
-    this.HWCompositing = isBoolean(options.HWCompositing) ? options.HWCompositing as boolean : true
-    this.useTransition = isBoolean(options.useTransition) ? options.useTransition as boolean : true
-    this.useTransform = isBoolean(options.useTransform) ? options.useTransform as boolean : true
-    this.bindToWrapper = isBoolean(options.bindToWrapper) ? options.bindToWrapper as boolean : this.isSupportMouseEvent()
-    this.scrollingElement = (this.scrollWrapElement as HTMLElement).firstChild
+    this.HWCompositing = new ParametricSerializer<boolean>(true)
+    this.useTransition = new ParametricSerializer<boolean>(true)
+    this.useTransform = new ParametricSerializer<boolean>(true)
+    this.bindToWrapper = new ParametricSerializer<boolean>(this.isSupportMouseEvent())
+    /*this.scrollingElement = (this.scrollWrapElement as HTMLElement).firstChild*/
     this.enable = false;
     this.notify = new Notifier();
+    this.updateScrollOptions(options);
     this.initializer();
     this.setRollState(true);
   }
+   
+  private updateScrollOptions(options:ScrollKit.scrollOptions){
+     if(isNumber(options.eventPassthrough)){
+       this.eventPassthrough.setProperty(options.eventPassthrough)
+     } 
+     if (isBoolean(options.clickable)) {
+        this.clickable.setProperty(options.clickable)
+      } 
+      if(isBoolean(options.tap)) {
+        this.tap.setProperty(options.tap)
+      } 
+      if (isBoolean(options.bounce)){
+         this.bounce.setProperty(options.bounce)
+      }
+      if ( isBoolean(options.momentum)) {
+        this.momentum.setProperty(options.momentum)
+      }
+      if (isNumber(options.probe)) {
+        this.probe.setProperty(options.probe)
+      }
+
+      if (isBoolean(options.preventDefault)) {
+        this.preventDefault.setProperty(options.preventDefault);
+     }
+     if (isBoolean(options.HWCompositing)) {
+       this.HWCompositing.setProperty(options.HWCompositing)
+     }
+     if ( isBoolean(options.useTransition)) {
+      this.useTransition.setProperty(options.useTransition)
+     }
+
+       if ( isBoolean(options.useTransform)) {
+         this.useTransform.setProperty(options.useTransform)
+     }
+       if ( isBoolean(options.bindToWrapper)) {
+       this.bindToWrapper.setProperty(options.bindToWrapper)
+     }
+  } 
 
   private setRollState(state: boolean): void {
     this.enable = state
   }
-
-  private isNumber(v: any): boolean {
-    return typeof v === 'number'
-  }
-
-  private isBoolean(v: any): boolean {
-    return typeof v === 'boolean'
-  }
-
+  
   private isSupport(e: string, context: any): boolean {
     return e in context
   }
