@@ -91,7 +91,7 @@ export default class DigitalScroll {
   /**
    * prevent default exception
    */
-  private preventDefaultException: object
+  private preventDefaultFilter: ScrollKit.ElementFilter
   /**
    * use tramformZ
    */
@@ -111,14 +111,14 @@ export default class DigitalScroll {
   /**
    * scroll element
    */
-  private scrollingElement: HTMLElement  | null
+  private scrollingElement: HTMLElement | null
 
   private scrollWrapElement: HTMLElement | null
 
 
   private enable: boolean
 
-  private notify:Notifier
+  private notify: Notifier
 
   constructor(wrapper: ScrollKit.ElementWrapper, options: ScrollKit.scrollOptions) {
     this.scrollWrapElement = isString(wrapper) ? document.querySelector(wrapper as string) : (wrapper as HTMLElement)
@@ -133,9 +133,9 @@ export default class DigitalScroll {
     this.flickLimitDistance = 100
     this.resizePolling = 60
     /*this.rollContext = */
-   /* this.scrollX = isBoolean(options.scrollX) ? options.scrollX as boolean : false
-    this.scrollY = isBoolean(options.scrollY) ? options.scrollY as boolean : true
-    this.freeScroll = isBoolean(options.freeScroll) ? options.freeScroll as boolean : false*/
+    /* this.scrollX = isBoolean(options.scrollX) ? options.scrollX as boolean : false
+     this.scrollY = isBoolean(options.scrollY) ? options.scrollY as boolean : true
+     this.freeScroll = isBoolean(options.freeScroll) ? options.freeScroll as boolean : false*/
 
     this.eventPassthrough = new ParametricSerializer<number>(-1);
     this.clickable = new ParametricSerializer(false);
@@ -144,7 +144,7 @@ export default class DigitalScroll {
     this.momentum = new ParametricSerializer<boolean>(true);
     this.probe = new ParametricSerializer<number>(0)
     this.preventDefault = new ParametricSerializer<boolean>(true)
-    this.preventDefaultException = options.preventDefaultException || { tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/ }
+    this.preventDefaultFilter = options.preventDefaultFilter || function(el:HTMLElement):boolean{ return /^(INPUT|TEXTAREA|BUTTON|SELECT)$/.test(el.tagName)}
     this.HWCompositing = new ParametricSerializer<boolean>(true)
     this.useTransition = new ParametricSerializer<boolean>(true)
     this.useTransform = new ParametricSerializer<boolean>(true)
@@ -156,49 +156,49 @@ export default class DigitalScroll {
     this.initializer();
     this.setRollState(true);
   }
-   
-  private updateScrollOptions(options:ScrollKit.scrollOptions){
-     if(isNumber(options.eventPassthrough)){
-       this.eventPassthrough.setProperty(options.eventPassthrough)
-     } 
-     if (isBoolean(options.clickable)) {
-        this.clickable.setProperty(options.clickable)
-      } 
-      if(isBoolean(options.tap)) {
-        this.tap.setProperty(options.tap)
-      } 
-      if (isBoolean(options.bounce)){
-         this.bounce.setProperty(options.bounce)
-      }
-      if ( isBoolean(options.momentum)) {
-        this.momentum.setProperty(options.momentum)
-      }
-      if (isNumber(options.probe)) {
-        this.probe.setProperty(options.probe)
-      }
 
-      if (isBoolean(options.preventDefault)) {
-        this.preventDefault.setProperty(options.preventDefault);
-     }
-     if (isBoolean(options.HWCompositing)) {
-       this.HWCompositing.setProperty(options.HWCompositing)
-     }
-     if ( isBoolean(options.useTransition)) {
+  private updateScrollOptions(options: ScrollKit.scrollOptions) {
+    if (isNumber(options.eventPassthrough)) {
+      this.eventPassthrough.setProperty(options.eventPassthrough)
+    }
+    if (isBoolean(options.clickable)) {
+      this.clickable.setProperty(options.clickable)
+    }
+    if (isBoolean(options.tap)) {
+      this.tap.setProperty(options.tap)
+    }
+    if (isBoolean(options.bounce)) {
+      this.bounce.setProperty(options.bounce)
+    }
+    if (isBoolean(options.momentum)) {
+      this.momentum.setProperty(options.momentum)
+    }
+    if (isNumber(options.probe)) {
+      this.probe.setProperty(options.probe)
+    }
+
+    if (isBoolean(options.preventDefault)) {
+      this.preventDefault.setProperty(options.preventDefault);
+    }
+    if (isBoolean(options.HWCompositing)) {
+      this.HWCompositing.setProperty(options.HWCompositing)
+    }
+    if (isBoolean(options.useTransition)) {
       this.useTransition.setProperty(options.useTransition)
-     }
+    }
 
-       if ( isBoolean(options.useTransform)) {
-         this.useTransform.setProperty(options.useTransform)
-     }
-       if ( isBoolean(options.bindToWrapper)) {
-       this.bindToWrapper.setProperty(options.bindToWrapper)
-     }
-  } 
+    if (isBoolean(options.useTransform)) {
+      this.useTransform.setProperty(options.useTransform)
+    }
+    if (isBoolean(options.bindToWrapper)) {
+      this.bindToWrapper.setProperty(options.bindToWrapper)
+    }
+  }
 
   private setRollState(state: boolean): void {
     this.enable = state
   }
-  
+
   private isSupport(e: string, context: any): boolean {
     return e in context
   }
@@ -216,11 +216,11 @@ export default class DigitalScroll {
   }
 
   private isSuportTransform(): boolean {
-    return this.isSupport(this.prefixStyle('transform'), this.pseudo().style) && this.useTransform
+    return this.isSupport(this.prefixStyle('transform'), this.pseudo().style) && this.useTransform.value()
   }
 
   private isSuportTransition(): boolean {
-    return this.isSupport(this.prefixStyle('transition'), this.pseudo().style) && this.useTransition
+    return this.isSupport(this.prefixStyle('transition'), this.pseudo().style) && this.useTransition.value() 
   }
 
   private isSupportTouch(): boolean {
@@ -261,23 +261,23 @@ export default class DigitalScroll {
     return document.createElement('div')
   }
 
-  private anonymous(): iRoll.Category {
+  private anonymous(): ScrollKit.Category {
     return { touchstart: 1, touchmove: 1, touchend: 1, mousedown: 2, mousemove: 2, mouseup: 2, pointerdown: 3, pointermove: 3, pointerup: 3, MSPointerDown: 3, MSPointerMove: 3, MSPointerUp: 3 }
   }
 
   private isPreventDefault() {
-    return this.eventPassthrough !== 1 && this.preventDefault;
+    return this.eventPassthrough.value() !== 1 && this.preventDefault.value();
   }
 
   private isLockScrollY() {
-    return this.eventPassthrough === 1 ? false : this.scrollY
+    return this.eventPassthrough.value() === 1 ? false : this.scrollY
   }
   private isLockScrollX() {
-    return this.eventPassthrough === 0 ? false : this.scrollX
+    return this.eventPassthrough.value() === 0 ? false : this.scrollX
   }
 
   private isLockFreeScroll() {
-    return this.eventPassthrough === -1 && this.freeScroll
+    return this.eventPassthrough.value() === -1 && this.freeScroll
   }
   private on(el: HTMLElement, type: string, fn: EventListenerOrEventListenerObject, capture: boolean) {
     el.addEventListener(type, fn, capture);
@@ -374,7 +374,7 @@ export default class DigitalScroll {
   public initializer() {
     this.addDOMEvents();
     this.refresh()
-    this.scrollTo(this.startX,this.startY)
+    this.scrollTo(this.startX, this.startY)
   }
 
   /**
@@ -395,7 +395,7 @@ export default class DigitalScroll {
    * makeDOMEvents
    */
   public makeDOMEvents(listener: Function) {
-    const target = this.bindToWrapper ? this.scrollWrapElement : window
+    const target = this.bindToWrapper.value() ? this.scrollWrapElement : window
     listener(window, 'orientationchange', this)
     listener(window, 'resize', this)
 
@@ -405,7 +405,7 @@ export default class DigitalScroll {
     /**
      * mouse
      *  */
-    if (false) {
+    if (this.isSupportMouseEvent()) {
       listener(this.scrollWrapElement, 'mousedown', this)
       listener(target, 'mousemove', this)
       listener(target, 'mousecancel', this)
@@ -414,7 +414,7 @@ export default class DigitalScroll {
     /**
      *  touch
      * */
-    if (true) {
+    if (this.isSupportTouch()) {
       listener(this.scrollWrapElement, 'touchstart', this)
       listener(target, 'touchmove', this)
       listener(target, 'touchcancel', this)
@@ -428,8 +428,7 @@ export default class DigitalScroll {
    * refresh
    */
   public refresh() {
-    this.wrapOffset.width = (this.scrollWrapElement as HTMLElement).clientWidth
-    this.wrapOffset.height = (this.scrollWrapElement as HTMLElement).clientHeight
+
   }
 
   /**
@@ -439,8 +438,8 @@ export default class DigitalScroll {
    * @param time 
    * @param ease 
    */
-  public scrollTo(x:number,y:number,time?:number,ease?:iRoll.Anmation) {
-    
+  public scrollTo(x: number, y: number, time?: number, ease?: iRoll.Anmation) {
+
   }
 
 }

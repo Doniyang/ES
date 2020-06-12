@@ -10,4 +10,7 @@ export default class ParametricSerializer<T>{
     getProperty():T{
     	return this.property
     }
+    value():T{
+        return this.property
+    }
 }

@@ -16,7 +16,7 @@ declare namespace ScrollKit {
         momentum?: boolean
         probe?: number
         preventDefault?: boolean
-        preventDefaultException?: ElementFilter
+        preventDefaultFilter?: ElementFilter
         HWCompositing?: boolean
         useTransition?: boolean
         useTransform?: boolean
