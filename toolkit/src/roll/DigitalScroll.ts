@@ -3,6 +3,8 @@ import isNumber from "../is/isNumber"
 import isBoolean from "../is/isBoolean"
 import Notifier from "src/notify/Notifier"
 import ParametricSerializer from './ParametricSerializer';
+import ContextDigitalizer from "./ContextDigitalizer";
+import TouchStartDigitalizer from "./TouchStartDigitalizer";
 export default class DigitalScroll {
   /**
    * direction lock threshold
@@ -119,7 +121,8 @@ export default class DigitalScroll {
   private enable: boolean
 
   private notify: Notifier
-
+  
+  private context:ContextDigitalizer
   constructor(wrapper: ScrollKit.ElementWrapper, options: ScrollKit.scrollOptions) {
     this.scrollWrapElement = isString(wrapper) ? document.querySelector(wrapper as string) : (wrapper as HTMLElement)
     this.directionLockThreshold = 5
@@ -152,6 +155,7 @@ export default class DigitalScroll {
     /*this.scrollingElement = (this.scrollWrapElement as HTMLElement).firstChild*/
     this.enable = false;
     this.notify = new Notifier();
+    this.context = new ContextDigitalizer();
     this.updateScrollOptions(options);
     this.initializer();
     this.setRollState(true);
@@ -293,7 +297,8 @@ export default class DigitalScroll {
 
 
   private handleStart(e: Event) {
-
+    this.context.setContext(TouchStartDigitalizer);
+    this.context.execute(e) 
   }
 
   private handleStop(e: Event) {
@@ -426,7 +431,7 @@ export default class DigitalScroll {
 
   /**
    * refresh
-   */
+   */  
   public refresh() {
 
   }
