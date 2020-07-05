@@ -230,36 +230,7 @@ export default class DigitalScroll {
   private isSupportTouch(): boolean {
     return this.isSupport('ontouchstart', window);
   }
-
-  private prefix(): iRoll.Prefix {
-    return { trident: 'ms', gecko: 'Moz', webkit: 'Webkit', presto: 'O' }
-  }
-
-
-  private engine(): string {
-    const u = navigator.userAgent
-    if (u.indexOf('Trident') > -1) {
-      return 'trident'
-    } else if (u.indexOf('Presto') > -1) {
-      return 'presto'
-    } else if (u.indexOf('AppleWebKit') > -1) {
-      return 'webKit'
-    } else if (u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1) {
-      return 'gecko'
-    } else {
-      return ''
-    }
-  }
-
-  private prefixStyle(style: string): string {
-    let key: string = this.engine();
-    if (key === '') {
-      return style
-    } else {
-      const prefix = this.prefix();
-      return prefix[key] + style.charAt(0).toUpperCase() + style.substr(1)
-    }
-  }
+ 
 
   private pseudo(): HTMLDivElement {
     return document.createElement('div')
