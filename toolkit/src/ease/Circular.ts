@@ -1,12 +1,13 @@
+import Easeble from './Easeble';
 export default class Circular implements Easeble{
-	private cubic:string 
+	private rule:string 
     constructor() {
-       	this.cubic = 'cubic-bezier(0.1, 0.57, 0.1, 1)' 
+       	this.rule = 'cubic-bezier(0.1, 0.57, 0.1, 1)' 
        }
        get style(){
-       	return this.cubic
+       	return this.rule
        }
-       bezier (k:number):number {
+       priority (k:number):number {
 			return Math.sqrt( 1 - ( --k * k ) );
 		}
 }

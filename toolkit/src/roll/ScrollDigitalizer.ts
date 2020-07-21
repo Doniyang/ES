@@ -1,6 +1,4 @@
-import requestAnimationFrame from '../raf/raf';
-import cancelAnimationFrame from '../raf/caf';
-
+import  {requestAnimationFrame,cancelAnimationFrame} from '../raf/index';
 export default class ScrollDigitalizer{
 	private rootElement:HTMLElement;
 	private scrollElement:HTMLElement;
@@ -70,6 +68,7 @@ private prefix(): ScrollKit.Prefix {
 				if(scrollStyle.getPropertyValue(durationProp)=== '0.0001ms') {
 					scrollStyle.setProperty(durationProp,'0s');
 				}
+        return 0;
 			});
 		}
     } 
@@ -92,7 +91,7 @@ private prefix(): ScrollKit.Prefix {
        if(this.useTransition){
           this.translate(x,y,time,easing.style,fn);
        }else{
-          this._animate(x, y, time, easing.fn,fn);  
+          this.animate(x, y, time, easing.fn,fn);  
        }     
     }  
 }

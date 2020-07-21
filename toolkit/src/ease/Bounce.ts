@@ -1,12 +1,14 @@
+import Easeble from './Easeble';
+
 export default class Bounce implements Easeble{
-	private cubic:string 
+	private rule:string 
     constructor() {
-       	this.cubic = '' 
+       	this.rule = '' 
        }
        get style(){
-       	return this.cubic
+       	return this.rule
        }
-       bezier (k:number):number {
+       priority (k:number):number {
 			if ( ( k /= 1 ) < ( 1 / 2.75 ) ) {
           return 7.5625 * k * k;
         } else if ( k < ( 2 / 2.75 ) ) {

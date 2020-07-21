@@ -1,3 +1,3 @@
 export default interface Easeble{
-	bezier(tm:number):number;
+	priority(tm:number):number;
 }

@@ -1,12 +1,14 @@
+import  Easeble from './Easeble';
+
 export default class Elastic implements Easeble{
-	private cubic:string 
+	private rule:string 
     constructor() {
-       	this.cubic = '' 
-       }
-       get style(){
-       	return this.cubic
-       }
-       bezier (k:number):number {
+       	this.rule = '' 
+    }
+    get style(){
+       	return this.rule
+    }
+    priority (k:number):number {
 			let f = 0.22,
           e = 0.4;
 

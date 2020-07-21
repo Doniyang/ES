@@ -1,4 +1,4 @@
-export default function requestAnimationFrame() {
+export  const requestAnimationFrame=(function() {
   let lastTime = 0;
   return (
     window.requestAnimationFrame ||
@@ -13,4 +13,14 @@ export default function requestAnimationFrame() {
       return id;
     }
   );
-};
+})();
+
+export const  cancelAnimationFrame = (function() {
+  return (
+    window.cancelAnimationFrame ||
+    window.webkitCancelAnimationFrame ||
+    function(id) {
+      window.clearTimeout(id);
+    }
+  );
+})()
