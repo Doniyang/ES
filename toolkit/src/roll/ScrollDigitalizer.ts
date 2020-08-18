@@ -79,19 +79,19 @@ private prefix(): ScrollKit.Prefix {
     }
     
 
-   private translate(x:number,y:number,time:number,easing:object,fn:Function){
+   private translate(x:number,y:number,time:number,easing:object){
    	this.transitionTimingFunction(easing,fn)
    }   
    
-   private animate(x:number,y:number,duration:number,easingfn:Function,fn:Function){
+   private animate(x:number,y:number,duration:number,easingfn:Function){
 
    }
-    scrollTo(x:number,y:number,time:number,easing:object,fn:Function){
+    scrollTo(x:number,y:number,time:number,easing:object){
        this.rollState=1
        if(this.useTransition){
-          this.translate(x,y,time,easing.style,fn);
+          this.translate(x,y,time,easing.style);
        }else{
-          this.animate(x, y, time, easing.fn,fn);  
+          this.animate(x, y, time, easing.fn);  
        }     
     }  
 }

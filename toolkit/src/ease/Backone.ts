@@ -5,7 +5,7 @@ export default class Backone implements Easeble{
     constructor() {
        	this.rule = 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' 
        }
-       get style(){
+      style(){
        	return this.rule
        }
        priority (k:number):number {
