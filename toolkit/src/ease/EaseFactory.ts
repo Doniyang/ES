@@ -3,11 +3,12 @@ import Bounce from './Bounce';
 import Circular from './Circular';
 import Elastic from './Elastic';
 import Quadratic from './Quadratic';
+import isString from '../is/isString';
 
 export default class EaseFactory {
 	constructor(elasic:EaseKit.easename) {
 	  if(isString(elasic)){
-	  	return this[elasic]()
+	  	return this[elasic as string]()
 	  }else{
 	  	return  this.customize(elasic);
 	  }
@@ -32,7 +33,7 @@ export default class EaseFactory {
 	quadratic(){
 		return new Quadratic();
 	}
-	customize(){
-		return 
+	customize(elasic){
+		return elasic ;
 	}
 } 

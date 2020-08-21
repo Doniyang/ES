@@ -3,6 +3,5 @@ declare namespace EaseKit{
    	style:string,
    	fn:(K:number)=>number
    }
-
    type easename=EaseOptions|string
 }
