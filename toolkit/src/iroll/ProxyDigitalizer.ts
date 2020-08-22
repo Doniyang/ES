@@ -1,21 +1,19 @@
 import Digitalizer from "./Digitalizer";
 
 export default class ProxyDigitalizer implements Digitalizer{
-   private roll:Digitalizer;
+   private roll:null|Digitalizer;
 
-   constructor(roll:Digitalizer){
-       this.roll = roll
+   constructor(){
+       this.roll = null;
    }
 
-    setState(state:number){
-      this.roll.setState(state)
-    }
+   build(){},
 
     scrollTo(x: number, y: number, time: number, easing: EaseKit.EaseOptions){
-       this.roll.scrollTo(x,y,time,easing) 
+      (this.roll as Digitalizer).scrollTo(x,y,time,easing) 
     }
 
     translate(x:number,y:number):void{
-      this.roll.translate(x,y);
+      (this.roll as Digitalizer).translate(x,y);
     }
 }

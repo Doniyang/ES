@@ -5,11 +5,6 @@ export default class RollDigitalizer implements Digitalizer{
      * 滚动元素
      */
     private scrollElement:HTMLElement;
-     /**
-      * 所处状态
-      *   0-原始状态 1-开始滚动 2-滚动中 3-滚动结束
-      */
-    private state:number;
     /**
      *阻止事件的默认行为  
      */  
@@ -23,12 +18,14 @@ export default class RollDigitalizer implements Digitalizer{
      */  
     private useTransform:boolean;
 
+    private HWCompositing:boolean;
+
     constructor(el:HTMLElement,preventDefault:boolean,useTransition:boolean,useTransform:boolean){
         this.scrollElement =el;
         this.preventDefault = preventDefault;
-        this.state = 0;
         this.useTransition = useTransition;
         this.useTransform = useTransform;
+        this.HWCompositing = true;
     }   
 
     private engine(): string {
@@ -46,7 +43,7 @@ export default class RollDigitalizer implements Digitalizer{
         }
       }
     
-      private isBadAndroid() {
+      private isBadAndroid():boolean {
         let appVersion = window.navigator.appVersion;
         // Android browser is not a chrome browser.
         if (/Android/.test(appVersion) && !(/Chrome\/\d/.test(appVersion))) {
@@ -60,9 +57,11 @@ export default class RollDigitalizer implements Digitalizer{
           return false;
         }
       }
+
       private prefix(): ScrollKit.Prefix {
         return { trident: 'ms', gecko: 'Moz', webkit: 'Webkit', presto: 'O' }
       }
+
       private prefixStyle(style: string): string {
         let key: string = this.engine();
         if (key === '') {
@@ -72,7 +71,21 @@ export default class RollDigitalizer implements Digitalizer{
           return prefix[key] + style.charAt(0).toUpperCase() + style.substr(1)
         }
       }
-    
+      
+      private isPerspective():boolean{
+        let style = document.createElement('div').style;
+        let prefixStyle = this.prefixStyle('perspective');
+        return prefixStyle in style;
+      }
+
+      private isHWCompositing():boolean{
+        return this.HWCompositing;
+      }
+
+      private isSpeedup():boolean{
+        return this.isHWCompositing() && this.isPerspective();
+      }
+      
       private transitionTime(time: number) {
         let durationProp: string = this.prefixStyle('transitionDuration');
         let scrollStyle: CSSStyleDeclaration = this.scrollElement.style;
@@ -87,6 +100,7 @@ export default class RollDigitalizer implements Digitalizer{
           });
         }
       }
+
       private transitionTimingFunction(easing:string) {
         let transitionTimingFunction: string = this.prefixStyle('transitionTimingFunction');
         let scrollStyle: CSSStyleDeclaration = this.scrollElement.style;
@@ -104,13 +118,8 @@ export default class RollDigitalizer implements Digitalizer{
     
       }
 
-      setState(state:number){
-        this.state = state;
-      }
-
 
       scrollTo(x: number, y: number, time: number, easing: EaseKit.EaseOptions) {
-        this.setState(1);
         if (this.useTransition) {
           this.transition(x, y, time, easing.style);
         } else {
@@ -122,7 +131,11 @@ export default class RollDigitalizer implements Digitalizer{
         let  scrollStyle:CSSStyleDeclaration = this.scrollElement.style; 
           if(this.useTransform) {
             let transform = this.prefixStyle('transform');
-            scrollStyle.setProperty
+            let translateZ = this.isSpeedup()?'translateZ(0)' : '';
+            scrollStyle.setProperty(transform,`translate(${x}px,${y}px) ${translateZ}`);
+          }else{
+            scrollStyle.setProperty('top',Math.round(y)+'px');
+            scrollStyle.setProperty('left',Math.round(x)+'px');
           }
       }
 
