@@ -7,7 +7,9 @@ export default class ProxyDigitalizer implements Digitalizer{
        this.roll = null;
    }
 
-   build(){},
+   build(){
+       
+   }
 
     scrollTo(x: number, y: number, time: number, easing: EaseKit.EaseOptions){
       (this.roll as Digitalizer).scrollTo(x,y,time,easing) 

@@ -4,4 +4,5 @@ declare namespace EaseKit{
    	fn:(K:number)=>number
    }
    type easename=EaseOptions|string
+   type easefn = (k:number)=>number
 }
