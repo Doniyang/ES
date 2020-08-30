@@ -1,4 +1,4 @@
-class Rect {
+export default class Scope {
     private top: number
     private left: number
     private width: number
