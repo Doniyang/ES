@@ -33,7 +33,7 @@ export default class RollDigitalizer implements Digitalizer {
     this.state = 0;
     this.preventDefault = options.preventDefault;
     this.useTransition = options.useTransition;
-    this.useTransform = options.u  seTransform;
+    this.useTransform = options.useTransform;
     this.HWCompositing = true;
     this.scope = scope;
   }
