@@ -11,17 +11,16 @@ export default class TransitionDefaultRoll extends Transition implements Digital
         this.easeStyle = style;
     }
 
-    private roll(x: number, y: number) {
+    translate(x: number, y: number) {
         let scrollStyle: CSSStyleDeclaration = this.getScrollStyle();
         scrollStyle.setProperty('top', Math.round(y) + 'px');
         scrollStyle.setProperty('left', Math.round(x) + 'px');
+        this.scope.setAxisX(x);
+        this.scope.setAxisY(y);
     }
     scrollTo(x: number, y: number, time: number): void {
         this.duration(time)
         this.timing(this.easeStyle);
-        this.roll(x, y);
+        this.translate(x, y);
     }
-
-
-
 }

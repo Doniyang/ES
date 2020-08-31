@@ -5,9 +5,10 @@
  */
 
 import Digitalizer from "./Digitalizer";
+import Animation from "./Animation";
 
-export default class AnimationTranslateRoll implements Digitalizer{
-    scrollTo(x: number, y: number, time: number, easing: EaseKit.EaseOptions): void {
+export default class AnimationTranslateRoll extends Animation implements Digitalizer{
+    scrollTo(x: number, y: number, time: number): void {
         throw new Error("Method not implemented.");
     }
 }

@@ -1,12 +1,20 @@
 import { requestAnimationFrame } from '../raf/index';
 import PrefixStyle from '../dom/PrefixStyle'
 export default class Transition {
+    /**
+     * 滚动元素
+     */
     private scrollElement: HTMLElement;
+    /**
+     * 状态
+     */
+    private state:number;
     /**
      *transition
      */
     constructor(el: HTMLElement) {
         this.scrollElement = el;
+        this.state = 0;
     }
 
     private isBadAndroid(): boolean {
@@ -28,11 +36,21 @@ export default class Transition {
         return this.scrollElement.style;
     }
 
-    duration(time: number) {
+    getState():number{
+        return this.state;
+    }
+
+    setState(state:number):void{
+        this.state = state
+    }
+
+    duration(time: number=0) {
         let durationProp: string = PrefixStyle.style('transitionDuration');
         let scrollStyle: CSSStyleDeclaration = this.getScrollStyle();
         scrollStyle.setProperty(durationProp, time + 'ms');
-
+        if(time ===0){
+            this.setState(1);
+        }  
         if (time === 0 && this.isBadAndroid()) {
             scrollStyle.setProperty(durationProp, '0.0001ms');
             requestAnimationFrame(() => {
