@@ -2,7 +2,7 @@ import Notification from './Notification'
 import ClassicEvent from '../event/ClassicEvent';
 
 export default class Notifier extends Notification<ClassicEvent> {
-  private map: Map<string,Set<Callbackable<ClassicEvent>>>;
+  private map: Map<string, Set<Callbackable<ClassicEvent>>>;
   constructor() {
     super();
     this.map = new Map();
@@ -14,19 +14,19 @@ export default class Notifier extends Notification<ClassicEvent> {
    */
   on(name: string, fn: Callbackable<ClassicEvent>): void {
     let set: Set<Callbackable<ClassicEvent>> | undefined = this.map.get(name);
-    if (set===undefined) { this.map.set(name, set = new Set<Callbackable<ClassicEvent>>()) }
+    if (set === undefined) { this.map.set(name, set = new Set<Callbackable<ClassicEvent>>()) }
     (set as Set<Callbackable<ClassicEvent>>).add(fn)
   }
-/**
- * remove event listener
- * @param name 
- * @param fn
- */
+  /**
+   * remove event listener
+   * @param name 
+   * @param fn
+   */
   off(name: string, fn?: Callbackable<ClassicEvent>): void {
-    if (fn === undefined) { this.map.delete(name);return;}
+    if (fn === undefined) { this.map.delete(name); return; }
     const set: Set<Callbackable<ClassicEvent>> | undefined = this.map.get(name)
     if (!!set) {
-      (set as Set<Callbackable<ClassicEvent>>).delete((fn as  Callbackable<ClassicEvent>))
+      (set as Set<Callbackable<ClassicEvent>>).delete((fn as Callbackable<ClassicEvent>))
     }
   }
   /**
@@ -37,7 +37,7 @@ export default class Notifier extends Notification<ClassicEvent> {
   has(name: string, fn: Callbackable<ClassicEvent>): boolean {
     if (this.map.has(name)) {
       const set: Set<Callbackable<ClassicEvent>> | undefined = this.map.get(name)
-      if (set === undefined) {return false}
+      if (set === undefined) { return false }
       return (set as Set<Callbackable<ClassicEvent>>).has(fn);
     } else {
       return false
@@ -46,24 +46,22 @@ export default class Notifier extends Notification<ClassicEvent> {
   /**
   * clear all event
   */
-  clean():void {
-    this.map.forEach((set: Set<Callbackable<ClassicEvent>>)=>{
+  clean(): void {
+    this.map.forEach((set: Set<Callbackable<ClassicEvent>>) => {
       set.clear()
     })
     this.map.clear()
   }
   /**
    * fire event hander
-   * @param name 
+   * @param evt 
    * @param args 
    */
-  notify(name: string, ...args: Array<argsOption>) {
-    if (this.map.has(name)) {
-      let event: ClassicEvent = new ClassicEvent(this, name)
-      let set:  Set<Callbackable<ClassicEvent>> | undefined = this.map.get(name)
-      if (!event.isStopImmediatePropagation) {
-        this.dispatch(event, set as Set<Callbackable<ClassicEvent>>, args)
-      }
+  notify(evt: string | ClassicEvent, ...args: Array<argsOption>) {
+    let event:ClassicEvent =  ClassicEvent.ensure(this, evt)
+    let set: Set<Callbackable<ClassicEvent>> | undefined = this.map.get(name)
+    if (!event.isStopImmediatePropagation) {
+      this.dispatch(event, set as Set<Callbackable<ClassicEvent>>, args)
     }
   }
   /**

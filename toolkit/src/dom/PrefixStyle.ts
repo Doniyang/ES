@@ -1,5 +1,5 @@
 import Engine from "../browser/Browser";
-
+import Node from './Node'
 export default class PrefixStyle {
     static prefix(): ScrollKit.Prefix {
         return { trident: 'ms', gecko: 'Moz', webkit: 'Webkit', presto: 'O' }
@@ -14,7 +14,7 @@ export default class PrefixStyle {
         }
     }
     static has(style: string): boolean {
-        let pseudoStyle: CSSStyleDeclaration = document.createElement('div').style;
+        let pseudoStyle: CSSStyleDeclaration = Node.getVDom().style;
         return style in pseudoStyle;
     }
 }

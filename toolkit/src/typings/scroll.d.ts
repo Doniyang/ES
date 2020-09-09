@@ -25,12 +25,8 @@ declare namespace ScrollKit {
         disableTouch?: boolean
     }
     interface Point {
-        x?: number
-        y?: number
-        directionX?: number
-        directionY?: number
-        maxX?: number
-        maxY?: number
+        x: number
+        y: number
     }
     interface Prefix {
         [key: string]: string

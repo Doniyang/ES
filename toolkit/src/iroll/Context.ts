@@ -1,27 +1,24 @@
-import Attribute from "./Attribute";
-import Rollable from "./Rollable";
-import Digitalizer from "./Digitalizer";
+import Attribute from "./attribute/Attribute";
+import EventDigitalizer from "./EventDigitalizer";
+import RollProxy from "./RollProxy";
 
 export default class Context {
     private attrs: Attribute;
-    private context: null | Rollable;
-    private strategy: null | Digitalizer;
-    constructor(proxy: Digitalizer) {
+    private context: null | EventDigitalizer;
+    private proxy: RollProxy;
+    constructor() {
         this.attrs = new Attribute();
         this.context = null;
-        this.strategy = null;
+        this.proxy = new RollProxy();
     }
 
-    setContext(c: ({ new(): Rollable; })): void {
+    setContext(c: ({ new(): EventDigitalizer; })): void {
         this.context = new c()
     }
 
-    setStrategy(strategy:Digitalizer):void{
-        this.strategy = strategy  
-    }
     execute(e: Event) {
-        if ((this.context as Rollable).attainState(this.attrs.getState())) {
-            (this.context as Rollable).execute(e, this.attrs, this.strategy)
+        if ((this.context as EventDigitalizer).attainState(this.attrs.getState())) {
+            (this.context as EventDigitalizer).execute(e, this.attrs, this.proxy)
         }
     }
 }

@@ -46,7 +46,7 @@ export default class ClassicEvent implements Eventable {
   /**
   *event name
   */
-  private name: string
+  private _name: string
 
   constructor(context: EventKit.EventContextOptions, name: string) {
     this.cancelable = false
@@ -58,7 +58,7 @@ export default class ClassicEvent implements Eventable {
     this.defaultPrevented = false
     this.immediate = false
     this.isPropagation = false
-    this.name = name
+    this._name = name
   }
 
   /**
@@ -72,6 +72,10 @@ export default class ClassicEvent implements Eventable {
   */
   get isStopImmediatePropagation() {
     return this.immediate
+  }
+
+  get name(): string {
+    return this._name
   }
 
 
@@ -104,5 +108,20 @@ export default class ClassicEvent implements Eventable {
     this.immediate = false
     this.defaultPrevented = false
     this.isPropagation = false
+    return this
+  }
+
+  /**
+   * 
+   * @param context 
+   * @param event
+   */
+
+  public static ensure(context: EventKit.EventContextOptions, event: null | string | ClassicEvent): ClassicEvent {
+    if ((event instanceof ClassicEvent && event.name == null) || event == null) {
+      throw new Error("Notify event name cannot be null");
+    }
+    if (event instanceof ClassicEvent) return event.reset();
+    return new ClassicEvent(context, event);
   }
 }
