@@ -22,6 +22,21 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
         this.algorithm = algorithm;
         this.HWCompositing = isComposition;
     }
+    stop(): void {
+        this.setState(0);
+        this.animation.cleanRafId()
+    }
+    getPosition(): ScrollKit.Point {
+        return this.scope.position();
+     }
+    getComputedPosition(): ScrollKit.Point {
+        let marix: CSSStyleDeclaration = window.getComputedStyle(this.animation.getScrollElement(), null);
+        let x = 0, y = 0;
+        let matrixs: string[] = marix.getPropertyValue(PrefixStyle.style('transform')).split(')')[0].split(', ')
+        x = +(matrixs[12] || matrixs[4]);
+        y = +(matrixs[13] || matrixs[5]);
+        return { x, y };
+    }
     getState(): number {
        return this.animation.getState();
     }

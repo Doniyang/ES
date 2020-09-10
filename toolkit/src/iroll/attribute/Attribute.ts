@@ -11,6 +11,10 @@ export default class Attribute {
      */
     private start: Axis;
     /**
+     * 绝对开始的
+     */
+    private absStart:Axis
+    /**
      * 移动点
      */
     private delta: Axis;
@@ -26,7 +30,10 @@ export default class Attribute {
      *最大移动点 
      */
     private max: Axis;
-
+    /**
+     * 用来记录手指接触屏幕的点或者鼠标滚动开始的点
+     */ 
+    private point:Axis;
     /**
      * 开始时间，单位毫秒
      */
@@ -44,17 +51,24 @@ export default class Attribute {
      * 1--transition-trabslate 2--transition-default 3--animation-translate 4--animation-default 
      */
     private mode: number
+    /**
+     *0-未锁定 1-锁定 horizontally  2- vertically
+     */  
+    private lock:number
 
     constructor() {
         this.start = new Axis();
+        this.absStart = new Axis();
         this.delta = new Axis();
         this.direction = new Axis();
         this.min = new Axis();
         this.max = new Axis();
+        this.point = new Axis();
         this.starttime = 0;
         this.endtime = 0;
         this.state = 0;
         this.mode = 0;
+        this.lock = 0
     }
 
     getStartX(): number {
@@ -64,7 +78,14 @@ export default class Attribute {
     getStartY(): number {
         return this.start.getAxisY();
     }
+     
+    getAbsStartX(): number {
+        return this.absStart.getAxisX();
+    }
 
+    getAbsStartY(): number {
+        return this.absStart.getAxisY();
+    }
 
     getDeltaX(): number {
         return this.delta.getAxisX()
@@ -98,6 +119,14 @@ export default class Attribute {
         return this.max.getAxisY();
     }
 
+    getPointX(): number {
+        return this.point.getAxisX();
+    }
+
+    getPointY(): number {
+        return this.point.getAxisY();
+    }
+
     getStartTime(): number {
         return this.starttime
     }
@@ -110,9 +139,26 @@ export default class Attribute {
         return this.state
     }
 
-    setStart(x: number, y: number) {
+    isNoLock():boolean{
+        return this.lock === 0
+    }
+
+    isAxisXLocked():boolean{
+     return this.lock ===1 
+    }
+
+    isAxisYLocked():boolean{
+        return this.lock === 2
+    }
+
+    setStart(x: number, y: number):void {
         this.start.setAxisX(x)
         this.start.setAxisY(y)
+    }
+
+    setAbsStart(x:number,y:number):void{
+        this.absStart.setAxisX(x);
+        this.absStart.setAxisY(y);
     }
 
     setDelta(x: number, y: number): void {
@@ -135,6 +181,11 @@ export default class Attribute {
         this.max.setAxisY(y);
     }
 
+    setPoint(x:number,y:number){
+        this.point.setAxisX(x);
+        this.point.setAxisY(y);
+    }
+
     setStartTime(starttime: number): void {
         this.starttime = starttime
     }
@@ -154,4 +205,7 @@ export default class Attribute {
         this.mode = mode
     }
 
+    setLock(code:number):void{
+       this.lock = code  
+    }
 }

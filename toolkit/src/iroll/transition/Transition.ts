@@ -31,7 +31,9 @@ export default class Transition {
             return false;
         }
     }
-    
+    getScrollElement():HTMLElement{
+        return this.scrollElement
+    }
     getScrollStyle():CSSStyleDeclaration{
         return this.scrollElement.style;
     }

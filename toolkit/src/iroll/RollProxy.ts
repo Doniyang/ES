@@ -11,6 +11,11 @@ export default class RollProxy implements RollDigitalizer {
         this.roll = null;
         this.notify = new Notifier()
     }
+
+    get disabled():boolean{
+        return this.roll === null
+    }
+    
     build(roll: RollDigitalizer): void {
         this.roll = roll
     }
@@ -38,5 +43,18 @@ export default class RollProxy implements RollDigitalizer {
     }
     setState(state: number): void {
         this.roll?.setState(state);
+    }
+
+    getComputedPosition():ScrollKit.Point{
+        return (this.roll as RollDigitalizer).getComputedPosition()
+    }
+
+    getPosition(): ScrollKit.Point {
+        return (this.roll as RollDigitalizer).getPosition();
+    }
+
+    stop(){
+      this.roll?.stop()
+      this.trigger('scroll:end',this.getPosition())
     }
 }

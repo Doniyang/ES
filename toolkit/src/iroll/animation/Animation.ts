@@ -11,6 +11,9 @@ export default class Animation {
         this.state = 0;
         this.rafId = null
     }
+    getScrollElement():HTMLElement{
+        return this.scrollElement
+    }
 
     getScrollStyle(): CSSStyleDeclaration {
         return this.scrollElement.style;

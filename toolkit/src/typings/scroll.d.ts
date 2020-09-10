@@ -28,22 +28,4 @@ declare namespace ScrollKit {
         x: number
         y: number
     }
-    interface Prefix {
-        [key: string]: string
-    }
-    interface Category {
-        [key: string]: number
-    }
-
-    interface Anmation {
-        style: string,
-        fn: (k: number) => number
-    }
-
-    interface Offset {
-        height?: number
-        width?: number
-        top?: number
-        left?: number
-    }
 }

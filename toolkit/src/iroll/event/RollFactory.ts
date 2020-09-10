@@ -27,19 +27,15 @@ export default class RollFactory {
         return this.mode === 4
     }
 
-    strategy(el: HTMLElement, scope: Scope, easing: Factory, isComponsition: boolean): undefined|RollDigitalizer {
+    strategy(el: HTMLElement, scope: Scope, easing: Factory, isComponsition: boolean): RollDigitalizer {
         if (this.isAnimationDefault()) {
             return new AnimationRoll(el, scope, easing.algorithm);
-        }
-        if (this.isAnimationTranslate()) {
+        } else if (this.isAnimationTranslate()) {
             return new AnimationTranslateRoll(el, scope, easing.algorithm, isComponsition);
-        }
-        if (this.isTransitionDefault()) {
+        } else if (this.isTransitionDefault()) {
             return new TransitionRoll(el, scope, easing.style())
-        }
-        if (this.isTransitionTranslate()) {
+        } else (this.isTransitionTranslate()) {
             return new TransitionTranslateRoll(el, scope, easing.style(), isComponsition)
         }
     }
-
 }

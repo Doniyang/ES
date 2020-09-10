@@ -31,7 +31,7 @@ export default class Axis {
     setAxisY(y: number): void {
         this.axisY = y;
     }
-    
+
     setAxisZ(z: number): void {
         this.axisZ = z;
     }

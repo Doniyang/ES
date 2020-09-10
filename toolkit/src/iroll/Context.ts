@@ -12,6 +12,26 @@ export default class Context {
         this.proxy = new RollProxy();
     }
 
+    setStart(x: number, y: number) {
+        this.attrs.setStart(x, y)
+    }
+
+    setMin(x: number, y: number) {
+        this.attrs.setMin(x, y);
+    }
+
+    setMax(x: number, y: number) {
+        this.attrs.setMax(x, y)
+    }
+
+    setState(state: number) {
+        this.attrs.setState(state)
+    }
+
+    setMode(m: number) {
+        this.attrs.setMode(m)
+    }
+
     setContext(c: ({ new(): EventDigitalizer; })): void {
         this.context = new c()
     }

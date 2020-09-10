@@ -11,8 +11,24 @@ export default class TransitionRoll implements RollDigitalizer {
         this.scope = scope;
         this.easingStyle = style;
     }
+    getPosition(): ScrollKit.Point {
+       return this.scope.position();
+    }
+    getComputedPosition(): ScrollKit.Point {
+        let marix: CSSStyleDeclaration = window.getComputedStyle(this.transition.getScrollElement(), null);
+        let x = 0, y = 0;
+        x = +marix.getPropertyValue('left').replace(/[^-\d.]/g, '');
+        y = +marix.getPropertyValue('top').replace(/[^-\d.]/g, '');
+        return { x, y }
+    }
+    stop(): void {
+        let pos = this.getComputedPosition();
+        this.transition.duration(0);
+        this.translate(pos.x, pos.y);
+        this.setState(0);
+    }
     getState(): number {
-      return this.transition.getState();
+        return this.transition.getState();
     }
     setState(state: number): void {
         this.transition.setState(state);

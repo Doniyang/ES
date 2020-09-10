@@ -16,6 +16,20 @@ export default class AnimationRoll implements RollDigitalizer {
         this.raftime = 0;
         this.algorithm = algorithm
     }
+    stop(): void {
+        this.setState(0);
+        this.animation.cleanRafId()
+    }
+    getPosition(): ScrollKit.Point {
+        return this.scope.position();
+     }
+    getComputedPosition(): ScrollKit.Point {
+        let marix: CSSStyleDeclaration = window.getComputedStyle(this.animation.getScrollElement(), null);
+        let x = 0, y = 0;
+        x = +marix.getPropertyValue('left').replace(/[^-\d.]/g, '');
+        y = +marix.getPropertyValue('top').replace(/[^-\d.]/g, '');
+        return { x, y } ;
+    }
     getState(): number {
       return this.animation.getState();
     }
