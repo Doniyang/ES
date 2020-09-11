@@ -1,22 +1,14 @@
 import { requestAnimationFrame, cancelAnimationFrame } from "../../raf/index";
 
 export default class Animation {
-    private scrollElement: HTMLElement;
+
     private state: number;
 
     private rafId: null | number;
 
-    constructor(el: HTMLElement) {
-        this.scrollElement = el;
+    constructor() {
         this.state = 0;
         this.rafId = null
-    }
-    getScrollElement():HTMLElement{
-        return this.scrollElement
-    }
-
-    getScrollStyle(): CSSStyleDeclaration {
-        return this.scrollElement.style;
     }
 
     getState(): number {

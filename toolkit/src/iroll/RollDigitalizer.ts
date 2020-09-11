@@ -2,8 +2,19 @@ export default interface RollDigitalizer {
     scrollTo(x: number, y: number, time: number): void;
     translate(x: number, y: number): void;
     getState(): number;
-    setState(state: number): void;
+    getDirectionLockThreshold():number;
     getPosition():ScrollKit.Point;
     getComputedPosition():ScrollKit.Point;
+    getMaxScroll():ScrollKit.Point;
+    setState(state: number): void;
+    setAnimation(easing:string|AnimationKit.Algorithm):void;
     stop():void;
+    isFreeScroll():boolean;
+    isHScroll():boolean;
+    isVScroll():boolean;
+    isHPassthrough():boolean;
+    isVPassthrough():boolean;
+    isTransition():boolean;
+    isResilient():boolean;
+    isOnRush():boolean;
 }

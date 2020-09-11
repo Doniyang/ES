@@ -12,10 +12,11 @@ export default class RollProxy implements RollDigitalizer {
         this.notify = new Notifier()
     }
 
-    get disabled():boolean{
+
+    get disabled(): boolean {
         return this.roll === null
     }
-    
+
     build(roll: RollDigitalizer): void {
         this.roll = roll
     }
@@ -45,16 +46,59 @@ export default class RollProxy implements RollDigitalizer {
         this.roll?.setState(state);
     }
 
-    getComputedPosition():ScrollKit.Point{
+    setAnimation(easing: string | AnimationKit.Algorithm): void {
+        this.roll?.setAnimation(easing)
+    }
+
+    getComputedPosition(): ScrollKit.Point {
         return (this.roll as RollDigitalizer).getComputedPosition()
+    }
+
+    getMaxScroll(): ScrollKit.Point {
+        return (this.roll as RollDigitalizer).getMaxScroll()
     }
 
     getPosition(): ScrollKit.Point {
         return (this.roll as RollDigitalizer).getPosition();
     }
 
-    stop(){
-      this.roll?.stop()
-      this.trigger('scroll:end',this.getPosition())
+    getDirectionLockThreshold(): number {
+        return (this.roll as RollDigitalizer).getDirectionLockThreshold();
+    }
+
+    stop() {
+        this.roll?.stop()
+        this.trigger('scroll:end', this.getPosition())
+    }
+
+    isFreeScroll(): boolean {
+        return (this.roll as RollDigitalizer).isFreeScroll();
+    }
+
+    isHScroll(): boolean {
+        return (this.roll as RollDigitalizer).isHScroll();
+    }
+
+    isVScroll(): boolean {
+        return (this.roll as RollDigitalizer).isVScroll();
+    }
+
+    isHPassthrough(): boolean {
+        return (this.roll as RollDigitalizer).isHPassthrough();
+    }
+
+    isVPassthrough(): boolean {
+        return (this.roll as RollDigitalizer).isVPassthrough();
+    }
+
+    isTransition(): boolean {
+        return (this.roll as RollDigitalizer).isTransition();
+    }
+
+    isResilient(): boolean {
+        return (this.roll as RollDigitalizer).isResilient();
+    }
+    isOnRush(): boolean {
+        return (this.roll as RollDigitalizer).isOnRush();
     }
 }

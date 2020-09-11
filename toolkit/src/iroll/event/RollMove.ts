@@ -1,57 +1,25 @@
 import EventDigitalizer from "../EventDigitalizer";
 import Attribute from "../attribute/Attribute";
 import RollProxy from "../RollProxy";
+import Event from "../utils/Event";
 
 export default class RollMove implements EventDigitalizer {
-    private preventDefault: boolean
-    private isRollFree: boolean;
-    private threshold: number;
-    private passthrough: number;
-    constructor() {
-        this.preventDefault = false
-        this.isRollFree = false
-        this.threshold = 200
-        this.passthrough = 0
-    }
+    constructor() { }
 
-    private isTouchEvent(e: Event): e is TouchEvent {
-        return 'touches' in e
-    }
-
-    private isPreventDefault() {
-        return this.preventDefault
-    }
-    private isInplant(dist: number): boolean {
-        return dist < 10
+    private isIarge(first: number, second: number): boolean {
+        return first > second
     }
 
     private isPlenty(now: number, start: number): boolean {
         return now - start > 300
     }
-
-    private isAxisXPassthrough(): boolean {
-        return this.passthrough === 1
-    }
-
-    private isAxisYPassthrough(): boolean {
-        return this.passthrough === 2
-    }
-
-    private isAxisLocked(): boolean {
-        return !this.isRollFree
-    }
-
-    setPreventDefault(preventDefault: boolean) {
-        this.preventDefault = preventDefault
-    }
     execute(e: MouseEvent | TouchEvent, attrs: Attribute, proxy: RollProxy): void {
         if (proxy.disabled) { return; }
-        if (this.isPreventDefault()) {
-            e.preventDefault()
-        }
-        let point = this.isTouchEvent(e) ? e.touches[0] : e,
+        let point = Event.isTouchEvent(e) ? e.touches[0] : e,
             deltaX = point.pageX - attrs.getPointX(),
             deltaY = point.pageY - attrs.getPointY(),
+            pos = proxy.getPosition(),
+            maxScroll = proxy.getMaxScroll(),
             timestamp = Date.now(),
             newX, newY,
             absDistX, absDistY;
@@ -61,39 +29,68 @@ export default class RollMove implements EventDigitalizer {
         absDistX = Math.abs(attrs.getDeltaX());
         absDistY = Math.abs(attrs.getDeltaY());
 
-        if (this.isPlenty(timestamp, attrs.getEndTime()) && (this.isInplant(absDistX) && this.isInplant(absDistY))) { return; }
+        if (this.isPlenty(timestamp, attrs.getEndTime()) && (this.isIarge(10, absDistX) && this.isIarge(10, absDistY))) { return; }
 
-        if (attrs.isNoLock() && this.isAxisLocked()) {
-            if (absDistX > absDistY + this.threshold) {
-                attrs.setLock(1)
-            } else if (absDistY >= absDistX + this.threshold) {
-                attrs.setLock(2)
+        if (attrs.isNoLocked() && !proxy.isFreeScroll()) {
+            if (absDistX > absDistY + proxy.getDirectionLockThreshold()) {
+                attrs.setMode(1)
+            } else if (absDistY >= absDistX + proxy.getDirectionLockThreshold()) {
+                attrs.setMode(2)
             } else {
-                attrs.setLock(0)
+                attrs.setMode(0)
             }
         }
 
-        if(attrs.isAxisXLocked()){
-            if(this.isAxisYPassthrough()){ e.preventDefault()}
-            if(this.isAxisXPassthrough()){
-                attrs.setState(0)
+        if (attrs.isAxisXLocked()) {
+            if (proxy.isVPassthrough()) {
+                e.preventDefault()
+            }
+            if (proxy.isHPassthrough()) {
+                attrs.setState(0);
                 return;
             }
             deltaY = 0
         }
-
-        if(attrs.isAxisYLocked()){
-            if(this.isAxisXPassthrough()){ e.preventDefault()}
-            if(this.isAxisYPassthrough()){
-                attrs.setState(0)
+        if (attrs.isAxisYLocked()) {
+            if (proxy.isHPassthrough()) {
+                e.preventDefault()
+            }
+            if (proxy.isVPassthrough()) {
+                attrs.setState(0);
                 return;
             }
             deltaX = 0
         }
 
+        deltaX = proxy.isHScroll() ? deltaX : 0
+        deltaY = proxy.isVScroll() ? deltaY : 0
+
+        newX = pos.x + deltaX;
+        newY = pos.y + deltaY;
+
+        if (this.isIarge(newX, 0) || this.isIarge(maxScroll.x, newX)) {
+            newX = proxy.isResilient() ? pos.x + deltaX / 3 : (this.isIarge(newX, 0) ? 0 : maxScroll.x)
+        }
+
+        if (this.isIarge(newY, 0) || this.isIarge(maxScroll.y, newY)) {
+            newY = proxy.isResilient() ? pos.y + deltaY / 3 : (this.isIarge(newY, 0) ? 0 : maxScroll.y)
+        }
+
+
+        if (attrs.getState() !== 2) {
+            proxy.trigger('scroll:start', pos)
+        }
+
+        attrs.setState(2);
+
+        proxy.translate(newX, newY);
+
+        if (this.isPlenty(timestamp, attrs.getStartTime())) {
+            attrs.setStartTime(timestamp)
+            attrs.setStart(pos.x, pos.y)
+        }
     }
     attainState(state: number): boolean {
         return state === 1
     }
-
 }

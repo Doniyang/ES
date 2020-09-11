@@ -47,14 +47,12 @@ export default class Attribute {
      */
     private state: number
     /**
-     * 滚动方式
-     * 1--transition-trabslate 2--transition-default 3--animation-translate 4--animation-default 
+     * 锁定方向
+     * 0 --- 未锁定
+     * 1 --- 锁定X
+     * 2 --- 锁定Y
      */
-    private mode: number
-    /**
-     *0-未锁定 1-锁定 horizontally  2- vertically
-     */  
-    private lock:number
+    private mode:number
 
     constructor() {
         this.start = new Axis();
@@ -68,7 +66,6 @@ export default class Attribute {
         this.endtime = 0;
         this.state = 0;
         this.mode = 0;
-        this.lock = 0
     }
 
     getStartX(): number {
@@ -139,16 +136,16 @@ export default class Attribute {
         return this.state
     }
 
-    isNoLock():boolean{
-        return this.lock === 0
+    isNoLocked():boolean{
+        return this.mode === 0
     }
 
     isAxisXLocked():boolean{
-     return this.lock ===1 
+     return this.mode ===1 
     }
 
     isAxisYLocked():boolean{
-        return this.lock === 2
+        return this.mode === 2
     }
 
     setStart(x: number, y: number):void {
@@ -196,16 +193,9 @@ export default class Attribute {
 
     setState(state: number): void {
         this.state = state;
-    }
-    getMode(): number {
-        return this.mode
-    }
+    } 
     
-    setMode(mode: number): void {
+    setMode(mode:number):void{
         this.mode = mode
-    }
-
-    setLock(code:number):void{
-       this.lock = code  
     }
 }

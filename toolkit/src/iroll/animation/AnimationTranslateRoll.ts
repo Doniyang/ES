@@ -10,38 +10,17 @@ import PrefixStyle from "../../dom/PrefixStyle";
 import Scope from "../scope/Scope";
 
 export default class AnimationTranslateRoll implements RollDigitalizer {
+    readonly mode: number;
     private animation: Animation
     private scope: Scope;
     private raftime: number;
     private algorithm: AnimationKit.Algorithm;
-    private HWCompositing: boolean;
-    constructor(el: HTMLElement, scope: Scope, algorithm: AnimationKit.Algorithm, isComposition: boolean) {
-        this.animation = new Animation(el);
+    constructor(scope: Scope, algorithm: AnimationKit.Algorithm) {
+        this.animation = new Animation();
         this.scope = scope;
         this.raftime = 0;
         this.algorithm = algorithm;
-        this.HWCompositing = isComposition;
-    }
-    stop(): void {
-        this.setState(0);
-        this.animation.cleanRafId()
-    }
-    getPosition(): ScrollKit.Point {
-        return this.scope.position();
-     }
-    getComputedPosition(): ScrollKit.Point {
-        let marix: CSSStyleDeclaration = window.getComputedStyle(this.animation.getScrollElement(), null);
-        let x = 0, y = 0;
-        let matrixs: string[] = marix.getPropertyValue(PrefixStyle.style('transform')).split(')')[0].split(', ')
-        x = +(matrixs[12] || matrixs[4]);
-        y = +(matrixs[13] || matrixs[5]);
-        return { x, y };
-    }
-    getState(): number {
-       return this.animation.getState();
-    }
-    setState(state: number): void {
-       this.animation.setState(state);
+        this.mode = 4
     }
 
     private isInAnimation() {
@@ -79,8 +58,86 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
     private isRapid() {
         return this.HWCompositing && PrefixStyle.has(PrefixStyle.style('perspective'))
     }
+
+    private getScrollElement(): HTMLElement {
+        return this.scope.getScrollElement()
+    }
+
+    private getScrollStyle(): CSSStyleDeclaration {
+        return this.getScrollElement().style;
+    }
+
+    isFreeScroll(): boolean {
+        return this.scope.isAxisScroll();
+    }
+
+    isHScroll(): boolean {
+        return this.scope.isLockAxisXScroll();
+    }
+
+    isVScroll(): boolean {
+        return this.scope.isLockAxisYScroll();
+    }
+
+    isHPassthrough(): boolean {
+        return this.scope.isAxisXPassthrough()
+    }
+
+    isVPassthrough(): boolean {
+        return this.scope.isAxisYPassthrough()
+    }
+
+    isTransition(): boolean {
+        return this.mode === 2
+    }
+
+    isResilient(): boolean {
+        return this.scope.isBounce()
+    }
+
+    isOnRush(): boolean {
+        return this.scope.isMomentum()
+    }
+
+    stop(): void {
+        this.setState(0);
+        this.animation.cleanRafId()
+    }
+
+    getDirectionLockThreshold(): number {
+        return this.scope.getThreshold()
+    }
+
+    getPosition(): ScrollKit.Point {
+        return this.scope.position();
+    }
+
+    getMaxScroll(): ScrollKit.Point {
+        return { x: this.scope.getMaxScrollWidth(), y: this.scope.getMaxScrollHeight() };
+    }
+
+    getComputedPosition(): ScrollKit.Point {
+        let marix: CSSStyleDeclaration = window.getComputedStyle(this.getScrollElement(), null);
+        let x = 0, y = 0;
+        let matrixs: string[] = marix.getPropertyValue(PrefixStyle.style('transform')).split(')')[0].split(', ')
+        x = +(matrixs[12] || matrixs[4]);
+        y = +(matrixs[13] || matrixs[5]);
+        return { x, y };
+    }
+
+    getState(): number {
+        return this.animation.getState();
+    }
+    setState(state: number): void {
+        this.animation.setState(state);
+    }
+
+    setAnimation(algorithm: AnimationKit.Algorithm) {
+        this.algorithm = algorithm
+    }
+
     translate(x: number, y: number) {
-        let scrollStyle = this.animation.getScrollStyle();
+        let scrollStyle = this.getScrollStyle();
         let transform = PrefixStyle.style('transform');
         let translateZ = this.isRapid() ? 'translateZ(0)' : '';
         scrollStyle.setProperty(transform, `translate(${x}px,${y}px) ${translateZ}`);
