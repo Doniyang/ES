@@ -21,6 +21,24 @@ export default class TransitionRoll implements RollDigitalizer {
         return this.getScrollElement().style;
     }
 
+    private getZonePosition(): ScrollKit.Point {
+        let pos = this.getPosition();
+        let x = pos.x, y = pos.y;
+        //左边
+        if (!this.isHScroll() || pos.x > 0) {
+            x = 0
+        } else if (pos.x < this.scope.getMaxScrollWidth()) {//右边
+            x = this.scope.getMaxScrollWidth()
+        }
+        //上边
+        if (!this.isVScroll() || pos.y > 0) {
+            y = 0
+        } else if (pos.y < this.scope.getMaxScrollHeight()) {//下边
+            y = this.scope.getMaxScrollHeight()
+        }
+        return { x, y }
+    }
+
     isFreeScroll(): boolean {
         return this.scope.isAxisScroll();
     }
@@ -53,6 +71,20 @@ export default class TransitionRoll implements RollDigitalizer {
         return this.scope.isMomentum()
     }
 
+    isPeak(): boolean {
+        let pos = this.getPosition(),
+            zone = this.getZonePosition();
+        return pos.x === zone.x && pos.y === zone.y
+    }
+
+    isClickable(): boolean {
+        return this.scope.isClickable();
+     }
+     
+     isTapable(): boolean {
+        return this.scope.isTap();
+     }
+
     getDirectionLockThreshold(): number {
         return this.scope.getThreshold()
     }
@@ -78,6 +110,12 @@ export default class TransitionRoll implements RollDigitalizer {
         this.transition.duration(0, this.getScrollStyle());
         this.translate(pos.x, pos.y);
         this.setState(0);
+    }
+
+    resetPosition(): void {
+        let time = this.scope.getBounceTime(),
+            pos = this.getZonePosition();
+        this.scrollTo(pos.x, pos.y, time)
     }
 
     getState(): number {

@@ -2,6 +2,7 @@ import Axis from "../axis/Axis"
 
 export default class Scope {
     private rootElement: HTMLElement;
+    private deceleration:number;
     private passthrough: number;
     private threshold: number;
     private time: number;
@@ -9,6 +10,8 @@ export default class Scope {
     private momentum: boolean;
     private axis: Axis;
     private scroll: Axis;
+    private clickable:boolean;
+    private tap:boolean;
     constructor(el: HTMLElement) {
         this.rootElement = el;
         this.axis = new Axis();
@@ -18,6 +21,9 @@ export default class Scope {
         this.time = 600
         this.bounce = true
         this.momentum = true
+        this.clickable = false
+        this.tap = false
+        this.deceleration = 0.0006
     }
 
     private getScrollOffsetWidth(): number {
@@ -30,10 +36,6 @@ export default class Scope {
 
     private compare(a: number, b: number): boolean {
         return a < b
-    }
-
-    offset() {
-
     }
 
     setPassthrough(sign: number): void {
@@ -66,6 +68,14 @@ export default class Scope {
 
     setBounceTime(time: number): void {
         this.time = time;
+    }
+
+    setClickable(clickable:boolean){
+        this.clickable = clickable
+    }
+
+    setTap(tap:boolean){
+        this.tap = tap
     }
 
     position(): ScrollKit.Point {
@@ -110,6 +120,14 @@ export default class Scope {
 
     isMomentum(): boolean {
         return this.momentum
+    }
+
+    isClickable(){
+        return this.clickable
+    }
+
+    isTap(){
+        return this.tap
     }
 
     getBounceTime(): number {

@@ -8,6 +8,7 @@ import RollDigitalizer from "../RollDigitalizer";
 import Animation from "./Animation";
 import PrefixStyle from "../../dom/PrefixStyle";
 import Scope from "../scope/Scope";
+import { Notifier } from "src/index";
 
 export default class AnimationTranslateRoll implements RollDigitalizer {
     readonly mode: number;
@@ -15,12 +16,14 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
     private scope: Scope;
     private raftime: number;
     private algorithm: AnimationKit.Algorithm;
+    private notify:null|Notifier,
     constructor(scope: Scope, algorithm: AnimationKit.Algorithm) {
         this.animation = new Animation();
         this.scope = scope;
         this.raftime = 0;
         this.algorithm = algorithm;
         this.mode = 4
+        this.notify = null
     }
 
     private isInAnimation() {
@@ -37,7 +40,10 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
 
         if (this.isTimeOut(now, destTime)) {
             this.translate(dest.x, dest.y);
-            this.animation.cleanRafId()
+            this.animation.cleanRafId();
+            if(this.isPeak()){
+            
+            }
             return;
         }
 
@@ -56,7 +62,7 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
     }
 
     private isRapid() {
-        return this.HWCompositing && PrefixStyle.has(PrefixStyle.style('perspective'))
+        return true
     }
 
     private getScrollElement(): HTMLElement {
@@ -65,6 +71,28 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
 
     private getScrollStyle(): CSSStyleDeclaration {
         return this.getScrollElement().style;
+    }
+
+    private getZonePosition(): ScrollKit.Point {
+        let pos = this.getPosition();
+        let x = pos.x, y = pos.y;
+        //左边
+        if (!this.isHScroll() || pos.x > 0) {
+            x = 0
+        } else if (pos.x < this.scope.getMaxScrollWidth()) {//右边
+            x = this.scope.getMaxScrollWidth()
+        }
+        //上边
+        if (!this.isVScroll() || pos.y > 0) {
+            y = 0
+        } else if (pos.y < this.scope.getMaxScrollHeight()) {//下边
+            y = this.scope.getMaxScrollHeight()
+        }
+        return { x, y }
+    }
+
+    register(notify:Notifier){
+        this.notify =notify
     }
 
     isFreeScroll(): boolean {
@@ -99,9 +127,28 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
         return this.scope.isMomentum()
     }
 
+    isPeak(): boolean {
+        let pos = this.getPosition(),
+            zone = this.getZonePosition();
+        return pos.x === zone.x && pos.y === zone.y
+    }
+    
+    isClickable(): boolean {
+        return this.scope.isClickable();
+     }
+     
+     isTapable(): boolean {
+        return this.scope.isTap();
+     }
     stop(): void {
         this.setState(0);
         this.animation.cleanRafId()
+    }
+
+    resetPosition(): void {
+        let time = this.scope.getBounceTime(),
+            pos = this.getZonePosition();
+        this.scrollTo(pos.x, pos.y, time)
     }
 
     getDirectionLockThreshold(): number {

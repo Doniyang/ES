@@ -9,6 +9,7 @@ export default interface RollDigitalizer {
     setState(state: number): void;
     setAnimation(easing:string|AnimationKit.Algorithm):void;
     stop():void;
+    resetPosition():void;
     isFreeScroll():boolean;
     isHScroll():boolean;
     isVScroll():boolean;
@@ -17,4 +18,7 @@ export default interface RollDigitalizer {
     isTransition():boolean;
     isResilient():boolean;
     isOnRush():boolean;
+    isPeak():boolean;
+    isClickable():boolean;
+    isTapable():boolean;
 }

@@ -6,22 +6,20 @@ export default class Context {
     private attrs: Attribute;
     private context: null | EventDigitalizer;
     private proxy: RollProxy;
-    constructor() {
+    private cache: ScrollKit.Cache<EventDigitalizer>
+    constructor(proxy:RollProxy) {
         this.attrs = new Attribute();
         this.context = null;
-        this.proxy = new RollProxy();
+        this.proxy = proxy;
+        this.cache = {};
+    }
+
+    private isPropInCache(cache: ScrollKit.Cache<EventDigitalizer>, key: string): boolean {
+        return Object.prototype.hasOwnProperty.call(cache, key)
     }
 
     setStart(x: number, y: number) {
         this.attrs.setStart(x, y)
-    }
-
-    setMin(x: number, y: number) {
-        this.attrs.setMin(x, y);
-    }
-
-    setMax(x: number, y: number) {
-        this.attrs.setMax(x, y)
     }
 
     setState(state: number) {
@@ -32,8 +30,12 @@ export default class Context {
         this.attrs.setMode(m)
     }
 
-    setContext(c: ({ new(): EventDigitalizer; })): void {
-        this.context = new c()
+    setContext(key: string, context: ({ new(): EventDigitalizer; })): void {
+        if (this.isPropInCache(this.cache, key)) {
+            this.context = this.cache[key]
+        } else {
+            this.context = this.cache[key] = new context()
+        }
     }
 
     execute(e: Event) {

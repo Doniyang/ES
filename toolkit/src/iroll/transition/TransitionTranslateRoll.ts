@@ -1,6 +1,7 @@
 import RollDigitalizer from "../RollDigitalizer";
 import Transition from "./Transition";
 import Scope from "../scope/Scope";
+import PrefixStyle from "../../dom/PrefixStyle";
 
 export default class TransitionTranslateRoll implements RollDigitalizer {
     readonly mode: number
@@ -24,6 +25,24 @@ export default class TransitionTranslateRoll implements RollDigitalizer {
 
     private getScrollStyle(): CSSStyleDeclaration {
         return this.getScrollElement().style;
+    }
+
+    private getZonePosition(): ScrollKit.Point {
+        let pos = this.getPosition();
+        let x = pos.x, y = pos.y;
+        //左边
+        if (!this.isHScroll() || pos.x > 0) {
+            x = 0
+        } else if (pos.x < this.scope.getMaxScrollWidth()) {//右边
+            x = this.scope.getMaxScrollWidth()
+        }
+        //上边
+        if (!this.isVScroll() || pos.y > 0) {
+            y = 0
+        } else if (pos.y < this.scope.getMaxScrollHeight()) {//下边
+            y = this.scope.getMaxScrollHeight()
+        }
+        return { x, y }
     }
 
     isFreeScroll(): boolean {
@@ -54,9 +73,23 @@ export default class TransitionTranslateRoll implements RollDigitalizer {
         return this.scope.isBounce()
     }
 
+    isPeak(): boolean {
+        let pos = this.getPosition(),
+            zone = this.getZonePosition();
+        return pos.x === zone.x && pos.y === zone.y
+    }
+
     isOnRush(): boolean {
         return this.scope.isMomentum()
     }
+
+    isClickable(): boolean {
+        return this.scope.isClickable();
+     }
+     
+     isTapable(): boolean {
+        return this.scope.isTap();
+     }
 
     getDirectionLockThreshold(): number {
         return this.scope.getThreshold()
@@ -84,6 +117,12 @@ export default class TransitionTranslateRoll implements RollDigitalizer {
         this.transition.duration(0, this.getScrollStyle());
         this.translate(pos.x, pos.y);
         this.setState(0);
+    }
+
+    resetPosition(): void {
+        let time = this.scope.getBounceTime(),
+            pos = this.getZonePosition();
+        this.scrollTo(pos.x, pos.y, time);
     }
 
     getState(): number {

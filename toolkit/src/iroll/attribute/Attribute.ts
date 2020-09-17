@@ -23,14 +23,6 @@ export default class Attribute {
      */
     private direction: Axis;
     /**
-     *最小移动点  
-     */
-    private min: Axis;
-    /**
-     *最大移动点 
-     */
-    private max: Axis;
-    /**
      * 用来记录手指接触屏幕的点或者鼠标滚动开始的点
      */ 
     private point:Axis;
@@ -100,22 +92,6 @@ export default class Attribute {
         return this.direction.getAxisY();
     }
 
-    getMinX(): number {
-        return this.min.getAxisX();
-    }
-
-    getMinY(): number {
-        return this.min.getAxisY();
-    }
-
-    getMaxX(): number {
-        return this.max.getAxisX();
-    }
-
-    getMaxY(): number {
-        return this.max.getAxisY();
-    }
-
     getPointX(): number {
         return this.point.getAxisX();
     }
@@ -166,16 +142,6 @@ export default class Attribute {
     setDirection(x: number, y: number): void {
         this.direction.setAxisX(x)
         this.direction.setAxisY(y)
-    }
-
-    setMin(x: number, y: number) {
-        this.min.setAxisX(x);
-        this.min.setAxisY(y);
-    }
-
-    setMax(x: number, y: number) {
-        this.max.setAxisX(x);
-        this.max.setAxisY(y);
     }
 
     setPoint(x:number,y:number){

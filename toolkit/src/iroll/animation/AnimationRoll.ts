@@ -4,11 +4,13 @@
 import RollDigitalizer from "../RollDigitalizer";
 import Animation from "./Animation";
 import Scope from "../scope/Scope";
+import Notify from "../notify/Notify";
 
 export default class AnimationRoll implements RollDigitalizer {
     readonly mode: number
     private scope: Scope;
     private raftime: number;
+    private notify:null|Notify
     private algorithm: AnimationKit.Algorithm;
     private animation: Animation;
     constructor(scope: Scope, algorithm: AnimationKit.Algorithm) {
@@ -16,8 +18,10 @@ export default class AnimationRoll implements RollDigitalizer {
         this.scope = scope;
         this.raftime = 0;
         this.algorithm = algorithm;
-        this.mode = 3
+        this.mode = 3;
+        this.notify = null
     }
+    
 
     private isInAnimation() {
         return this.animation.getState() === 2
@@ -60,6 +64,24 @@ export default class AnimationRoll implements RollDigitalizer {
         return this.getScrollElement().style;
     }
 
+    private getZonePosition(): ScrollKit.Point {
+        let pos = this.getPosition();
+        let x = pos.x, y = pos.y;
+        //左边
+        if (!this.isHScroll() || pos.x > 0) {
+            x = 0
+        } else if (pos.x < this.scope.getMaxScrollWidth()) {//右边
+            x = this.scope.getMaxScrollWidth()
+        }
+        //上边
+        if (!this.isVScroll() || pos.y > 0) {
+            y = 0
+        } else if (pos.y < this.scope.getMaxScrollHeight()) {//下边
+            y = this.scope.getMaxScrollHeight()
+        }
+        return { x, y }
+    }
+
     isFreeScroll(): boolean {
         return this.scope.isAxisScroll();
     }
@@ -92,9 +114,29 @@ export default class AnimationRoll implements RollDigitalizer {
         return this.scope.isMomentum()
     }
 
+    isPeak(): boolean {
+        let pos = this.getPosition(),
+            zone = this.getZonePosition();
+        return pos.x === zone.x && pos.y === zone.y
+    }
+
+    isClickable(): boolean {
+       return this.scope.isClickable();
+    }
+    
+    isTapable(): boolean {
+       return this.scope.isTap();
+    }
+
     stop(): void {
         this.setState(0);
         this.animation.cleanRafId()
+    }
+
+    resetPosition(): void {
+        let time = this.scope.getBounceTime(),
+            pos = this.getZonePosition();
+        this.scrollTo(pos.x, pos.y, time)
     }
 
     getDirectionLockThreshold(): number {

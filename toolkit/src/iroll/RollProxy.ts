@@ -1,18 +1,16 @@
 import RollDigitalizer from "./RollDigitalizer";
 import Notifier from "../notify/Notifier";
 import ClassicEvent from "../event/ClassicEvent";
+import Notify from "./notify/Notify";
 
-export default class RollProxy implements RollDigitalizer {
+export default class RollProxy  implements RollDigitalizer {
     private roll: null | RollDigitalizer;
-
-    private notify: Notifier
-
-    constructor() {
-        this.roll = null;
-        this.notify = new Notifier()
+    private notify: Notify;
+    constructor(notify: Notify) {
+        this.roll = null
+        this.notify = notify
     }
-
-
+    
     get disabled(): boolean {
         return this.roll === null
     }
@@ -21,16 +19,8 @@ export default class RollProxy implements RollDigitalizer {
         this.roll = roll
     }
 
-    on(evt: string, fn: Callbackable<ClassicEvent>) {
-        this.notify.on(evt, fn)
-    }
-
-    off(evt: string, fn?: Callbackable<ClassicEvent>) {
-        this.notify.off(evt, fn)
-    }
-
     trigger(e: string | ClassicEvent, ...args: Array<argsOption>) {
-        this.notify.notify(e, args)
+        (this.notify as Notify).trigger(e, args)
     }
 
     scrollTo(x: number, y: number, time: number): void {
@@ -66,9 +56,13 @@ export default class RollProxy implements RollDigitalizer {
         return (this.roll as RollDigitalizer).getDirectionLockThreshold();
     }
 
-    stop() {
+    stop(): void {
         this.roll?.stop()
         this.trigger('scroll:end', this.getPosition())
+    }
+
+    resetPosition(): void {
+        this.roll?.resetPosition()
     }
 
     isFreeScroll(): boolean {
@@ -100,5 +94,17 @@ export default class RollProxy implements RollDigitalizer {
     }
     isOnRush(): boolean {
         return (this.roll as RollDigitalizer).isOnRush();
+    }
+
+    isPeak(): boolean {
+        return (this.roll as RollDigitalizer).isPeak();
+    }
+
+    isClickable(): boolean {
+        return (this.roll as RollDigitalizer).isClickable();
+    }
+
+    isTapable(): boolean {
+        return (this.roll as RollDigitalizer).isTapable();
     }
 }
