@@ -21,8 +21,6 @@ declare namespace ScrollKit {
         useTransition?: boolean
         useTransform?: boolean
         bindToWrapper?: boolean
-        disableMouse?: boolean
-        disableTouch?: boolean
     }
     interface Point {
         x: number

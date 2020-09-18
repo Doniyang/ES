@@ -8,7 +8,7 @@ import RollDigitalizer from "../RollDigitalizer";
 import Animation from "./Animation";
 import PrefixStyle from "../../dom/PrefixStyle";
 import Scope from "../scope/Scope";
-import { Notifier } from "src/index";
+import Notify from "../notify/Notify";
 
 export default class AnimationTranslateRoll implements RollDigitalizer {
     readonly mode: number;
@@ -16,14 +16,14 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
     private scope: Scope;
     private raftime: number;
     private algorithm: AnimationKit.Algorithm;
-    private notify:null|Notifier;
-    constructor(scope: Scope, algorithm: AnimationKit.Algorithm) {
+    private notify:Notify;
+    constructor(scope: Scope, algorithm: AnimationKit.Algorithm,notify:Notify) {
         this.animation = new Animation();
         this.scope = scope;
         this.raftime = 0;
         this.algorithm = algorithm;
         this.mode = 4
-        this.notify = null
+        this.notify = notify
     }
 
     private isInAnimation() {
@@ -32,6 +32,14 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
 
     private isTimeOut(now: number, duration: number) {
         return now >= duration
+    }
+
+    private onFinish(){
+        if(this.isPeak()){
+          this.notify.trigger('scroll:end',this.getPosition())
+        }else{
+          this.resetPosition()
+        }
     }
 
     private animationFrame(start: ScrollKit.Point, dest: ScrollKit.Point, duration: number, startTime: number) {
@@ -89,10 +97,6 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
             y = this.scope.getMaxScrollHeight()
         }
         return { x, y }
-    }
-
-    register(notify:Notifier){
-        this.notify =notify
     }
 
     isFreeScroll(): boolean {

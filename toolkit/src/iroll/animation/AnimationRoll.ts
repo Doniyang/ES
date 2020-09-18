@@ -10,16 +10,16 @@ export default class AnimationRoll implements RollDigitalizer {
     readonly mode: number
     private scope: Scope;
     private raftime: number;
-    private notify: null | Notify
+    private notify: Notify
     private algorithm: AnimationKit.Algorithm;
     private animation: Animation;
-    constructor(scope: Scope, algorithm: AnimationKit.Algorithm) {
+    constructor(scope: Scope, algorithm: AnimationKit.Algorithm, notify: Notify) {
         this.animation = new Animation();
         this.scope = scope;
         this.raftime = 0;
         this.algorithm = algorithm;
         this.mode = 3;
-        this.notify = null
+        this.notify = notify
     }
 
 
@@ -31,6 +31,14 @@ export default class AnimationRoll implements RollDigitalizer {
         return now >= duration
     }
 
+    private onFinish(){
+        if(this.isPeak()){
+          this.notify.trigger('scroll:end',this.getPosition())
+        }else{
+          this.resetPosition()
+        }
+    }
+
     private animationFrame(start: ScrollKit.Point, dest: ScrollKit.Point, duration: number, startTime: number) {
         let destTime = startTime + duration, now = Date.now(), newX, newY, easing;
         const that = this
@@ -39,6 +47,7 @@ export default class AnimationRoll implements RollDigitalizer {
             this.translate(dest.x, dest.y);
             this.animation.cleanRafId();
             this.raftime = 0
+            this.onFinish()
             return;
         }
 
@@ -151,7 +160,7 @@ export default class AnimationRoll implements RollDigitalizer {
         return { x: this.scope.getClientWidth(), y: this.scope.getClientHeight() }
     }
 
-    getDeceleration():number{
+    getDeceleration(): number {
         return this.scope.getDeceleration();
     }
 

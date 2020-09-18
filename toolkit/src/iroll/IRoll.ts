@@ -10,7 +10,12 @@ import RollStop from "./core/RollStop";
 import RollRefresh from "./core/RollRefresh";
 import RollFinish from "./core/RollFinish";
 import RollMove from "./core/RollMove";
-import PrefixStyle from "src/dom/PrefixStyle";
+import PrefixStyle from "../dom/PrefixStyle";
+import TransitionTranslateRoll from "./transition/TransitionTranslateRoll";
+import CircularFactory from "../anmiation/circular/CircularFactory";
+import TransitionRoll from "./transition/TransitionRoll";
+import AnimationTranslateRoll from "./animation/AnimationTranslateRoll";
+import AnimationRoll from "./animation/AnimationRoll";
 export default class DigitalScroll {
   /**
    * direction lock threshold
@@ -89,7 +94,10 @@ export default class DigitalScroll {
     if (isBoolean(options.bindToWrapper)) {
       this.bindToWrapper = options.bindToWrapper
     }
-    
+    this.scope.setScrollX(options.scrollX ? 1 : 0)
+    this.scope.setScrollY(options.scrollY ? 1 : 0)
+    this.scope.setScrollZ(options.freeScroll ? 1 : 0)
+    this.context.setStart(options.startX || 0, options.startY || 0)
   }
 
   private isSupport(e: string, context: any): boolean {
@@ -246,13 +254,30 @@ export default class DigitalScroll {
     listener(this.scope.getScrollElement(), 'oTransitionEnd', this);
     listener(this.scope.getScrollElement(), 'MSTransitionEnd', this);
   }
-
+  private initRoll() {
+    const circular = new CircularFactory();
+    if (this.isSuportTransition()) {
+      if (this.isSuportTransform()) {
+        this.rollProxy.build(new TransitionTranslateRoll(this.scope, circular.style()))
+      } else {
+        this.rollProxy.build(new TransitionRoll(this.scope, circular.style()))
+      }
+    } else {
+      if (this.isSuportTransform()) {
+        this.rollProxy.build(new AnimationTranslateRoll(this.scope, circular.algorithm, this.notify))
+      } else {
+        this.rollProxy.build(new AnimationRoll(this.scope, circular.algorithm, this.notify))
+      }
+    }
+  }
 
   /**
    * initializer
    */
-  public initializer() {
+  private initializer() {
     this.addEvents();
+    this.initRoll();
+    this.scrollTo(this.context.getStartX(), this.context.getStartY(), 0)
   }
 
   /**
@@ -263,6 +288,6 @@ export default class DigitalScroll {
    * @param ease 
    */
   public scrollTo(x: number, y: number, time: number) {
-    this.rollProxy.scrollTo(x,y,time);
+    this.rollProxy.scrollTo(x, y, time);
   }
 }

@@ -7,7 +7,7 @@ export default class Context {
     private context: null | EventDigitalizer;
     private proxy: RollProxy;
     private cache: ScrollKit.Cache<EventDigitalizer>
-    constructor(proxy:RollProxy) {
+    constructor(proxy: RollProxy) {
         this.attrs = new Attribute();
         this.context = null;
         this.proxy = proxy;
@@ -20,6 +20,14 @@ export default class Context {
 
     setStart(x: number, y: number) {
         this.attrs.setStart(x, y)
+    }
+
+    getStartX(): number {
+        return this.attrs.getStartX()
+    }
+
+    getStartY(): number {
+        return this.attrs.getStartY()
     }
 
     setState(state: number) {
