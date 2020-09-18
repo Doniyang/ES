@@ -6,6 +6,8 @@ export default interface RollDigitalizer {
     getPosition():ScrollKit.Point;
     getComputedPosition():ScrollKit.Point;
     getMaxScroll():ScrollKit.Point;
+    getSize():ScrollKit.Point;
+    getDeceleration():number;
     setState(state: number): void;
     setAnimation(easing:string|AnimationKit.Algorithm):void;
     stop():void;

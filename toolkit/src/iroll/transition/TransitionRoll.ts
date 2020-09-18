@@ -97,6 +97,14 @@ export default class TransitionRoll implements RollDigitalizer {
         return this.scope.position();
     }
 
+    getSize(): ScrollKit.Point {
+        return { x: this.scope.getClientWidth(), y: this.scope.getClientHeight() }
+    }
+
+    getDeceleration():number{
+        return this.scope.getDeceleration();
+    }
+
     getComputedPosition(): ScrollKit.Point {
         let marix: CSSStyleDeclaration = window.getComputedStyle(this.getScrollElement(), null);
         let x = 0, y = 0;
@@ -111,6 +119,7 @@ export default class TransitionRoll implements RollDigitalizer {
         this.translate(pos.x, pos.y);
         this.setState(0);
     }
+    
 
     resetPosition(): void {
         let time = this.scope.getBounceTime(),

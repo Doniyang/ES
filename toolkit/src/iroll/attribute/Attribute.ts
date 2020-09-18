@@ -51,8 +51,6 @@ export default class Attribute {
         this.absStart = new Axis();
         this.delta = new Axis();
         this.direction = new Axis();
-        this.min = new Axis();
-        this.max = new Axis();
         this.point = new Axis();
         this.starttime = 0;
         this.endtime = 0;

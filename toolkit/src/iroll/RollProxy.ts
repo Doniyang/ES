@@ -1,5 +1,4 @@
 import RollDigitalizer from "./RollDigitalizer";
-import Notifier from "../notify/Notifier";
 import ClassicEvent from "../event/ClassicEvent";
 import Notify from "./notify/Notify";
 
@@ -29,6 +28,15 @@ export default class RollProxy  implements RollDigitalizer {
     translate(x: number, y: number): void {
         this.roll?.translate(x, y);
     }
+     
+    getSize(): ScrollKit.Point {
+      return (this.roll as RollDigitalizer).getSize();
+    }
+
+    getDeceleration(): number {
+        return (this.roll as RollDigitalizer).getDeceleration();
+    }
+
     getState(): number {
         return (this.roll as RollDigitalizer).getState();
     }

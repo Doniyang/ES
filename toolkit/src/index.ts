@@ -24,3 +24,5 @@ export { default as EaseOutQuart} from './anmiation/ease-out-quart/EaseOutQuartF
 export { default as EaseOutQuint} from './anmiation/ease-out-quint/EaseOutQuintFactory'
 export { default as Elastic} from './anmiation/elastic/ElasticFactory'
 export { default as Quadratic} from './anmiation/quadratic/QuadraticFactory'
+
+export {default as IRoll} from './iroll/IRoll'

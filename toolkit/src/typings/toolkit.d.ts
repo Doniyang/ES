@@ -7,3 +7,7 @@ declare interface Callbackable<T> {
 declare interface rafCallback{
   (t:number):void
 }
+
+declare interface StylePrefix{
+  [key:string]:string
+}

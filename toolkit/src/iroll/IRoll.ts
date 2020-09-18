@@ -1,10 +1,16 @@
 import isString from "../is/isString"
 import isNumber from "../is/isNumber"
 import isBoolean from "../is/isBoolean"
-import Notifier from "src/notify/Notifier"
-import ParametricSerializer from './ParametricSerializer';
-import ContextDigitalizer from "./ContextDigitalizer";
-import TouchStartDigitalizer from "./TouchStartDigitalizer";
+import Scope from "./scope/Scope";
+import RollProxy from "./RollProxy";
+import Context from "./Context";
+import Notify from "./notify/Notify";
+import RollStart from "./core/RollStart";
+import RollStop from "./core/RollStop";
+import RollRefresh from "./core/RollRefresh";
+import RollFinish from "./core/RollFinish";
+import RollMove from "./core/RollMove";
+import PrefixStyle from "src/dom/PrefixStyle";
 export default class DigitalScroll {
   /**
    * direction lock threshold
@@ -15,266 +21,153 @@ export default class DigitalScroll {
    */
   readonly bounceTime: number
   /**
-   * momentum limit time
-   */
-  readonly momentumLimitTime: number
-  /**
-   * momentum limit distance
-   */
-  readonly momentumLimitDistance: number
-  /**
-   * swipe time
-   */
-  readonly swipeTime: number
-  /**
-   * swipe bounce time
-   */
-  readonly swipeBounceTime: number
-  /**
    * deceleration
    */
   readonly deceleration: number
-  /**
-   * flick limit time
-   */
-  readonly flickLimitTime: number
-  /**
-   * flick limit distance
-   */
-  readonly flickLimitDistance: number
-  /**
-   * resize polling
-   */
-  readonly resizePolling: number
-
-  /**
-   * allow x scroll or not
-   */
-  private scrollX: boolean
-  /**
-   * allow y scroll or not
-   */
-  private scrollY: boolean
-  /**
-   * allow x/y scroll or not
-   */
-  private freeScroll: boolean
-  /**
-   * event pass through
-   * 1 axis y
-   * 0 axis x
-   * -1 none
-   */
-  private eventPassthrough: ParametricSerializer<number>
-  /**
-   * clickable
-   */
-  private clickable: ParametricSerializer<boolean>
-  /**
-   * tap
-   */
-  private tap: ParametricSerializer<boolean>
-  /**
-   * bounce
-   */
-  private bounce: ParametricSerializer<boolean>
-  /**
-   * momentum
-   */
-  private momentum: ParametricSerializer<boolean>
-  /**
-   * probe
-   */
-  private probe: ParametricSerializer<number>
-  /**
-   * prevent default
-   */
-  private preventDefault: ParametricSerializer<boolean>
-  /**
-   * prevent default exception
-   */
-  private preventDefaultFilter: ScrollKit.ElementFilter
-  /**
-   * use tramformZ
-   */
-  private HWCompositing: ParametricSerializer<boolean>
-  /**
-   * use transition
-   */
-  private useTransition: ParametricSerializer<boolean>
-  /**
-   * use transform
-   */
-  private useTransform: ParametricSerializer<boolean>
-  /**
-   * bind to wrapper
-   */
-  private bindToWrapper: ParametricSerializer<boolean>
-  /**
-   * scroll element
-   */
-  private scrollingElement: HTMLElement | null
-
-  private scrollWrapElement: HTMLElement | null
 
 
-  private enable: boolean
+  private preventDefault: boolean
 
-  private notify: Notifier
-  
-  private context:ContextDigitalizer
+  private useTransition: boolean
+
+  private useTransform: boolean
+
+  private bindToWrapper: boolean
+
+  private scope: Scope;
+  private rollProxy: RollProxy;
+  private context: Context;
+  private notify: Notify;
   constructor(wrapper: ScrollKit.ElementWrapper, options: ScrollKit.scrollOptions) {
-    this.scrollWrapElement = isString(wrapper) ? document.querySelector(wrapper as string) : (wrapper as HTMLElement)
     this.directionLockThreshold = 5
     this.bounceTime = 700
-    this.momentumLimitTime = 300
-    this.momentumLimitDistance = 15
-    this.swipeTime = 2500
-    this.swipeBounceTime = 500
-    this.deceleration = 0.001
-    this.flickLimitTime = 200
-    this.flickLimitDistance = 100
-    this.resizePolling = 60
-    
-    this.eventPassthrough = new ParametricSerializer<number>(-1);
-    this.clickable = new ParametricSerializer(false);
-    this.tap = new ParametricSerializer<boolean>(false)
-    this.bounce = new ParametricSerializer<boolean>(true)
-    this.momentum = new ParametricSerializer<boolean>(true);
-    this.probe = new ParametricSerializer<number>(0)
-    this.preventDefault = new ParametricSerializer<boolean>(true)
-    this.preventDefaultFilter = options.preventDefaultFilter || function(el:HTMLElement):boolean{ return /^(INPUT|TEXTAREA|BUTTON|SELECT)$/.test(el.tagName)}
-    this.HWCompositing = new ParametricSerializer<boolean>(true)
-    this.useTransition = new ParametricSerializer<boolean>(true)
-    this.useTransform = new ParametricSerializer<boolean>(true)
-    this.bindToWrapper = new ParametricSerializer<boolean>(this.isSupportMouseEvent())
-    /*this.scrollingElement = (this.scrollWrapElement as HTMLElement).firstChild*/
-    this.context = new ContextDigitalizer();
+    this.deceleration = 0.0015
+    this.preventDefault = true
+    this.useTransform = true
+    this.useTransition = true
+    this.bindToWrapper = typeof window.onmousedown === 'undefined';
+    this.notify = new Notify()
+    this.scope = new Scope(isString(wrapper) ? document.body.querySelector(wrapper) as HTMLElement : wrapper as HTMLElement);
+    this.rollProxy = new RollProxy(this.notify);
+    this.context = new Context(this.rollProxy);
     this.updateScrollOptions(options);
-    this.initializer();
+    this.initializer()
   }
 
   private updateScrollOptions(options: ScrollKit.scrollOptions) {
     if (isNumber(options.eventPassthrough)) {
-      this.eventPassthrough.setProperty(options.eventPassthrough)
+      this.scope.setPassthrough(options.eventPassthrough)
     }
     if (isBoolean(options.clickable)) {
-      this.clickable.setProperty(options.clickable)
+      this.scope.setClickable(options.clickable)
     }
     if (isBoolean(options.tap)) {
-      this.tap.setProperty(options.tap)
+      this.scope.setTap(options.tap)
     }
     if (isBoolean(options.bounce)) {
-      this.bounce.setProperty(options.bounce)
+      this.scope.setBounce(options.bounce)
     }
     if (isBoolean(options.momentum)) {
-      this.momentum.setProperty(options.momentum)
+      this.scope.setMomentum(options.momentum)
     }
-    if (isNumber(options.probe)) {
-      this.probe.setProperty(options.probe)
+
+    if (isBoolean(options.HWCompositing)) {
+      this.scope.setHWCompositing(options.HWCompositing)
     }
 
     if (isBoolean(options.preventDefault)) {
-      this.preventDefault.setProperty(options.preventDefault);
+      this.preventDefault = options.preventDefault;
     }
-    if (isBoolean(options.HWCompositing)) {
-      this.HWCompositing.setProperty(options.HWCompositing)
-    }
+
     if (isBoolean(options.useTransition)) {
-      this.useTransition.setProperty(options.useTransition)
+      this.useTransition = options.useTransition
     }
 
     if (isBoolean(options.useTransform)) {
-      this.useTransform.setProperty(options.useTransform)
+      this.useTransform = options.useTransform
     }
     if (isBoolean(options.bindToWrapper)) {
-      this.bindToWrapper.setProperty(options.bindToWrapper)
+      this.bindToWrapper = options.bindToWrapper
     }
+    
   }
 
   private isSupport(e: string, context: any): boolean {
     return e in context
   }
 
-  private isSupportMouseEvent(): boolean {
-    return this.isSupport('onmousedown', window);
-  }
-
-  private isSupportPointer(): boolean {
-    return this.isSupport('PointerEvent', window) || this.isSupport('MSPointerEvent', window)
-  }
-
-  private isSuportPerspective(): boolean {
-    return this.isSupport(this.prefixStyle('perspective'), this.pseudo().style)
-  }
-
   private isSuportTransform(): boolean {
-    return this.isSupport(this.prefixStyle('transform'), this.pseudo().style) && this.useTransform.value()
+    return PrefixStyle.has('transform') && this.useTransform
   }
 
   private isSuportTransition(): boolean {
-    return this.isSupport(this.prefixStyle('transition'), this.pseudo().style) && this.useTransition.value() 
+    return PrefixStyle.has('transition') && this.useTransition
   }
 
   private isSupportTouch(): boolean {
     return this.isSupport('ontouchstart', window);
   }
- 
-  private on(el: HTMLElement, type: string, fn: EventListenerOrEventListenerObject, capture: boolean) {
+
+  private addEventListener(el: HTMLElement, type: string, fn: EventListenerOrEventListenerObject, capture: boolean) {
     el.addEventListener(type, fn, capture);
   }
 
-  private off(el: HTMLElement, type: string, fn: EventListenerOrEventListenerObject, capture: boolean) {
+  private removeEventListener(el: HTMLElement, type: string, fn: EventListenerOrEventListenerObject, capture: boolean) {
     el.removeEventListener(type, fn, capture)
   }
 
+  private stopPreventDefault(e: Event): void {
+    if (this.preventDefault) {
+      e.preventDefault()
+    }
+  }
+
   private handleStart(e: Event) {
-    this.context.setContext(TouchStartDigitalizer);
-    this.context.execute(e) 
+    this.context.setContext('start', RollStart);
+    this.stopPreventDefault(e);
+    this.context.execute(e)
   }
 
   private handleStop(e: Event) {
-
+    this.context.setContext('stop', RollStop)
+    this.stopPreventDefault(e);
+    this.context.execute(e)
   }
 
   private resize(e: Event) {
-
+    this.context.setContext('resize', RollRefresh);
+    this.stopPreventDefault(e);
+    this.context.execute(e);
   }
   private handleTransitionEnd(e: Event) {
-
+    this.context.setContext('finish', RollFinish);
+    this.stopPreventDefault(e);
+    this.context.execute(e);
   }
 
   private wheel(e: Event) {
 
   }
 
-  private handleMove(e: Event) { }
-
-  private handleKey(e: Event) {
-
+  private handleMove(e: Event) {
+    this.context.setContext('move', RollMove);
+    this.stopPreventDefault(e);
+    this.context.execute(e);
   }
 
   protected handleEvent(e: Event) {
     switch (e.type) {
       case 'touchstart':
-      case 'pointerdown':
-      case 'MSPointerDown':
       case 'mousedown':
         this.handleStart(e);
         break;
       case 'touchmove':
-      case 'pointermove':
-      case 'MSPointerMove':
       case 'mousemove':
         this.handleMove(e);
         break;
       case 'touchend':
-      case 'pointerup':
-      case 'MSPointerUp':
       case 'mouseup':
       case 'touchcancel':
-      case 'pointercancel':
-      case 'MSPointerCancel':
       case 'mousecancel':
         this.handleStop(e);
         break;
@@ -293,8 +186,6 @@ export default class DigitalScroll {
       case 'mousewheel':
         this.wheel(e);
         break;
-      case 'keydown':
-        this.handleKey(e);
         break;
       case 'click':
 
@@ -305,44 +196,38 @@ export default class DigitalScroll {
     }
   }
 
-  /**
-   * initializer
-   */
-  public initializer() {
-    this.addDOMEvents();
-    this.refresh()
-  }
 
   /**
    * addDOMEvents
    */
-  public addDOMEvents() {
-    this.makeDOMEvents(this.on)
+  private addEvents() {
+    this.initEvents(this.addEventListener)
   }
 
   /**
    * removeDOMEvents
    */
-  public removeDOMEvents() {
-    this.makeDOMEvents(this.off)
+  private removeEvents() {
+    this.initEvents(this.removeEventListener)
   }
 
   /**
    * makeDOMEvents
    */
-  public makeDOMEvents(listener: Function) {
-    const target = this.bindToWrapper.value() ? this.scrollWrapElement : window
+  private initEvents(listener: Function) {
+    const rootElement: HTMLElement = this.scope.getWrapElement();
+    const target: HTMLElement | Window = this.bindToWrapper ? rootElement : window;
     listener(window, 'orientationchange', this)
     listener(window, 'resize', this)
 
-    if (this.clickable) {
-      listener(this.scrollWrapElement, 'click', this, true)
+    if (this.scope.isClickable()) {
+      listener(rootElement, 'click', this, true)
     }
     /**
      * mouse
      *  */
-    if (this.isSupportMouseEvent()) {
-      listener(this.scrollWrapElement, 'mousedown', this)
+    if (!this.isSupportTouch()) {
+      listener(rootElement, 'mousedown', this)
       listener(target, 'mousemove', this)
       listener(target, 'mousecancel', this)
       listener(target, 'mouseup', this)
@@ -351,20 +236,23 @@ export default class DigitalScroll {
      *  touch
      * */
     if (this.isSupportTouch()) {
-      listener(this.scrollWrapElement, 'touchstart', this)
+      listener(rootElement, 'touchstart', this)
       listener(target, 'touchmove', this)
       listener(target, 'touchcancel', this)
       listener(target, 'touchend', this)
     }
-
-    listener(this.scrollingElement, 'transitionEnd', this)
+    listener(this.scope.getScrollElement(), 'transitionend', this);
+    listener(this.scope.getScrollElement(), 'webkitTransitionEnd', this);
+    listener(this.scope.getScrollElement(), 'oTransitionEnd', this);
+    listener(this.scope.getScrollElement(), 'MSTransitionEnd', this);
   }
 
-  /**
-   * refresh
-   */  
-  public refresh() {
 
+  /**
+   * initializer
+   */
+  public initializer() {
+    this.addEvents();
   }
 
   /**
@@ -374,8 +262,7 @@ export default class DigitalScroll {
    * @param time 
    * @param ease 
    */
-  public scrollTo(x: number, y: number, time?: number, ease?: iRoll.Anmation) {
-
+  public scrollTo(x: number, y: number, time: number) {
+    this.rollProxy.scrollTo(x,y,time);
   }
-
 }

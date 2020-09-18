@@ -10,7 +10,7 @@ export default class AnimationRoll implements RollDigitalizer {
     readonly mode: number
     private scope: Scope;
     private raftime: number;
-    private notify:null|Notify
+    private notify: null | Notify
     private algorithm: AnimationKit.Algorithm;
     private animation: Animation;
     constructor(scope: Scope, algorithm: AnimationKit.Algorithm) {
@@ -21,7 +21,7 @@ export default class AnimationRoll implements RollDigitalizer {
         this.mode = 3;
         this.notify = null
     }
-    
+
 
     private isInAnimation() {
         return this.animation.getState() === 2
@@ -121,11 +121,11 @@ export default class AnimationRoll implements RollDigitalizer {
     }
 
     isClickable(): boolean {
-       return this.scope.isClickable();
+        return this.scope.isClickable();
     }
-    
+
     isTapable(): boolean {
-       return this.scope.isTap();
+        return this.scope.isTap();
     }
 
     stop(): void {
@@ -145,6 +145,14 @@ export default class AnimationRoll implements RollDigitalizer {
 
     getPosition(): ScrollKit.Point {
         return this.scope.position();
+    }
+
+    getSize(): ScrollKit.Point {
+        return { x: this.scope.getClientWidth(), y: this.scope.getClientHeight() }
+    }
+
+    getDeceleration():number{
+        return this.scope.getDeceleration();
     }
 
     getMaxScroll(): ScrollKit.Point {

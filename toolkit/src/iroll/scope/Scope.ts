@@ -1,8 +1,8 @@
 import Axis from "../axis/Axis"
 
 export default class Scope {
-    private rootElement: HTMLElement;
-    private deceleration:number;
+    readonly rootElement: HTMLElement;
+    private deceleration: number;
     private passthrough: number;
     private threshold: number;
     private time: number;
@@ -10,8 +10,9 @@ export default class Scope {
     private momentum: boolean;
     private axis: Axis;
     private scroll: Axis;
-    private clickable:boolean;
-    private tap:boolean;
+    private clickable: boolean;
+    private tap: boolean;
+    private HWCompositing:boolean
     constructor(el: HTMLElement) {
         this.rootElement = el;
         this.axis = new Axis();
@@ -24,6 +25,7 @@ export default class Scope {
         this.clickable = false
         this.tap = false
         this.deceleration = 0.0006
+        this.HWCompositing = true
     }
 
     private getScrollOffsetWidth(): number {
@@ -66,16 +68,24 @@ export default class Scope {
         this.momentum = momentum
     }
 
+    setDeceleration(deceleration: number): void {
+        this.deceleration = deceleration
+    }
+
     setBounceTime(time: number): void {
         this.time = time;
     }
 
-    setClickable(clickable:boolean){
+    setClickable(clickable: boolean): void {
         this.clickable = clickable
     }
 
-    setTap(tap:boolean){
+    setTap(tap: boolean): void {
         this.tap = tap
+    }
+
+    setHWCompositing(isComposition:boolean):void{
+        this.HWCompositing =isComposition
     }
 
     position(): ScrollKit.Point {
@@ -122,12 +132,20 @@ export default class Scope {
         return this.momentum
     }
 
-    isClickable(){
+    isClickable(): boolean {
         return this.clickable
     }
 
-    isTap(){
+    isTap(): boolean {
         return this.tap
+    }
+
+    isHWCompositing():boolean{
+        return this.HWCompositing
+    }
+
+    getDeceleration(): number {
+        return this.deceleration
     }
 
     getBounceTime(): number {
@@ -136,6 +154,10 @@ export default class Scope {
 
     getThreshold(): number {
         return this.threshold
+    }
+
+    getWrapElement():HTMLElement{
+        return this.rootElement;
     }
 
     getScrollElement(): HTMLElement {

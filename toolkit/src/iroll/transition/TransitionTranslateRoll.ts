@@ -103,6 +103,14 @@ export default class TransitionTranslateRoll implements RollDigitalizer {
         return this.scope.position();
     }
 
+    getSize(): ScrollKit.Point {
+        return { x: this.scope.getClientWidth(), y: this.scope.getClientHeight() }
+    }
+
+    getDeceleration():number{
+        return this.scope.getDeceleration();
+    }
+
     getComputedPosition(): ScrollKit.Point {
         let marix: CSSStyleDeclaration = window.getComputedStyle(this.getScrollElement(), null);
         let x = 0, y = 0;

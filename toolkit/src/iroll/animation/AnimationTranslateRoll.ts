@@ -16,7 +16,7 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
     private scope: Scope;
     private raftime: number;
     private algorithm: AnimationKit.Algorithm;
-    private notify:null|Notifier,
+    private notify:null|Notifier;
     constructor(scope: Scope, algorithm: AnimationKit.Algorithm) {
         this.animation = new Animation();
         this.scope = scope;
@@ -157,6 +157,14 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
 
     getPosition(): ScrollKit.Point {
         return this.scope.position();
+    }
+
+    getSize(): ScrollKit.Point {
+        return { x: this.scope.getClientWidth(), y: this.scope.getClientHeight() }
+    }
+
+    getDeceleration():number{
+        return this.scope.getDeceleration();
     }
 
     getMaxScroll(): ScrollKit.Point {
