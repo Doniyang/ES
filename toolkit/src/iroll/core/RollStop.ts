@@ -88,7 +88,4 @@ export default class RollStop implements EventDigitalizer {
     
     proxy.trigger('scroll:end',pos)
   }
-  attainState(state: number): boolean {
-    return state === 2;
-  }
 }

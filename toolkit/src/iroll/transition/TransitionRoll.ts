@@ -141,8 +141,7 @@ export default class TransitionRoll implements RollDigitalizer {
 
     translate(x: number, y: number) {
         let scrollStyle: CSSStyleDeclaration = this.getScrollStyle();
-        scrollStyle.setProperty('top', Math.round(y) + 'px');
-        scrollStyle.setProperty('left', Math.round(x) + 'px');
+        scrollStyle.cssText = ` top: ${Math.round(y)}px);left:${Math.round(x)}px`;
         this.scope.setAxis(x, y);
     }
     scrollTo(x: number, y: number, time: number): void {

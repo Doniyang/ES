@@ -52,4 +52,8 @@ declare namespace ScrollKit {
         clientX?:number
         clientY?:number
     }
+    interface Style extends CSSStyleDeclaration{
+        top?:string;
+        left?:string
+    }
 }

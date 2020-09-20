@@ -131,24 +131,24 @@ export default class DigitalScroll {
   }
 
   private handleStart(e: Event) {
-    this.context.setContext('start', RollStart);
+    this.context.setContext(RollStart);
     this.stopPreventDefault(e);
     this.context.execute(e)
   }
 
   private handleStop(e: Event) {
-    this.context.setContext('stop', RollStop)
+    this.context.setContext(RollStop)
     this.stopPreventDefault(e);
     this.context.execute(e)
   }
 
   private resize(e: Event) {
-    this.context.setContext('resize', RollRefresh);
+    this.context.setContext(RollRefresh);
     this.stopPreventDefault(e);
     this.context.execute(e);
   }
   private handleTransitionEnd(e: Event) {
-    this.context.setContext('finish', RollFinish);
+    this.context.setContext(RollFinish);
     this.stopPreventDefault(e);
     this.context.execute(e);
   }
@@ -158,7 +158,7 @@ export default class DigitalScroll {
   }
 
   private handleMove(e: Event) {
-    this.context.setContext('move', RollMove);
+    this.context.setContext(RollMove);
     this.stopPreventDefault(e);
     this.context.execute(e);
   }

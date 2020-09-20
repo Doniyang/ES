@@ -15,7 +15,6 @@ export { default as Broswer } from './browser/Browser';
 
 export { default as PrefixStyle } from './dom/PrefixStyle'
 
-
 export { default as Backone} from './anmiation/backone/BackoneFactory'
 export { default as Bounce} from './anmiation/bounce/BounceFactory'
 export { default as Circular } from './anmiation/circular/CircularFactory'
@@ -26,3 +25,7 @@ export { default as Elastic} from './anmiation/elastic/ElasticFactory'
 export { default as Quadratic} from './anmiation/quadratic/QuadraticFactory'
 
 export {default as IRoll} from './iroll/IRoll'
+
+export {default as ArrayQueue} from './queue/array/ArrayQueue';
+export {default as LinkedQueue} from './queue/linked/LinkedQueue';
+

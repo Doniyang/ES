@@ -14,7 +14,7 @@ export default class PrefixStyle {
         }
     }
     static has(style: string): boolean {
-        let pseudoStyle: CSSStyleDeclaration = Node.getVDom().style;
+        let pseudoStyle: CSSStyleDeclaration = Node.getInstance().create().style;
         return style in pseudoStyle;
     }
 }

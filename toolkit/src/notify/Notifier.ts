@@ -34,13 +34,17 @@ export default class Notifier extends Notification<ClassicEvent> {
    * @param name 
    * @param fn 
    */
-  has(name: string, fn: Callbackable<ClassicEvent>): boolean {
-    if (this.map.has(name)) {
-      const set: Set<Callbackable<ClassicEvent>> | undefined = this.map.get(name)
-      if (set === undefined) { return false }
-      return (set as Set<Callbackable<ClassicEvent>>).has(fn);
+  has(name: string, fn?: Callbackable<ClassicEvent>): boolean {
+    if (fn) {
+      if (this.map.has(name)) {
+        const set: Set<Callbackable<ClassicEvent>> | undefined = this.map.get(name)
+        if (set === undefined) { return false }
+        return (set as Set<Callbackable<ClassicEvent>>).has(fn);
+      } else {
+        return false
+      }
     } else {
-      return false
+      return this.map.has(name);
     }
   }
   /**
@@ -58,10 +62,12 @@ export default class Notifier extends Notification<ClassicEvent> {
    * @param args 
    */
   notify(evt: string | ClassicEvent, ...args: Array<argsOption>) {
-    let event:ClassicEvent =  ClassicEvent.ensure(this, evt)
-    let set: Set<Callbackable<ClassicEvent>> | undefined = this.map.get(name)
-    if (!event.isStopImmediatePropagation) {
-      this.dispatch(event, set as Set<Callbackable<ClassicEvent>>, args)
+    let event: ClassicEvent = ClassicEvent.ensure(this, evt)
+    if (this.has(event.name)) {
+      let set: Set<Callbackable<ClassicEvent>> | undefined = this.map.get(event.name)
+      if (!event.isStopImmediatePropagation) {
+        this.dispatch(event, set as Set<Callbackable<ClassicEvent>>, args)
+      }
     }
   }
   /**

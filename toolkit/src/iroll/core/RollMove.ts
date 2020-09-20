@@ -90,7 +90,4 @@ export default class RollMove implements EventDigitalizer {
             attrs.setStart(pos.x, pos.y)
         }
     }
-    attainState(state: number): boolean {
-        return state === 1
-    }
 }

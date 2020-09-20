@@ -199,7 +199,7 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
         let scrollStyle = this.getScrollStyle();
         let transform = PrefixStyle.style('transform');
         let translateZ = this.isRapid() ? 'translateZ(0)' : '';
-        scrollStyle.setProperty(transform, `translate(${x}px,${y}px) ${translateZ}`);
+        scrollStyle.cssText = `${transform} : translate(${x}px,${y}px) ${translateZ}`;
     }
 
     scrollTo(x: number, y: number, time: number): void {

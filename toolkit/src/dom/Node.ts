@@ -1,9 +1,14 @@
 export default class Node {
-    private static vdom: null | HTMLDivElement;
-    public static getVDom(): HTMLDivElement {
-        if (this.vdom === null) {
-            this.vdom = document.createElement('div')
+    public static instance: null | Node = null;
+    constructor() { }
+    public create(): HTMLElement {
+        return document.createElement('div')
+    }
+    
+    public static getInstance(): Node {
+        if (this.instance === null) {
+            this.instance = new Node()
         }
-        return this.vdom as HTMLDivElement
+        return this.instance
     }
 } 

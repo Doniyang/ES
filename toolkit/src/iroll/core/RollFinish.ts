@@ -13,7 +13,4 @@ export default class RollFinish implements EventDigitalizer {
         }
 
     }
-    attainState(state: number): boolean {
-        return state === 0;
-    }
 }

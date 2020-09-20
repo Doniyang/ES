@@ -25,8 +25,4 @@ export default class RollStart implements EventDigitalizer {
     proxy.trigger('scroll:bofore', pos);
 
   }
-
-  attainState(state: number): boolean {
-    return state === 0
-  }
 }

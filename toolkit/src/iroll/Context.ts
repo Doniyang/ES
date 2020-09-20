@@ -1,21 +1,16 @@
+import LinkedQueue from "../queue/linked/LinkedQueue";
 import Attribute from "./attribute/Attribute";
 import EventDigitalizer from "./EventDigitalizer";
 import RollProxy from "./RollProxy";
 
 export default class Context {
     private attrs: Attribute;
-    private context: null | EventDigitalizer;
+    private context: LinkedQueue<EventDigitalizer>;
     private proxy: RollProxy;
-    private cache: ScrollKit.Cache<EventDigitalizer>
     constructor(proxy: RollProxy) {
         this.attrs = new Attribute();
-        this.context = null;
+        this.context = new LinkedQueue<EventDigitalizer>();
         this.proxy = proxy;
-        this.cache = {};
-    }
-
-    private isPropInCache(cache: ScrollKit.Cache<EventDigitalizer>, key: string): boolean {
-        return Object.prototype.hasOwnProperty.call(cache, key)
     }
 
     setStart(x: number, y: number) {
@@ -38,17 +33,14 @@ export default class Context {
         this.attrs.setMode(m)
     }
 
-    setContext(key: string, context: ({ new(): EventDigitalizer; })): void {
-        if (this.isPropInCache(this.cache, key)) {
-            this.context = this.cache[key]
-        } else {
-            this.context = this.cache[key] = new context()
-        }
+    setContext(Digitalizer: ({ new(): EventDigitalizer; })): void {
+        this.context.push(new Digitalizer())
     }
 
     execute(e: Event) {
-        if ((this.context as EventDigitalizer).attainState(this.attrs.getState())) {
-            (this.context as EventDigitalizer).execute(e, this.attrs, this.proxy)
+        if (!this.context.isEmpty()) {
+            const digitalizer: EventDigitalizer = this.context.pop();
+            digitalizer.execute(e, this.attrs, this.proxy)
         }
     }
 }

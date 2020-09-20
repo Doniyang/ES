@@ -37,7 +37,7 @@ export default class Transition {
 
     duration(time: number = 0, scrollStyle: CSSStyleDeclaration) {
         let durationProp: string = PrefixStyle.style('transitionDuration');
-        scrollStyle.setProperty(durationProp, time + 'ms');
+        scrollStyle[durationProp] = (, time + 'ms');
         if (time === 0) {
             this.setState(1);
         }

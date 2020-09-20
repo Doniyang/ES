@@ -10,8 +10,4 @@ export default class RollRefresh implements EventDigitalizer {
             proxy.resetPosition()
         }
     }
-    attainState(state: number): boolean {
-        return state === 0;
-    }
-
 }
