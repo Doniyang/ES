@@ -8,7 +8,7 @@ export default class Browser {
             return 'presto';
         }
         else if (u.indexOf('AppleWebKit') > -1) {
-            return 'webKit';
+            return 'webkit';
         }
         else if (u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1) {
             return 'gecko';

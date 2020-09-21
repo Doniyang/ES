@@ -34,8 +34,7 @@ export default class AnimationTranslateRoll {
         if (this.isTimeOut(now, destTime)) {
             this.translate(dest.x, dest.y);
             this.animation.cleanRafId();
-            if (this.isPeak()) {
-            }
+            this.onFinish();
             return;
         }
         now = (now - startTime) / duration;
@@ -156,7 +155,7 @@ export default class AnimationTranslateRoll {
         let scrollStyle = this.getScrollStyle();
         let transform = PrefixStyle.style('transform');
         let translateZ = this.isRapid() ? 'translateZ(0)' : '';
-        scrollStyle.setProperty(transform, `translate(${x}px,${y}px) ${translateZ}`);
+        scrollStyle.cssText = `${transform} : translate(${x}px,${y}px) ${translateZ}`;
     }
     scrollTo(x, y, time) {
         let now = Date.now();

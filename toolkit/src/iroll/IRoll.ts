@@ -194,9 +194,7 @@ export default class DigitalScroll {
       case 'mousewheel':
         this.wheel(e);
         break;
-        break;
       case 'click':
-
         break;
 
       default:

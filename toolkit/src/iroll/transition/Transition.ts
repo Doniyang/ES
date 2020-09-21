@@ -36,16 +36,16 @@ export default class Transition {
     }
 
     duration(time: number = 0, scrollStyle: CSSStyleDeclaration) {
-        let durationProp: string = PrefixStyle.style('transitionDuration');
-        scrollStyle[durationProp] = (, time + 'ms');
+        let duration: string = PrefixStyle.style('transitionDuration');
+        scrollStyle.setProperty(duration,time + 'ms');
         if (time === 0) {
             this.setState(1);
         }
         if (time === 0 && this.isBadAndroid()) {
-            scrollStyle.setProperty(durationProp, '0.0001ms');
+            scrollStyle.setProperty(duration, '0.0001ms');
             requestAnimationFrame(() => {
-                if (scrollStyle.getPropertyValue(durationProp) === '0.0001ms') {
-                    scrollStyle.setProperty(durationProp, '0s');
+                if (scrollStyle.getPropertyValue(duration) === '0.0001ms') {
+                    scrollStyle.setProperty(duration, '0s');
                 }
             });
         }

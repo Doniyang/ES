@@ -49,9 +49,7 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
         if (this.isTimeOut(now, destTime)) {
             this.translate(dest.x, dest.y);
             this.animation.cleanRafId();
-            if(this.isPeak()){
-            
-            }
+            this.onFinish()
             return;
         }
 
