@@ -38,14 +38,17 @@ export default class Transition {
     duration(time: number = 0, scrollStyle: CSSStyleDeclaration) {
         let duration: string = PrefixStyle.style('transitionDuration');
         scrollStyle.setProperty(duration,time + 'ms');
+        scrollStyle.setProperty('transition-duration',time+'ms')
         if (time === 0) {
             this.setState(1);
         }
         if (time === 0 && this.isBadAndroid()) {
             scrollStyle.setProperty(duration, '0.0001ms');
+            scrollStyle.setProperty('transition-duration','0.0001ms')
             requestAnimationFrame(() => {
-                if (scrollStyle.getPropertyValue(duration) === '0.0001ms') {
+                if ((scrollStyle.getPropertyValue(duration)||scrollStyle.getPropertyValue('transitionDuration')) === '0.0001ms') {
                     scrollStyle.setProperty(duration, '0s');
+                    scrollStyle.setProperty('transition-duration','0ms')
                 }
             });
         }
@@ -54,5 +57,6 @@ export default class Transition {
     timing(style: string, scrollStyle: CSSStyleDeclaration) {
         let transitionTimingFunction: string = PrefixStyle.style('transitionTimingFunction');
         scrollStyle.setProperty(transitionTimingFunction, style)
+        scrollStyle.setProperty('transition-timing-function',style)
     }
 } 

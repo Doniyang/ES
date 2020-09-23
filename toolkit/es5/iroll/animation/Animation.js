@@ -16,7 +16,6 @@ export default class Animation {
         }
     }
     animate(callback) {
-        this.setState(2);
         this.rafId = requestAnimationFrame(callback);
     }
 }

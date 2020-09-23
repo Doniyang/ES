@@ -16,7 +16,7 @@ import CircularFactory from "../anmiation/circular/CircularFactory";
 import TransitionRoll from "./transition/TransitionRoll";
 import AnimationTranslateRoll from "./animation/AnimationTranslateRoll";
 import AnimationRoll from "./animation/AnimationRoll";
-export default class DigitalScroll {
+export default class IRoll {
   /**
    * direction lock threshold
    */
@@ -95,7 +95,7 @@ export default class DigitalScroll {
       this.bindToWrapper = options.bindToWrapper
     }
     this.scope.setScrollX(options.scrollX ? 1 : 0)
-    this.scope.setScrollY(options.scrollY ? 1 : 0)
+    this.scope.setScrollY(options.scrollY === false ? 0 : 1)
     this.scope.setScrollZ(options.freeScroll ? 1 : 0)
     this.context.setStart(options.startX || 0, options.startY || 0)
   }

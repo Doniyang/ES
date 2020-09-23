@@ -151,10 +151,7 @@ export default class AnimationRoll {
     scrollTo(x, y, time) {
         let now = Date.now();
         let position = this.scope.position();
-        const that = this;
-        this.animation.animate(function (tm) {
-            that.raftime = tm;
-            that.animationFrame(position, { x, y }, time, now);
-        });
+        this.setState(2);
+        this.animationFrame(position, { x, y }, time, now);
     }
 }

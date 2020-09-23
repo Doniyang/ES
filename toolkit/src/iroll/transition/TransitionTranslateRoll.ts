@@ -85,11 +85,11 @@ export default class TransitionTranslateRoll implements RollDigitalizer {
 
     isClickable(): boolean {
         return this.scope.isClickable();
-     }
-     
-     isTapable(): boolean {
+    }
+
+    isTapable(): boolean {
         return this.scope.isTap();
-     }
+    }
 
     getDirectionLockThreshold(): number {
         return this.scope.getThreshold()
@@ -107,14 +107,15 @@ export default class TransitionTranslateRoll implements RollDigitalizer {
         return { x: this.scope.getClientWidth(), y: this.scope.getClientHeight() }
     }
 
-    getDeceleration():number{
+    getDeceleration(): number {
         return this.scope.getDeceleration();
     }
 
     getComputedPosition(): ScrollKit.Point {
         let marix: CSSStyleDeclaration = window.getComputedStyle(this.getScrollElement(), null);
         let x = 0, y = 0;
-        let matrixs: string[] = marix.getPropertyValue(PrefixStyle.style('transform')).split(')')[0].split(', ')
+        let transform:string = marix.getPropertyValue(PrefixStyle.style('transform')) || marix.getPropertyValue('transform')
+        let matrixs: string[] = transform.split(')')[0].split(', ')
         x = +(matrixs[12] || matrixs[4]);
         y = +(matrixs[13] || matrixs[5]);
         return { x, y }
@@ -149,7 +150,9 @@ export default class TransitionTranslateRoll implements RollDigitalizer {
         let scrollStyle = this.getScrollStyle();
         let transform = PrefixStyle.style('transform');
         let translateZ = this.isRapid() ? 'translateZ(0)' : '';
-        scrollStyle.setProperty(transform,`translate(${x}px,${y}px) ${translateZ}`);
+        scrollStyle.setProperty(transform, `translate(${x}px,${y}px) ${translateZ}`);
+        scrollStyle.setProperty('transform', `translate(${x}px,${y}px) ${translateZ}`);
+        this.scope.setAxis(x, y);
     }
 
     scrollTo(x: number, y: number, time: number): void {
@@ -157,5 +160,4 @@ export default class TransitionTranslateRoll implements RollDigitalizer {
         this.transition.timing(this.easingStyle, this.getScrollStyle());
         this.translate(x, y);
     }
-
 }

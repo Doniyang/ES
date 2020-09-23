@@ -31,11 +31,11 @@ export default class AnimationRoll implements RollDigitalizer {
         return now >= duration
     }
 
-    private onFinish(){
-        if(this.isPeak()){
-          this.notify.trigger('scroll:end',this.getPosition())
-        }else{
-          this.resetPosition()
+    private onFinish() {
+        if (this.isPeak()) {
+            this.notify.trigger('scroll:end', this.getPosition())
+        } else {
+            this.resetPosition()
         }
     }
 
@@ -197,11 +197,7 @@ export default class AnimationRoll implements RollDigitalizer {
     scrollTo(x: number, y: number, time: number): void {
         let now = Date.now();
         let position = this.scope.position();
-        const that = this;
-
-        this.animation.animate(function (tm) {
-            that.raftime = tm
-            that.animationFrame(position, { x, y }, time, now);
-        })
+        this.setState(2)
+        this.animationFrame(position, { x, y }, time, now);
     }
 }

@@ -87,7 +87,8 @@ export default class TransitionTranslateRoll {
     getComputedPosition() {
         let marix = window.getComputedStyle(this.getScrollElement(), null);
         let x = 0, y = 0;
-        let matrixs = marix.getPropertyValue(PrefixStyle.style('transform')).split(')')[0].split(', ');
+        let transform = marix.getPropertyValue(PrefixStyle.style('transform')) || marix.getPropertyValue('transform');
+        let matrixs = transform.split(')')[0].split(', ');
         x = +(matrixs[12] || matrixs[4]);
         y = +(matrixs[13] || matrixs[5]);
         return { x, y };
@@ -116,6 +117,8 @@ export default class TransitionTranslateRoll {
         let transform = PrefixStyle.style('transform');
         let translateZ = this.isRapid() ? 'translateZ(0)' : '';
         scrollStyle.setProperty(transform, `translate(${x}px,${y}px) ${translateZ}`);
+        scrollStyle.setProperty('transform', `translate(${x}px,${y}px) ${translateZ}`);
+        this.scope.setAxis(x, y);
     }
     scrollTo(x, y, time) {
         this.transition.duration(time, this.getScrollStyle());

@@ -57,6 +57,7 @@ export default class RollStop {
                 easing = new QuadraticFactory();
                 proxy.isTransition() ? proxy.setAnimation(easing.style()) : proxy.setAnimation(easing.algorithm);
             }
+            console.log(newX, newY);
             proxy.scrollTo(newX, newY, time);
             return;
         }

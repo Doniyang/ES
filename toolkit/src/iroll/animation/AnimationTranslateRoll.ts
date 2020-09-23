@@ -16,8 +16,8 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
     private scope: Scope;
     private raftime: number;
     private algorithm: AnimationKit.Algorithm;
-    private notify:Notify;
-    constructor(scope: Scope, algorithm: AnimationKit.Algorithm,notify:Notify) {
+    private notify: Notify;
+    constructor(scope: Scope, algorithm: AnimationKit.Algorithm, notify: Notify) {
         this.animation = new Animation();
         this.scope = scope;
         this.raftime = 0;
@@ -34,11 +34,11 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
         return now >= duration
     }
 
-    private onFinish(){
-        if(this.isPeak()){
-          this.notify.trigger('scroll:end',this.getPosition())
-        }else{
-          this.resetPosition()
+    private onFinish() {
+        if (this.isPeak()) {
+            this.notify.trigger('scroll:end', this.getPosition())
+        } else {
+            this.resetPosition()
         }
     }
 
@@ -134,14 +134,14 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
             zone = this.getZonePosition();
         return pos.x === zone.x && pos.y === zone.y
     }
-    
+
     isClickable(): boolean {
         return this.scope.isClickable();
-     }
-     
-     isTapable(): boolean {
+    }
+
+    isTapable(): boolean {
         return this.scope.isTap();
-     }
+    }
     stop(): void {
         this.setState(0);
         this.animation.cleanRafId()
@@ -165,7 +165,7 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
         return { x: this.scope.getClientWidth(), y: this.scope.getClientHeight() }
     }
 
-    getDeceleration():number{
+    getDeceleration(): number {
         return this.scope.getDeceleration();
     }
 
@@ -176,7 +176,8 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
     getComputedPosition(): ScrollKit.Point {
         let marix: CSSStyleDeclaration = window.getComputedStyle(this.getScrollElement(), null);
         let x = 0, y = 0;
-        let matrixs: string[] = marix.getPropertyValue(PrefixStyle.style('transform')).split(')')[0].split(', ')
+        let transform: string = marix.getPropertyValue(PrefixStyle.style('transform')) || marix.getPropertyValue('transform')
+        let matrixs: string[] = transform.split(')')[0].split(', ')
         x = +(matrixs[12] || matrixs[4]);
         y = +(matrixs[13] || matrixs[5]);
         return { x, y };
@@ -197,17 +198,15 @@ export default class AnimationTranslateRoll implements RollDigitalizer {
         let scrollStyle = this.getScrollStyle();
         let transform = PrefixStyle.style('transform');
         let translateZ = this.isRapid() ? 'translateZ(0)' : '';
-        scrollStyle.cssText = `${transform} : translate(${x}px,${y}px) ${translateZ}`;
+        scrollStyle.setProperty(transform, `translate(${x}px,${y}px) ${translateZ}`);
+        scrollStyle.setProperty('transform', `translate(${x}px,${y}px) ${translateZ}`);
+        this.scope.setAxis(x, y);
     }
 
     scrollTo(x: number, y: number, time: number): void {
         let now = Date.now();
         let position = this.scope.position();
-        const that = this;
-
-        this.animation.animate(function (tm) {
-            that.raftime = tm
-            that.animationFrame(position, { x, y }, time, now);
-        })
+        this.setState(2)
+        this.animationFrame(position, { x, y }, time, now);
     }
 }

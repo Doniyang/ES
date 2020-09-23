@@ -77,15 +77,16 @@ export default class RollStop implements EventDigitalizer {
       proxy.setState(1)
     }
 
-    if (this.isunven(newX,pos.x)||this.isunven(newY,pos.y)){
-      if(this.isLarge(newX,0)||this.isLarge(proxy.getMaxScroll().x,newX)||this.isLarge(newY,0)||this.isLarge(proxy.getMaxScroll().y,newY)){
-        easing =new QuadraticFactory();
-        proxy.isTransition()?proxy.setAnimation(easing.style()):proxy.setAnimation(easing.algorithm)
+    if (this.isunven(newX, pos.x) || this.isunven(newY, pos.y)) {
+      if (this.isLarge(newX, 0) || this.isLarge(proxy.getMaxScroll().x, newX) || this.isLarge(newY, 0) || this.isLarge(proxy.getMaxScroll().y, newY)) {
+        easing = new QuadraticFactory();
+        proxy.isTransition() ? proxy.setAnimation(easing.style()) : proxy.setAnimation(easing.algorithm)
       }
-      proxy.scrollTo(newX,newY,time);
+      console.log(newX,newY)
+      proxy.scrollTo(newX, newY, time);
       return;
     }
-    
-    proxy.trigger('scroll:end',pos)
+
+    proxy.trigger('scroll:end', pos)
   }
 }
