@@ -29,3 +29,6 @@ export {default as IRoll} from './iroll/IRoll'
 export {default as ArrayQueue} from './queue/array/ArrayQueue';
 export {default as LinkedQueue} from './queue/linked/LinkedQueue';
 
+export {default as requestAnimationFrame} from './fps/requestAnimationFrame';
+export {default as cancelAnimationFrame} from './fps/cancelAnimationFrame';
+
