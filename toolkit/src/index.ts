@@ -15,18 +15,18 @@ export { default as Broswer } from './browser/Browser';
 
 export { default as PrefixStyle } from './dom/PrefixStyle'
 
-export { default as Backone} from './anmiation/backone/BackoneFactory'
-export { default as Bounce} from './anmiation/bounce/BounceFactory'
+export { default as Backone } from './anmiation/backone/BackoneFactory'
+export { default as Bounce } from './anmiation/bounce/BounceFactory'
 export { default as Circular } from './anmiation/circular/CircularFactory'
-export { default as EaseOutQuard} from './anmiation/ease-out-quard/EaseOutQuardFactory'
-export { default as EaseOutQuart} from './anmiation/ease-out-quart/EaseOutQuartFactory'
-export { default as EaseOutQuint} from './anmiation/ease-out-quint/EaseOutQuintFactory'
-export { default as Elastic} from './anmiation/elastic/ElasticFactory'
-export { default as Quadratic} from './anmiation/quadratic/QuadraticFactory'
+export { default as EaseOutQuard } from './anmiation/ease-out-quard/EaseOutQuardFactory'
+export { default as EaseOutQuart } from './anmiation/ease-out-quart/EaseOutQuartFactory'
+export { default as EaseOutQuint } from './anmiation/ease-out-quint/EaseOutQuintFactory'
+export { default as Elastic } from './anmiation/elastic/ElasticFactory'
+export { default as Quadratic } from './anmiation/quadratic/QuadraticFactory'
 
-export {default as ArrayQueue} from './queue/array/ArrayQueue';
-export {default as LinkedQueue} from './queue/linked/LinkedQueue';
+export { default as ArrayQueue } from './queue/array/ArrayQueue';
+export { default as LinkedQueue } from './queue/linked/LinkedQueue';
 
-export {default as requestAnimationFrame} from './fps/requestAnimationFrame';
-export {default as cancelAnimationFrame} from './fps/cancelAnimationFrame';
+export { default as requestAnimationFrame } from './fps/requestAnimationFrame';
+export { default as cancelAnimationFrame } from './fps/cancelAnimationFrame';
 
