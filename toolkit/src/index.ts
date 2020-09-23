@@ -24,8 +24,6 @@ export { default as EaseOutQuint} from './anmiation/ease-out-quint/EaseOutQuintF
 export { default as Elastic} from './anmiation/elastic/ElasticFactory'
 export { default as Quadratic} from './anmiation/quadratic/QuadraticFactory'
 
-export {default as IRoll} from './iroll/IRoll'
-
 export {default as ArrayQueue} from './queue/array/ArrayQueue';
 export {default as LinkedQueue} from './queue/linked/LinkedQueue';
 
