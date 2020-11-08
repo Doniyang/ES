@@ -2,14 +2,12 @@
   "name": "@niyang-es/notify",
   "version": "0.0.1",
   "description": "a js notify tool",
-  "main": "index.js",
+  "main": "es5/index",
+  "typings": "es5/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "ts:init": "tsc --init",
     "build": "tsc"
-  },
-  "peerDependencies": {
-    "@niyang-es/toolkit": "latest"
   },
   "author": "niyang",
   "license": "MIT",

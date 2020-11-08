@@ -1,4 +1,4 @@
-import { ClassicEvent } from "@niyang-es/toolkit";
+import { ClassicEvent } from "@niyang-es/notify";
 import RollDigitalizer from "./RollDigitalizer";
 import Notify from "./notify/Notify";
 export default class RollProxy implements RollDigitalizer {

@@ -1,4 +1,4 @@
-import { ClassicEvent, Notifier } from '@niyang-es/toolkit';
+import { ClassicEvent, Notifier } from '@niyang-es/notify';
 
 export default class Notify {
     private notify: Notifier

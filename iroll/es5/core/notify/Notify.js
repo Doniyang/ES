@@ -1,4 +1,4 @@
-import { Notifier } from '@niyang-es/toolkit';
+import { Notifier } from '@niyang-es/notify';
 export default class Notify {
     constructor() {
         this.notify = new Notifier();

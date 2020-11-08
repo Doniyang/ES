@@ -1,6 +1,6 @@
 {
   "name": "@niyang-es/iroll",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "scroll for mobile",
   "main": "es5/index",
   "typings": "es5/index.d.ts",
@@ -10,7 +10,8 @@
     "build": "tsc"
   },
   "peerDependencies": {
-    "@niyang-es/toolkit": "latest"
+    "@niyang-es/toolkit": "latest",
+    "@niyang-es/notify": "latest"
   },
   "keywords": [
     "scroll"
@@ -28,5 +29,9 @@
   "homepage": "https://github.com/Doniyang/ES#readme",
   "devDependencies": {
     "typescript": "^4.0.3"
+  },
+  "dependencies": {
+    "@niyang-es/notify": "0.0.1",
+    "@niyang-es/toolkit": "^0.1.4"
   }
 }
