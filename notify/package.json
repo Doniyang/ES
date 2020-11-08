@@ -1,11 +1,32 @@
 {
-  "name": "notification",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@niyang-es/notify",
+  "version": "0.0.1",
+  "description": "a js notify tool",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ts:init": "tsc --init",
+    "build": "tsc"
   },
-  "author": "",
-  "license": "MIT"
+  "peerDependencies": {
+    "@niyang-es/toolkit": "latest"
+  },
+  "author": "niyang",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Doniyang/ES.git",
+    "directory": "notify"
+  },
+  "keywords": [
+    "Event",
+    "Notify"
+  ],
+  "bugs": {
+    "url": "https://github.com/Doniyang/ES/issues"
+  },
+  "homepage": "https://github.com/Doniyang/ES#readme",
+  "devDependencies": {
+    "typescript": "^4.0.5"
+  }
 }
