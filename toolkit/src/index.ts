@@ -1,7 +1,3 @@
-export { default as ClassicEvent } from './event/ClassicEvent'
-export { default as Notifier } from './notify/Notifier'
-
-
 export { default as isArray } from './is/isArray'
 export { default as isBoolean } from './is/isBoolean'
 export { default as isDate } from './is/isDate'

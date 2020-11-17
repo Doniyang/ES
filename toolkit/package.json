@@ -1,6 +1,6 @@
 {
   "name": "@niyang-es/toolkit",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": " a toolkit for js ",
   "main": "es5/index",
   "typings": "es5/index.d.ts",

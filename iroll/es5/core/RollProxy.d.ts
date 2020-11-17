@@ -1,0 +1,35 @@
+import { ClassicEvent } from "@niyang-es/notify";
+import RollDigitalizer from "./RollDigitalizer";
+import Notify from "./notify/Notify";
+export default class RollProxy implements RollDigitalizer {
+    private roll;
+    private notify;
+    constructor(notify: Notify);
+    get disabled(): boolean;
+    build(roll: RollDigitalizer): void;
+    trigger(e: string | ClassicEvent, ...args: Array<ScrollKit.NotifyParams>): void;
+    scrollTo(x: number, y: number, time: number): void;
+    translate(x: number, y: number): void;
+    getSize(): ScrollKit.Point;
+    getDeceleration(): number;
+    getState(): number;
+    setState(state: number): void;
+    setAnimation(easing: string | ScrollKit.Algorithm): void;
+    getComputedPosition(): ScrollKit.Point;
+    getMaxScroll(): ScrollKit.Point;
+    getPosition(): ScrollKit.Point;
+    getDirectionLockThreshold(): number;
+    stop(): void;
+    resetPosition(): void;
+    isFreeScroll(): boolean;
+    isHScroll(): boolean;
+    isVScroll(): boolean;
+    isHPassthrough(): boolean;
+    isVPassthrough(): boolean;
+    isTransition(): boolean;
+    isResilient(): boolean;
+    isOnRush(): boolean;
+    isPeak(): boolean;
+    isClickable(): boolean;
+    isTapable(): boolean;
+}
