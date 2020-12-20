@@ -57,38 +57,38 @@ export default class IRoll {
 
   private updateScrollOptions(options: ScrollKit.scrollOptions) {
     if (isNumber(options.eventPassthrough)) {
-      this.scope.setPassthrough(options.eventPassthrough)
+      this.scope.setPassthrough(options.eventPassthrough as number)
     }
     if (isBoolean(options.clickable)) {
-      this.scope.setClickable(options.clickable)
+      this.scope.setClickable(options.clickable as boolean)
     }
     if (isBoolean(options.tap)) {
-      this.scope.setTap(options.tap)
+      this.scope.setTap(options.tap as boolean)
     }
     if (isBoolean(options.bounce)) {
-      this.scope.setBounce(options.bounce)
+      this.scope.setBounce(options.bounce as boolean)
     }
     if (isBoolean(options.momentum)) {
-      this.scope.setMomentum(options.momentum)
+      this.scope.setMomentum(options.momentum as boolean)
     }
 
     if (isBoolean(options.HWCompositing)) {
-      this.scope.setHWCompositing(options.HWCompositing)
+      this.scope.setHWCompositing(options.HWCompositing as boolean)
     }
 
     if (isBoolean(options.preventDefault)) {
-      this.preventDefault = options.preventDefault;
+      this.preventDefault = options.preventDefault as boolean;
     }
 
     if (isBoolean(options.useTransition)) {
-      this.useTransition = options.useTransition
+      this.useTransition = options.useTransition as boolean;
     }
 
     if (isBoolean(options.useTransform)) {
-      this.useTransform = options.useTransform
+      this.useTransform = options.useTransform as boolean;
     }
     if (isBoolean(options.bindToWrapper)) {
-      this.bindToWrapper = options.bindToWrapper
+      this.bindToWrapper = options.bindToWrapper as boolean;
     }
     this.scope.setScrollX(options.scrollX ? 1 : 0)
     this.scope.setScrollY(options.scrollY === false ? 0 : 1)

@@ -1,12 +1,13 @@
 {
   "name": "@niyang-es/toolkit",
-  "version": "0.1.4",
+  "version": "1.0.0",
   "description": " a toolkit for js ",
   "main": "es5/index",
-  "typings": "es5/index.d.ts",
+  "typings": "typing/index.d.ts",
   "files": [
-    "src",
-    "es5"
+    "typing/index.d.ts",
+    "typings/animation.d.ts",
+    "typings/toolkit.d.ts"
   ],
   "dependencies": {},
   "devDependencies": {
