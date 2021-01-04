@@ -4,7 +4,7 @@ export default class Node {
     public create(): HTMLElement {
         return document.createElement('div')
     }
-    
+
     public static getInstance(): Node {
         if (this.instance === null) {
             this.instance = new Node()
