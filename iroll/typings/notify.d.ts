@@ -1,1 +1,1 @@
-declare module "@niyang-es/notify"
+export declare module "@niyang-es/notify"

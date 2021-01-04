@@ -1,4 +1,4 @@
-declare namespace ScrollKit {
+export declare namespace ScrollKit {
     type ElementWrapper = string | HTMLElement
     type NotifyParams = number | string | boolean | object
     interface ElementFilter {

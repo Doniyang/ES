@@ -1,1 +1,1 @@
-declare module "@niyang-es/toolkit"
+export declare module "@niyang-es/toolkit"
