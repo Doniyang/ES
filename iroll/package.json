@@ -11,9 +11,7 @@
   },
   "files": [
     "typings/index.d.ts",
-    "typings/roll.d.ts",
-    "typings/notify.d.ts",
-    "typings/toolkit.d.ts"
+    "typings/roll.d.ts"
   ],
   "peerDependencies": {
     "@niyang-es/toolkit": "latest",
@@ -37,7 +35,7 @@
     "typescript": "^4.1.3"
   },
   "dependencies": {
-    "@niyang-es/notify": "^1.0.0",
-    "@niyang-es/toolkit": "^1.0.0"
+    "@niyang-es/notify": "^1.0.5",
+    "@niyang-es/toolkit": "^1.0.6"
   }
 }

@@ -1,4 +1,4 @@
-import { isString, isNumber, isBoolean, PrefixStyle, Circular } from "@niyang-es/toolkit";
+import { isString, isNumber, isBoolean, PrefixStyle, Circular, isUndefined } from "@niyang-es/toolkit";
 import Scope from "./scope/Scope";
 import RollProxy from "./RollProxy";
 import Context from "./Context";
@@ -76,6 +76,22 @@ export default class IRoll {
       this.scope.setHWCompositing(options.HWCompositing as boolean)
     }
 
+    if (isNumber(options.probe)) {
+      this.scope.setProbe(<number>options.probe)
+    }
+
+    if (!isUndefined(options.wheel) && isNumber((options.wheel as ScrollKit.WheelParams).speed)) {
+      this.scope.setWheelSpeed((options.wheel as ScrollKit.WheelParams).speed as number)
+    }
+
+    if (!isUndefined(options.wheel)) {
+      this.scope.setWheelSpeed((options.wheel as ScrollKit.WheelParams).invert ? -1 : 1)
+    }
+
+    if (!isUndefined(options.wheel)) {
+      this.scope.setEnableWheel((options.wheel as ScrollKit.WheelParams).enable as boolean)
+    }
+
     if (isBoolean(options.preventDefault)) {
       this.preventDefault = options.preventDefault as boolean;
     }
@@ -87,9 +103,11 @@ export default class IRoll {
     if (isBoolean(options.useTransform)) {
       this.useTransform = options.useTransform as boolean;
     }
+
     if (isBoolean(options.bindToWrapper)) {
       this.bindToWrapper = options.bindToWrapper as boolean;
     }
+
     this.scope.setScrollX(options.scrollX ? 1 : 0)
     this.scope.setScrollY(options.scrollY === false ? 0 : 1)
     this.scope.setScrollZ(options.freeScroll ? 1 : 0)
@@ -110,6 +128,10 @@ export default class IRoll {
 
   private isSupportTouch(): boolean {
     return this.isSupport('ontouchstart', window);
+  }
+
+  private isWheelEnabled() {
+    return this.scope.isWheelEnabled()
   }
 
   private addEventListener(el: HTMLElement, type: string, fn: EventListenerOrEventListenerObject, capture: boolean) {
@@ -149,14 +171,18 @@ export default class IRoll {
     this.context.execute(e);
   }
 
-  private wheel(e: Event) {
-
+  private wheel(e: MouseEvent) {
+    this.context.setContext();
   }
 
   private handleMove(e: Event) {
     this.context.setContext(RollMove);
     this.stopPreventDefault(e);
     this.context.execute(e);
+  }
+
+  private handleClick(e: Event) {
+
   }
 
   protected handleEvent(e: Event) {
@@ -188,9 +214,10 @@ export default class IRoll {
       case 'wheel':
       case 'DOMMouseScroll':
       case 'mousewheel':
-        this.wheel(e);
+        this.wheel(e as MouseEvent);
         break;
       case 'click':
+        this.handleClick(e);
         break;
 
       default:
@@ -243,6 +270,14 @@ export default class IRoll {
       listener(target, 'touchcancel', this)
       listener(target, 'touchend', this)
     }
+
+    if (this.isWheelEnabled()) {
+      listener(rootElement, 'wheel', this);
+      listener(rootElement, 'mousewheel', this);
+      listener(rootElement, 'DOMMouseScroll', this);
+    }
+
+
     listener(this.scope.getScrollElement(), 'transitionend', this);
     listener(this.scope.getScrollElement(), 'webkitTransitionEnd', this);
     listener(this.scope.getScrollElement(), 'oTransitionEnd', this);
@@ -284,4 +319,7 @@ export default class IRoll {
   public scrollTo(x: number, y: number, time: number) {
     this.rollProxy.scrollTo(x, y, time);
   }
+
+
+
 }

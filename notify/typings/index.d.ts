@@ -1,6 +1,3 @@
-export * from './eventkit'
-export * from './notifierkit'
-
 export declare class ClassicEvent{
     /*
      *  event  exist in DOM or not

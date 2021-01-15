@@ -1,10 +1,17 @@
-export declare namespace ScrollKit {
-    type ElementWrapper = string | HTMLElement
-    type NotifyParams = number | string | boolean | object
-    interface ElementFilter {
+declare namespace ScrollKit {
+    export type ElementWrapper = string | HTMLElement
+    export type NotifyParams = number | string | boolean | object
+    export interface ElementFilter {
         (el: HTMLElement): boolean
     }
-    interface scrollOptions {
+
+   export interface WheelParams {
+        speed?: number
+        invert?: boolean
+        enable?:boolean
+    }
+
+    export interface scrollOptions {
         startX?: number
         startY?: number
         scrollX?: boolean
@@ -16,6 +23,7 @@ export declare namespace ScrollKit {
         bounce?: boolean
         momentum?: boolean
         probe?: number
+        wheel?: WheelParams,
         preventDefault?: boolean
         preventDefaultFilter?: ElementFilter
         HWCompositing?: boolean
@@ -23,41 +31,41 @@ export declare namespace ScrollKit {
         useTransform?: boolean
         bindToWrapper?: boolean
     }
-    interface Point {
+    export interface Point {
         x: number
         y: number
     }
 
-    interface Momentun {
+    export interface Momentun {
         destination: number
         duration: number
     }
 
-    interface Cache<T> {
+    export interface Cache<T> {
         [key: string]: T
     }
 
-    interface VisitorCallback<T>{
-        (arg:T):void
+    export interface VisitorCallback<T> {
+        (arg: T): void
     }
 
-    interface CustomEvent extends Event{
-        pageX?:number
-        pageY?:number
+    export interface CustomEvent extends Event {
+        pageX?: number
+        pageY?: number
     }
 
-    interface ElementEventTarget extends EventTarget{
-        tagName?:string
-        screenX?:number
-        screenY?:number
-        clientX?:number
-        clientY?:number
+    export interface ElementEventTarget extends EventTarget {
+        tagName?: string
+        screenX?: number
+        screenY?: number
+        clientX?: number
+        clientY?: number
     }
-    interface Algorithm {
+    export interface Algorithm {
         (k: number): number
     }
 
-    interface NotifyCallback<T>{
-        (evt:T,...args:Array<NotifyParams>):void
+    export interface NotifyCallback<T> {
+        (evt: T, ...args: Array<NotifyParams>): void
     }
 }

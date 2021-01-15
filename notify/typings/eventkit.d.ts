@@ -1,3 +1,3 @@
-export declare namespace EventKit{
-    type EventContextOptions = null|object
+declare namespace EventKit {
+    export type EventContextOptions = null | object
 }

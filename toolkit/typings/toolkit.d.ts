@@ -1,3 +1,3 @@
-export declare interface StylePrefix{
+declare interface StylePrefix{
   [key:string]:string
 }

@@ -1,6 +1,6 @@
 
-export declare namespace AnimationKit {
-    interface Algorithm {
+declare namespace AnimationKit {
+    export interface Algorithm {
         (k: number): number
     }
 }

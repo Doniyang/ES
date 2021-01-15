@@ -1,7 +1,7 @@
-export declare namespace NotifierKit {
-    type NotiyParams = number | string | boolean | object
+declare namespace NotifierKit {
+    export type NotiyParams = number | string | boolean | object
 
-    interface NotifyEventCallback<T> {
+    export interface NotifyEventCallback<T> {
         (evt: T, ...args: Array<NotiyParams>): void
     }
 }

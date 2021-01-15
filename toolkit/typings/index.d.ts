@@ -1,22 +1,88 @@
-export { default as isArray } from '../src/is/isArray';
-export { default as isBoolean } from '../src/is/isBoolean';
-export { default as isDate } from '../src/is/isDate';
-export { default as isFunction } from '../src/is/isFunction';
-export { default as isNumber } from '../src/is/isNumber';
-export { default as isNull } from '../src/is/isNull';
-export { default as isString } from '../src/is/isString';
-export { default as isUndefined } from '../src/is/isUndefined';
-export { default as Broswer } from '../src/browser/Browser';
-export { default as PrefixStyle } from '../src/dom/PrefixStyle';
-export { default as Backone } from '../src/anmiation/backone/BackoneFactory';
-export { default as Bounce } from '../src/anmiation/bounce/BounceFactory';
-export { default as Circular } from '../src/anmiation/circular/CircularFactory';
-export { default as EaseOutQuard } from '../src/anmiation/ease-out-quard/EaseOutQuardFactory';
-export { default as EaseOutQuart } from '../src/anmiation/ease-out-quart/EaseOutQuartFactory';
-export { default as EaseOutQuint } from '../src/anmiation/ease-out-quint/EaseOutQuintFactory';
-export { default as Elastic } from '../src/anmiation/elastic/ElasticFactory';
-export { default as Quadratic } from '../src/anmiation/quadratic/QuadraticFactory';
-export { default as ArrayQueue } from '../src/queue/array/ArrayQueue';
-export { default as LinkedQueue } from '../src/queue/linked/LinkedQueue';
-export { default as requestAnimationFrame } from '../src/fps/requestAnimationFrame';
-export { default as cancelAnimationFrame } from '../src/fps/cancelAnimationFrame';
+interface Fortran<T> {
+    (value: any): value is T
+}
+interface Factory {
+    style(): string;
+    algorithm(k: number): number
+}
+
+interface Queue<T> {
+    push(item: T): void;
+    pop(): T;
+    size(): number;
+    clear(): void;
+    isEmpty(): boolean;
+    getFront(): T;
+    getRear(): T;
+}
+
+export declare const isArray: Fortran<Array<any>>;
+export declare const isBoolean: Fortran<boolean>
+export declare const isDate: Fortran<Date>
+export declare const isFunction: Fortran<Function>
+export declare const isNumber: Fortran<number>
+export declare const isNull: Fortran<null>
+export declare const isString: Fortran<string>
+export declare const isUndefined: Fortran<unknown>
+
+export declare class Broswer {
+    static Core(): string
+}
+
+export declare class PrefixStyle {
+    static prefix(): StylePrefix
+    static style(style: string): string
+    static has(style: string): boolean
+}
+export declare class Backone implements Factory {
+    style(): string;
+    algorithm(k: number): number
+}
+export declare class Bounce implements Factory {
+    style(): string;
+    algorithm(k: number): number
+}
+export declare class Circular implements Factory {
+    style(): string;
+    algorithm(k: number): number
+}
+export declare class EaseOutQuard implements Factory {
+    style(): string;
+    algorithm(k: number): number
+}
+export declare class EaseOutQuart implements Factory {
+    style(): string;
+    algorithm(k: number): number
+}
+export declare class EaseOutQuint implements Factory {
+    style(): string;
+    algorithm(k: number): number
+}
+export declare class Elastic implements Factory {
+    style(): string;
+    algorithm(k: number): number
+}
+export declare class Quadratic implements Factory {
+    style(): string;
+    algorithm(k: number): number
+}
+export declare class ArrayQueue<T> implements Queue<T>{
+    push(item: T): void;
+    pop(): T;
+    size(): number;
+    clear(): void;
+    isEmpty(): boolean;
+    getFront(): T;
+    getRear(): T;
+}
+export declare class LinkedQueue<T> implements Queue<T>{
+    push(item: T): void;
+    pop(): T;
+    size(): number;
+    clear(): void;
+    isEmpty(): boolean;
+    getFront(): T;
+    getRear(): T;
+}
+export declare function requestAnimationFrame(rafCallback: FrameRequestCallback): number
+export declare function cancelAnimationFrame(rafId: number): void

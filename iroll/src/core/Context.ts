@@ -38,7 +38,7 @@ export default class Context {
     }
 
     execute(e: Event) {
-        if (!this.context.isEmpty()) {
+        while (!this.context.isEmpty()) {
             const digitalizer: EventDigitalizer = this.context.pop();
             digitalizer.execute(e, this.attrs, this.proxy)
         }

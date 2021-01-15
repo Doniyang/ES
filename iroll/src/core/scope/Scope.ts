@@ -1,10 +1,12 @@
 import Axis from "../axis/Axis"
+import Wheel from "./Wheel";
 
 export default class Scope {
     readonly rootElement: HTMLElement;
     private deceleration: number;
     private passthrough: number;
     private threshold: number;
+    private probe:number;
     private time: number;
     private bounce: boolean;
     private momentum: boolean;
@@ -12,6 +14,7 @@ export default class Scope {
     private scroll: Axis;
     private clickable: boolean;
     private tap: boolean;
+    private wheel:Wheel;
     private HWCompositing:boolean
     constructor(el: HTMLElement) {
         this.rootElement = el;
@@ -24,6 +27,8 @@ export default class Scope {
         this.momentum = true
         this.clickable = false
         this.tap = false
+        this.probe = 0;
+        this.wheel = new Wheel();
         this.deceleration = 0.0006
         this.HWCompositing = true
     }
@@ -96,6 +101,22 @@ export default class Scope {
         this.axis.setAxisY(y);
     }
 
+    setProbe(probe:number){
+        this.probe = probe
+    }
+
+    setWheelSpeed(speed:number){
+        this.wheel.setSpeed(speed)
+    }
+
+    setEnableWheel(enable:boolean){
+        this.wheel.setEnable(enable)
+    }
+
+    setWheelDirection(direction:number){
+       this.wheel.setDirection(direction)  
+    }
+
     isAxisXPassthrough(): boolean {
         return this.passthrough === 1
     }
@@ -144,12 +165,28 @@ export default class Scope {
         return this.HWCompositing
     }
 
+    isWheelEnabled():boolean{
+      return this.wheel.enabled() 
+    }
+
     getDeceleration(): number {
         return this.deceleration
     }
 
     getBounceTime(): number {
         return this.time;
+    }
+
+    getProbe():number{
+        return this.probe
+    }
+
+    getWheelSpeed():number{
+       return this.wheel.getSpeed()
+    }
+
+    getWheelDirection():number{
+      return this.wheel.getDirection()  
     }
 
     getThreshold(): number {
