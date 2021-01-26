@@ -172,7 +172,7 @@ export default class IRoll {
   }
 
   private wheel(e: MouseEvent) {
-    this.context.setContext();
+    // this.context.setContext();
   }
 
   private handleMove(e: Event) {
