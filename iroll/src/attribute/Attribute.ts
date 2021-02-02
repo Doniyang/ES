@@ -20,10 +20,10 @@ export default class Attribute {
      * @description the orgin point
      */
     private origin: Axis;
-     /**
-     * @type Axis
-     * @description end point
-     */
+    /**
+    * @type Axis
+    * @description end point
+    */
     private destination: Axis;
     /**
      * @type Axis
@@ -61,35 +61,149 @@ export default class Attribute {
     }
 
 
-   /**
-    * @method getOriginX
-    * @description the start point of X-Coordinate
+    /**
+     * @method getOriginX
+     * @description the start point of X-Coordinate
+     * @return number 
+     */
+    public getOriginX() {
+        return this.origin.getAxisX()
+    }
+
+    /**
+     * @method getOriginY
+     * @description the start point of Y-Coordinate
+     * @return number 
+     */
+    public getOriginY(): number {
+        return this.origin.getAxisY()
+    }
+
+    /**
+     * @description set start point
+     * @param x 
+     * @param y 
+     * @return void
+     */
+    public setOrigin(x: number, y: number): void {
+        this.origin.setAxisX(x)
+        this.origin.setAxisY(y)
+    }
+
+    /**
+     * @method getDestinationX
+     * @description the destination point of X-Coordinate
+     * @return number 
+     */
+    public getDestinationX(): number {
+        return this.destination.getAxisX()
+    }
+
+    /**
+     * @method getDestinationY
+     * @description the destination point of Y-Coordinate
+     * @return number 
+     */
+    public getDestinationY(): number {
+        return this.destination.getAxisY()
+    }
+
+
+    /**
+     * @description set destination point
+     * @param x 
+     * @param y 
+     * @return void
+     */
+    public setDestination(x: number, y: number): void {
+        this.destination.setAxisX(x);
+        this.destination.setAxisY(y);
+    }
+
+    /**
+         * @method getDeltaX
+         * @description the delta point of X-Coordinate
+         * @return number 
+         */
+    public getDeltaX(): number {
+        return this.delta.getAxisX()
+    }
+
+    /**
+     * @method getDeltaY
+     * @description the delta point of Y-Coordinate
+     * @return number 
+     */
+    public getDeltaY(): number {
+        return this.delta.getAxisY()
+    }
+
+
+    /**
+     * @description set delta point
+     * @param x 
+     * @param y 
+     * @return void
+     */
+    public setDelta(x: number, y: number): void {
+        this.destination.setAxisX(x);
+        this.destination.setAxisY(y);
+    }
+
+    /**
+    * @method getState
+    * @description the state
     * @return number 
     */
-   public getOriginX() {
-       return this.origin.getAxisX()
-   }
+    getState(): number {
+        return this.state
+    }
 
-   /**
-    * @method getOriginY
-    * @description the start point of Y-Coordinate
+    /**
+     * @description set state
+     * @param state
+     * @return void
+     */
+    setState(state: number): void {
+        this.state = state
+    }
+
+    /**
+    * @method getStartTime
+    * @description the start time
     * @return number 
     */
-   public getOriginY():number {
-       return this.origin.getAxisY()
-   }
-   
-   /**
-    * @description set start point
-    * @param x 
-    * @param y 
-    * @return void
-    */
-   public setOrigin(x:number,y:number):void{
-      this.origin.setAxisX(x)
-      this.origin.setAxisY(y)
-   }
+    getStartTime(): number {
+        return this.startTime
+    }
 
-    
+    /**
+     * @method setStartTime
+     * @description set start time
+     * @param time
+     * @return void
+     */
+    setStartTime(time: number): void {
+        this.startTime = time
+    }
+
+    /**
+        * @method getEndTime
+        * @description the end time
+        * @return number 
+        */
+    getEndTime(): number {
+        return this.endTime
+    }
+
+    /**
+     * @method setEndTime
+     * @description set endTime
+     * @param time
+     * @return void
+     */
+    setEndTime(time: number): void {
+        this.endTime = time
+    }
 
 }
