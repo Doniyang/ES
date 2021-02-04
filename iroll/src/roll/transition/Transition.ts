@@ -1,14 +1,9 @@
 import { requestAnimationFrame, PrefixStyle } from '@niyang-es/toolkit';
-export default class Transition {
-    /**
-     * 状态
-     */
-    private state: number;
-    /**
-     *transition
-     */
-    constructor() {
-        this.state = 0;
+import Roll from '../Roll';
+import Variate from '../Variate';
+export default class Transition extends Roll {
+    constructor(roll:Variate) {
+        super(roll);
     }
 
     private isBadAndroid(): boolean {
@@ -24,14 +19,6 @@ export default class Transition {
         } else {
             return false;
         }
-    }
-
-    getState(): number {
-        return this.state;
-    }
-
-    setState(state: number): void {
-        this.state = state
     }
 
     duration(time: number = 0, scrollStyle: CSSStyleDeclaration) {
@@ -58,4 +45,24 @@ export default class Transition {
         scrollStyle.setProperty(transitionTimingFunction, style)
         scrollStyle.setProperty('transition-timing-function', style)
     }
+
+    scrollTo(x: number, y: number, time: number): void {
+        throw new Error('Method not implemented.');
+    }
+    translate(x: number, y: number): void {
+        throw new Error('Method not implemented.');
+    }
+    getPosition(): ScrollKit.Point {
+        throw new Error('Method not implemented.');
+    }
+    getComputedPosition(): ScrollKit.Point {
+        throw new Error('Method not implemented.');
+    }
+    resetPosition(): void {
+        throw new Error('Method not implemented.');
+    }
+    stop(): void {
+        throw new Error('Method not implemented.');
+    }
+
 } 
