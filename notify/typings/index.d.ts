@@ -1,4 +1,4 @@
-export declare class ClassicEvent{
+export declare class ClassicEvent {
     /*
      *  event  exist in DOM or not
      */
@@ -23,7 +23,7 @@ export declare class ClassicEvent{
        *event create time
        */
     private timeStamp: number
-  
+
     /**
     *stop event default prevent or not
     */
@@ -36,16 +36,21 @@ export declare class ClassicEvent{
     * stop event propagation
     */
     private isPropagation: boolean
-  
+
     /**
     *event name
     */
     private _name: string
-  
-    new(context: EventKit.EventContextOptions, name: string):ClassicEvent;
+
+    new(context: EventKit.EventContextOptions, name: string): ClassicEvent;
 }
 
-export declare class Notifier <T>{
-    private map: Map<string, Set<NotifierKit.NotifyEventCallback<T>>>;
-    new():Notifier<T>;
+export declare class Notifier {
+    private map: Map<string, Set<NotifierKit.NotifyEventCallback<ClassicEvent>>>;
+    on(name: string, fn: NotifierKit.NotifyEventCallback<ClassicEvent>): void;
+    off(name: string, fn: NotifierKit.NotifyEventCallback<ClassicEvent>): void;
+    has(name: string, fn: NotifierKit.NotifyEventCallback<ClassicEvent>): boolean;
+    clean(): void
+    notify(name: string|ClassicEvent, ...args: Array<NotifierKit.NotiyParams>): void
+    new(): Notifier;
 }

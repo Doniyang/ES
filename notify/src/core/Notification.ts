@@ -21,5 +21,5 @@ export default abstract class Notification<T>{
 	 /**
 	  *notify event
 	  */
-	 abstract notify(name:string,...args:Array<NotifierKit.NotiyParams>):void 
+	 abstract notify(name:string|T,...args:Array<NotifierKit.NotiyParams>):void 
 }

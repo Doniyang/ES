@@ -117,7 +117,7 @@ export default class ClassicEvent implements Eventable {
    * @param event
    */
 
-  public static ensure(context: EventKit.EventContextOptions, event: null | string | ClassicEvent): ClassicEvent {
+  public static ensure(context: EventKit.EventContextOptions, event:  null|string | ClassicEvent): ClassicEvent {
     if ((event instanceof ClassicEvent && event.name == null) || event == null) {
       throw new Error("Notify event name cannot be null");
     }
