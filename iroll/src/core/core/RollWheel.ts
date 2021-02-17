@@ -1,6 +1,6 @@
 import Attribute from "../attribute/Attribute";
 import EventDigitalizer from "../EventDigitalizer";
-import RollProxy from "../RollProxy";
+import RollProxy from "../../translate/RollProxy";
 export default class RollWheel implements EventDigitalizer {
     private tId: number
     constructor() {

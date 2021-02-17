@@ -1,7 +1,7 @@
 import {Quadratic} from "@niyang-es/toolkit";
 import Attribute from "../attribute/Attribute";
 import EventDigitalizer from "../EventDigitalizer";
-import RollProxy from "../RollProxy";
+import RollProxy from "../../translate/RollProxy";
 import EventKit from "../utils/EventKit";
 
 export default class RollStop implements EventDigitalizer {

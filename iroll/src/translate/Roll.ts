@@ -1,3 +1,4 @@
+import Scope from "src/scope/Scope";
 import Variate from "./Variate";
 
 /**
@@ -19,20 +20,29 @@ export default abstract class Roll {
      *      1 -  moving  
      */
     private state:number
-
-    constructor(roll: Variate) {
+    /**
+     * @name scope
+     */
+    private scope:Scope;
+    /**
+     * @constructor
+     * @param scope 
+     * @param roll 
+     */
+    constructor(scope:Scope,roll: Variate) {
         this.roll = roll
         this.state = 0
-    }
-      
-    /**
-     * @method getRoll
-     * @returns Variate
-     */
-    getRoll():Variate{
-        return this.roll;
+        this.scope = scope;
     }
     
+    /**
+     * @method getElement
+     * @returns root element
+    */
+    protected getElement():HTMLElement{
+        return this.scope.getWrapElement()
+    }
+          
     /**
      * @method getState
      * @returns number
@@ -52,33 +62,49 @@ export default abstract class Roll {
      * @method scrollTo
      * @param x 
      * @param y 
-     * @param time 
+     * @param time
+     * @param easing
      */
-    abstract scrollTo(x: number, y: number, time: number): void;
+    abstract scrollTo(x: number, y: number, time: number,easing?:string|ScrollKit.Algorithm): void;
     /**
      * @method translate
      * @param x 
      * @param y 
      */
-    abstract translate(x: number, y: number): void;
+    translate(x: number, y: number): void{
+        this.roll.translate(x,y,this.getElement().style); 
+    };
     /**
      * @method getPosion
      * @description get point of scroll element
      * @returns {x,y}
      */
-    abstract getPosition(): ScrollKit.Point;
+    getPosition(): ScrollKit.Point{
+        return this.scope.getPosition();
+    };
     /**
      * @method getComputedPosition
      * @description get point of scroll element
      * @returns {x,y}
      */
-    abstract getComputedPosition(): ScrollKit.Point;
+    getComputedPosition(): ScrollKit.Point{
+        return this.roll.getComputedPosition(this.getElement());
+    };
     /**
      * @method resetPosition
      */
-    abstract resetPosition(): void;
+    resetPosition(): void{
+        let time = this.scope.getBounceTime(),
+            pos = this.scope.getCrisisPosition();
+        this.scrollTo(pos.x, pos.y, time,this.getAnimation())
+    };
     /**
      * @method stop
      */
     abstract stop(): void;
+    /**
+     * @method getAnimation
+     * @description get anmation
+     */
+    abstract getAnimation():string|ScrollKit.Algorithm
 }

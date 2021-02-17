@@ -1,6 +1,6 @@
 import EventDigitalizer from "../EventDigitalizer";
 import Attribute from "../attribute/Attribute";
-import RollProxy from "../RollProxy";
+import RollProxy from "../../translate/RollProxy";
 import Event from "../utils/EventKit";
 
 export default class RollMove implements EventDigitalizer {

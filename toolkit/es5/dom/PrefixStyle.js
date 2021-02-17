@@ -2,7 +2,7 @@ import Engine from "../browser/Browser";
 import Node from './Node';
 export default class PrefixStyle {
     static prefix() {
-        return { trident: 'ms', gecko: 'Moz', webkit: 'webkit', presto: 'O' };
+        return { trident: '-ms-', gecko: '-moz-', webkit: '-webkit-', presto: '-o-' };
     }
     static style(style) {
         let key = Engine.Core();
@@ -11,7 +11,7 @@ export default class PrefixStyle {
         }
         else {
             const prefix = this.prefix();
-            return prefix[key] + style.charAt(0).toUpperCase() + style.substr(1);
+            return prefix[key] + style;
         }
     }
     static has(style) {

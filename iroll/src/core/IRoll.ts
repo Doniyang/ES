@@ -1,6 +1,6 @@
 import { isString, isNumber, isBoolean, PrefixStyle, Circular, isUndefined } from "@niyang-es/toolkit";
 import Scope from "./scope/Scope";
-import RollProxy from "./RollProxy";
+import RollProxy from "../translate/RollProxy";
 import Context from "./Context";
 import Notify from "./notify/Notify";
 import RollStart from "./core/RollStart";
@@ -51,11 +51,11 @@ export default class IRoll {
     this.scope = new Scope(isString(wrapper) ? document.body.querySelector(wrapper as string) as HTMLElement : wrapper as HTMLElement);
     this.rollProxy = new RollProxy(this.notify);
     this.context = new Context(this.rollProxy);
-    this.updateScrollOptions(options);
+    this.updateOptions(options);
     this.initializer()
   }
 
-  private updateScrollOptions(options: ScrollKit.scrollOptions) {
+  private updateOptions(options: ScrollKit.scrollOptions) {
     if (isNumber(options.eventPassthrough)) {
       this.scope.setPassthrough(options.eventPassthrough as number)
     }

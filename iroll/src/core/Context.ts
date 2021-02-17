@@ -1,7 +1,7 @@
 import { LinkedQueue } from "@niyang-es/toolkit";
 import Attribute from "./attribute/Attribute";
 import EventDigitalizer from "./EventDigitalizer";
-import RollProxy from "./RollProxy";
+import RollProxy from "../translate/RollProxy";
 
 export default class Context {
     private attrs: Attribute;
