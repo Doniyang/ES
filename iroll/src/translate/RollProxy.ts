@@ -1,22 +1,22 @@
 
 import { ClassicEvent } from "@niyang-es/notify";
+import Scope from "src/scope/Scope";
 import Notify from "../notify/Notify";
-import Designor from "./Designor";
+import RollDigitalizer from "./RollDigitalizer";
 
-export default class RollProxy implements Designor {
-    private roll: null | Designor;
+export default class RollProxy implements RollDigitalizer {
+    private roll: null | RollDigitalizer;
     private notify: Notify;
     constructor(notify: Notify) {
         this.roll = null
         this.notify = notify
     }
-    
 
     get disabled(): boolean {
         return this.roll === null
     }
 
-    build(roll: Designor): void {
+    build(roll: RollDigitalizer): void {
         this.roll = roll
     }
 
@@ -32,7 +32,7 @@ export default class RollProxy implements Designor {
     }
 
     getState(): number {
-        return (this.roll as Designor).getState();
+        return (this.roll as RollDigitalizer).getState();
     }
     setState(state: number): void {
         this.roll?.setState(state);
@@ -41,13 +41,8 @@ export default class RollProxy implements Designor {
     getComputedPosition(): ScrollKit.Point {
         return (this.roll as RollDigitalizer).getComputedPosition()
     }
-
-    getMaxScroll(): ScrollKit.Point {
-        return (this.roll as RollDigitalizer).getMaxScroll()
-    }
-
     getPosition(): ScrollKit.Point {
-        return (this.roll as Designor).getPosition();
+        return (this.roll as RollDigitalizer).getPosition();
     }
 
     stop(): void {
@@ -59,6 +54,10 @@ export default class RollProxy implements Designor {
         this.roll?.resetPosition()
     }
     getAnimation(): string | ScrollKit.Algorithm {
-       return (this.roll as Designor).getAnimation()
+        return (this.roll as RollDigitalizer).getAnimation()
+    }
+
+    getScope(): Scope {
+        return (this.roll as RollDigitalizer).getScope()
     }
 }

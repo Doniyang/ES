@@ -13,24 +13,13 @@ export default class RollFactory {
 
     private HWCompositing: boolean;
 
-    private probe: number;
-
     private notify: Notify;
 
     constructor(notify: Notify) {
         this.useTransition = true
         this.useTransform = true
         this.HWCompositing = true
-        this.probe = 1;
         this.notify = notify
-    }
-
-    setProbe(probe: number) {
-        this.probe = probe
-    }
-
-    getProbe(): number {
-        return this.probe
     }
 
     setUseTransition(useTransition: boolean): void {
@@ -45,10 +34,10 @@ export default class RollFactory {
     }
 
     build(scope: Scope) {
-        return this.useTransition ? new Transition(scope, this.buildRoll()) : new Animation(scope, this.buildRoll(), this.notify, this.probe)
+        return this.useTransition ? new Transition(scope, this.roll()) : new Animation(scope, this.roll(), this.notify)
     }
 
-    buildRoll(): Variate {
+    roll(): Variate {
         return this.useTransform ? new Transform(this.HWCompositing) : new Deviation()
     }
 }

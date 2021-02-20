@@ -1,6 +1,10 @@
+import RollProxy from "../translate/RollProxy";
+import Attribute from "../attribute/Attribute";
+
 /**
  * @description  
  */
 export default interface Digitalizer{
-    execute(e: Event, attrs: any, proxy: any): void
+    attain(state:number):boolean;
+    execute(e: Event, attrs: Attribute, proxy: RollProxy): void
 }

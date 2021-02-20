@@ -42,6 +42,12 @@ export default abstract class Roll {
     protected getElement():HTMLElement{
         return this.scope.getWrapElement()
     }
+    /**
+     * @method getScope
+     */   
+    getScope():Scope{
+        return this.scope
+    }
           
     /**
      * @method getState

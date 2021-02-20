@@ -7,11 +7,11 @@ import { requestAnimationFrame, cancelAnimationFrame, Circular } from "@niyang-e
 import Notify from "../../notify/Notify";
 import Scope from "../../scope/Scope";
 import DateKit from "../../utils/DateKit";
-import Designor from "../Designor";
+import RollDigitalizer from "../RollDigitalizer";
 import Roll from "../Roll";
 import Variate from "../Variate";
 
-export default class Animation extends Roll implements Designor {
+export default class Animation extends Roll implements RollDigitalizer {
     /**
      * @name rafId
      */
@@ -19,34 +19,27 @@ export default class Animation extends Roll implements Designor {
     /**
      * @name rafTime
      * @description the animation dispatch time 
-     */   
+     */
     private rafTime: number;
-    /**
-     * @name probe 
-     * @description the scroll event dispatch mode
-     */    
-    private probe: number;
     /**
      * @name notify
      * @description notification 
-     */ 
+     */
     private notify: Notify;
-    
+
     /**
      * @constructor
      * @param scope 
      * @param roll 
      * @param notify 
-     * @param probe 
      */
-    constructor(scope: Scope, roll: Variate, notify: Notify, probe: number) {
+    constructor(scope: Scope, roll: Variate, notify: Notify) {
         super(scope, roll);
         this.rafId = 0
         this.rafTime = 0;
-        this.probe = probe;
         this.notify = notify;
     }
-    
+
     /**
      * @method getRafTime
      * @description get raf time
@@ -58,7 +51,7 @@ export default class Animation extends Roll implements Designor {
      * @method setRafTime
      * @param tm 
      * @description set requestAnimationFrame time
-     */ 
+     */
     private setRafTime(tm: number): void {
         this.rafTime = tm
     }
@@ -72,9 +65,9 @@ export default class Animation extends Roll implements Designor {
     /**
      * @method isRealtime
      * @description roll trigger scroll realtime
-     */  
+     */
     private isRealtime(): boolean {
-        return this.probe === 3
+        return this.getScope().getProbe() === 3
     }
     /**
      * @method isTimeout
@@ -89,7 +82,7 @@ export default class Animation extends Roll implements Designor {
      * @method finish 
      * @param pos 
      * @description finish roll
-     */ 
+     */
     private finish(pos: ScrollKit.Point) {
         if (this.isRealtime()) {
             this.notify.trigger('scroll', pos)
@@ -152,7 +145,7 @@ export default class Animation extends Roll implements Designor {
      * @param time 
      * @param easing 
      * @description scroll to some point
-     */    
+     */
     scrollTo(x: number, y: number, time: number, easing: ScrollKit.Algorithm): void {
         let now = DateKit.now();
         let position = this.getPosition();

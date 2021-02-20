@@ -50,11 +50,17 @@ export default class Attribute {
      * @description end time
      */
     private endTime: number;
-
+    /**
+     * @type Axis
+     * @description the point scroll 
+     */
+    private point:Axis;
+    
     constructor() {
         this.delta = new Axis();
         this.origin = new Axis();
         this.destination = new Axis();
+        this.point = new Axis();
         this.state = 0
         this.startTime = 0
         this.endTime = 0;
@@ -205,5 +211,28 @@ export default class Attribute {
     setEndTime(time: number): void {
         this.endTime = time
     }
-
+    /**
+     * @method getPointX
+     * @description x of scroll point
+     */
+    getPointX():number{
+        return this.point.getAxisX()
+    }
+    /**
+     * @method getPointY
+     * @description y of scroll point
+     */
+    getPointY():number{
+        return this.point.getAxisY()
+    }
+    
+    /**
+     * @method setPoint
+     * @param x 
+     * @param y 
+     */
+    setPoint(x:number,y:number):void{
+        this.point.setAxisX(x);
+        this.point.setAxisY(y)
+    }
 }

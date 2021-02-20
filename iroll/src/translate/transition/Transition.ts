@@ -1,9 +1,9 @@
 import { requestAnimationFrame, PrefixStyle,Circular, isString } from '@niyang-es/toolkit';
 import Scope from 'src/scope/Scope';
-import Designor from '../Designor';
+import RollDigitalizer from '../RollDigitalizer';
 import Roll from '../Roll';
 import Variate from '../Variate';
-export default class Transition extends Roll implements Designor{
+export default class Transition extends Roll implements RollDigitalizer{
     /**
      * @constructor
      * @param scope 
