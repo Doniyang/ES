@@ -1,9 +1,8 @@
 import Scope from "../scope/Scope";
-import EventKit from "../utils/EventKit";
 import Attribute from "../attribute/Attribute";
 import RollProxy from "../translate/RollProxy";
 import Digitalizer from "./Digitalizer";
-import DateKit from "src/utils/DateKit";
+import {DateKit,EventKit} from "../shared";
 
 export default class RollProgress implements Digitalizer {
     private isLarger(a: number, b: number) {

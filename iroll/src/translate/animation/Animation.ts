@@ -6,7 +6,7 @@
 import { requestAnimationFrame, cancelAnimationFrame, Circular } from "@niyang-es/toolkit";
 import Notify from "../../notify/Notify";
 import Scope from "../../scope/Scope";
-import DateKit from "../../utils/DateKit";
+import {DateKit} from "../../shared";
 import RollDigitalizer from "../RollDigitalizer";
 import Roll from "../Roll";
 import Variate from "../Variate";
