@@ -251,15 +251,15 @@ export default class Scope {
     /**
      * @method isXPrevent
      */
-    isXPrevent():boolean{
-        return this.scroll.getPrevent()===1
+    isXPrevent(): boolean {
+        return this.scroll.getPrevent() === 1
     }
 
     /**
      * @method isYPrevent
      */
-    isYPrevent():boolean{
-        return this.scroll.getPrevent()===2
+    isYPrevent(): boolean {
+        return this.scroll.getPrevent() === 2
     }
     /**
      * @method isBounce
@@ -330,13 +330,12 @@ export default class Scope {
      * @method getMaxDistance
      * @description get max scroll distance
      * @returns {x,y}
-     */ 
-    getMaxDistance():ScrollKit.Point{
-        return {x:this.getMaxScrollWidth(),y:this.getMaxScrollHeight()}
-    } 
-
-    getDirectionLockThreshold(){
-        return this.scroll.getThreshold()
+     */
+    getMaxDistance(): ScrollKit.Point {
+        return { x: this.getMaxScrollWidth(), y: this.getMaxScrollHeight() }
     }
 
+    getDirectionLockThreshold(): number {
+        return this.scroll.getThreshold()
+    }
 }

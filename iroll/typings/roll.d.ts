@@ -1,14 +1,17 @@
 declare namespace ScrollKit {
     export type ElementWrapper = string | HTMLElement
     export type NotifyParams = number | string | boolean | object
-    export interface ElementFilter {
-        (el: HTMLElement): boolean
+
+    export interface Exception {
+        [key: string]: any
+        tagName?: RegExp
+        className?: RegExp
     }
 
-   export interface WheelParams {
+    export interface WheelParams {
         speed?: number
         invert?: boolean
-        enable?:boolean
+        enable?: boolean
     }
 
     export interface scrollOptions {

@@ -54,13 +54,16 @@ export default class Attribute {
      * @type Axis
      * @description the point scroll 
      */
-    private point:Axis;
-    
+    private point: Axis;
+
+    private absOrigin: Axis;
+
     constructor() {
         this.delta = new Axis();
         this.origin = new Axis();
         this.destination = new Axis();
         this.point = new Axis();
+        this.absOrigin = new Axis();
         this.state = 0
         this.startTime = 0
         this.endTime = 0;
@@ -215,24 +218,44 @@ export default class Attribute {
      * @method getPointX
      * @description x of scroll point
      */
-    getPointX():number{
+    getPointX(): number {
         return this.point.getAxisX()
     }
     /**
      * @method getPointY
      * @description y of scroll point
      */
-    getPointY():number{
+    getPointY(): number {
         return this.point.getAxisY()
     }
-    
+
     /**
      * @method setPoint
      * @param x 
      * @param y 
      */
-    setPoint(x:number,y:number):void{
+    setPoint(x: number, y: number): void {
         this.point.setAxisX(x);
         this.point.setAxisY(y)
+    }
+
+    /**
+     * @method getAbsOriginX
+     */
+    getAbsOriginX():number{
+        return this.absOrigin.getAxisX()
+    }
+
+    getAbsOriginY():number{
+        return this.absOrigin.getAxisY()
+    }
+    /**
+     * @method setAbsOrigin
+     * @param x 
+     * @param y 
+     */
+    setAbsOrigin(x: number, y: number): void {
+        this.absOrigin.setAxisX(x);
+        this.absOrigin.setAxisY(y);
     }
 }
