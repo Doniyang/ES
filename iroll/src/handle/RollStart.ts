@@ -69,8 +69,10 @@ export default class RollStart implements Digitalizer {
         if (proxy.getState() === 1) { proxy.stop(); }
 
         attrs.setOrigin(pos.x, pos.y);
+        attrs.setAbsOrigin(pos.x, pos.y);
         attrs.setPoint(point.pageX, point.pageY);
         attrs.setState(1);
+        
         proxy.trigger('scroll:bofore', pos);
     }
 

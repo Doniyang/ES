@@ -24,8 +24,8 @@ export default class RollProxy implements RollDigitalizer {
         (this.notify as Notify).trigger(e, args)
     }
 
-    scrollTo(x: number, y: number, time: number): void {
-        this.roll?.scrollTo(x, y, time);
+    scrollTo(x: number, y: number, time: number, easing: string | ScrollKit.Algorithm): void {
+        this.roll?.scrollTo(x, y, time, easing);
     }
     translate(x: number, y: number): void {
         this.roll?.translate(x, y);

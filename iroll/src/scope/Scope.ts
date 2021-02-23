@@ -5,6 +5,7 @@
  */
 import Axis from "../axis/Axis"
 import Feature from "./feature/Feature";
+import Momentum from "./momentum/Momentum";
 
 export default class Scope {
     /**
@@ -42,6 +43,10 @@ export default class Scope {
      */
     private probe: number;
     /**
+     * @name momentum
+     */
+    private momentum: Momentum;
+    /**
      * @constructor
      * @param el 
      */
@@ -52,7 +57,8 @@ export default class Scope {
         this.bounce = true
         this.bounceTime = 800;
         this.specifiedIndex = 0;
-        this.probe = 1
+        this.probe = 1;
+        this.momentum = new Momentum()
     }
     /**
      * @method getScrollOffsetWidth
@@ -72,14 +78,20 @@ export default class Scope {
     }
 
     /**
-     * @method compare
-     * @description compare two number
-     * @param a 
-     * @param b 
+     * @method rollable
+     * @param wapper 
+     * @param content 
+     * @description make sure it is rollable with two number
+     * @example 
+     *      if x-scroll need:
+     *          rollable(wapperWidth，contentWidth)
+     *      if y-scroll need:
+     *        rollable(wapperHeight，contentHeight)   
+     *            
      * @returns boolean
      */
-    private compare(a: number, b: number): boolean {
-        return a < b
+    private rollable(wapper: number, content: number): boolean {
+        return wapper < content
     }
     /**
      * @method getMaxScrollWidth
@@ -221,19 +233,19 @@ export default class Scope {
         this.axis.setAxisY(y);
     }
     /**
-     * @method isHScroll
+     * @method isLockScrollX
      * @description x-scroll  or not
      * @returns boolean
      */
-    isHScroll(): boolean {
+    isLockScrollX(): boolean {
         return this.scroll.getMode() === 1
     }
     /**
-     * @method isYScroll
+     * @method isLockScrollY
      * @description y-scroll  or not
      * @returns boolean
      */
-    isVScroll(): boolean {
+    isLockScrollY(): boolean {
         return this.scroll.getMode() === 2
     }
 
@@ -275,20 +287,20 @@ export default class Scope {
         return this.bounceTime;
     }
     /**
-     * @method isLockXScroll
-     * @description lock x scroll  or not
+     * @method isHScroll
+     * @description x scroll  or not
      * @returns boolean
      */
-    isLockXScroll(): boolean {
-        return this.isHScroll() && this.compare(this.getClientWidth(), this.getScrollOffsetWidth());
+    isHScroll(): boolean {
+        return this.isLockScrollX() && this.rollable(this.getClientWidth(), this.getScrollOffsetWidth());
     }
     /**
-     * @method isLockYScroll
-     * @description lock y scroll  or not
+     * @method isVScroll
+     * @description  y scroll  or not
      * @returns boolean
      */
-    isLockYScroll(): boolean {
-        return this.isHScroll() && this.compare(this.getClientHeight(), this.getScrollOffsetHeight());
+    isVScroll(): boolean {
+        return this.isLockScrollY() && this.rollable(this.getClientHeight(), this.getScrollOffsetHeight());
     }
     /**
      * @method getWrapElement
@@ -313,13 +325,13 @@ export default class Scope {
         let pos = this.getPosition();
         let x = pos.x, y = pos.y;
         //left
-        if (!this.isLockXScroll() || pos.x > 0) {
+        if (!this.isHScroll() || pos.x > 0) {
             x = 0
         } else if (pos.x < this.getMaxScrollWidth()) {//right
             x = this.getMaxScrollWidth()
         }
         //top
-        if (!this.isLockYScroll() || pos.y > 0) {
+        if (!this.isVScroll() || pos.y > 0) {
             y = 0
         } else if (pos.y < this.getMaxScrollHeight()) {//bottom
             y = this.getMaxScrollHeight()
@@ -334,8 +346,34 @@ export default class Scope {
     getMaxDistance(): ScrollKit.Point {
         return { x: this.getMaxScrollWidth(), y: this.getMaxScrollHeight() }
     }
-
+    /**
+     * @method getDirectionLockThreshold
+     */
     getDirectionLockThreshold(): number {
         return this.scroll.getThreshold()
+    }
+
+    getMomentumThreshold(): number {
+        return this.momentum.getThreshold()
+    }
+
+    setMomentumThreshold(dist: number): void {
+        this.momentum.setThreshold(dist)
+    }
+
+    getMomentumPeroid(): number {
+        return this.momentum.getPeriod()
+    }
+
+    setMomentumPeroid(time: number): void {
+        this.momentum.setPeriod(time)
+    }
+
+    setMomentum(flag: boolean) {
+        this.momentum.setEnableFlag(flag)
+    }
+
+    isEnableMomentum(): boolean {
+        return this.momentum.enabled()
     }
 }

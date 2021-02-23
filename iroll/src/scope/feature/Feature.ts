@@ -39,7 +39,7 @@ export default class Feature {
      */
     private threshold: number
     constructor() {
-        this.mode = 0
+        this.mode = 2
         this.direction = new Axis();
         this.prevent = 0
         this.automatic = false
