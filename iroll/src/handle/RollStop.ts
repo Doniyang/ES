@@ -10,7 +10,7 @@ export default class RollStop implements Digitalizer{
       return !(prev.x===next.x && prev.y===next.y)  
    }
     attain(state: number): boolean {
-        return state ===2;
+        return state ===2||state===1;
     }
     execute(e: Event, attrs: Attribute, proxy: RollProxy): void {
         let pos:ScrollKit.Point = proxy.getPosition(),
