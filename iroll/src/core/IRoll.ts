@@ -1,129 +1,148 @@
 import { isString, isNumber, isBoolean, PrefixStyle, Circular, isUndefined } from "@niyang-es/toolkit";
-import Scope from "./scope/Scope";
 import RollProxy from "../translate/RollProxy";
+import Scope from "../scope/Scope";
 import Context from "./Context";
-import Notify from "./notify/Notify";
-import RollStart from "./core/RollStart";
-import RollStop from "./core/RollStop";
-import RollRefresh from "./core/RollRefresh";
-import RollFinish from "./core/RollFinish";
-import RollMove from "./core/RollMove";
-import TransitionTranslateRoll from "./transition/TransitionTranslateRoll";
-import TransitionRoll from "./transition/TransitionRoll";
-import AnimationTranslateRoll from "./animation/AnimationTranslateRoll";
-import AnimationRoll from "./animation/AnimationRoll";
+import Notify from "src/notify/Notify";
+import RollFactory from "src/translate/RollFactory";
+import { ToolKit } from "src/shared";
+
+
 export default class IRoll {
-  /**
-   * direction lock threshold
-   */
-  readonly directionLockThreshold: number
-  /**
-   * set bounce time
-   */
-  readonly bounceTime: number
-  /**
-   * deceleration
-   */
-  readonly deceleration: number
-
-
-  private preventDefault: boolean
-
-  private useTransition: boolean
-
-  private useTransform: boolean
-
-  private bindToWrapper: boolean
-
   private scope: Scope;
   private rollProxy: RollProxy;
   private context: Context;
   private notify: Notify;
+  private factory: RollFactory;
+  private bindToWrapper: boolean
+  private preventDefault: boolean
+  private preventDefaultException: ScrollKit.Exception
+  private resizePolling: number
+  private stopPropagation: boolean
+  private mouseWheel: boolean
+   private resizeTimeoutId:number
   constructor(wrapper: ScrollKit.ElementWrapper, options: ScrollKit.scrollOptions) {
-    this.directionLockThreshold = 5
-    this.bounceTime = 700
-    this.deceleration = 0.0015
     this.preventDefault = true
-    this.useTransform = true
-    this.useTransition = true
+    this.preventDefaultException = { tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/ }
     this.bindToWrapper = typeof window.onmousedown === 'undefined';
+    this.resizePolling = 60
+    this.resizeTimeoutId=0;
+    this.stopPropagation = false
+    this.mouseWheel = false
     this.notify = new Notify()
     this.scope = new Scope(isString(wrapper) ? document.body.querySelector(wrapper as string) as HTMLElement : wrapper as HTMLElement);
     this.rollProxy = new RollProxy(this.notify);
     this.context = new Context(this.rollProxy);
-    this.updateOptions(options);
+    this.factory = new RollFactory(this.notify);
+    this.merge(options);
     this.initializer()
   }
 
-  private updateOptions(options: ScrollKit.scrollOptions) {
-    if (isNumber(options.eventPassthrough)) {
-      this.scope.setPassthrough(options.eventPassthrough as number)
-    }
-    if (isBoolean(options.clickable)) {
-      this.scope.setClickable(options.clickable as boolean)
-    }
-    if (isBoolean(options.tap)) {
-      this.scope.setTap(options.tap as boolean)
-    }
-    if (isBoolean(options.bounce)) {
-      this.scope.setBounce(options.bounce as boolean)
-    }
-    if (isBoolean(options.momentum)) {
-      this.scope.setMomentum(options.momentum as boolean)
-    }
-
-    if (isBoolean(options.HWCompositing)) {
-      this.scope.setHWCompositing(options.HWCompositing as boolean)
-    }
-
-    if (isNumber(options.probe)) {
-      this.scope.setProbe(<number>options.probe)
-    }
-
-    if (!isUndefined(options.wheel) && isNumber((options.wheel as ScrollKit.WheelParams).speed)) {
-      this.scope.setWheelSpeed((options.wheel as ScrollKit.WheelParams).speed as number)
-    }
-
-    if (!isUndefined(options.wheel)) {
-      this.scope.setWheelSpeed((options.wheel as ScrollKit.WheelParams).invert ? -1 : 1)
-    }
-
-    if (!isUndefined(options.wheel)) {
-      this.scope.setEnableWheel((options.wheel as ScrollKit.WheelParams).enable as boolean)
-    }
-
-    if (isBoolean(options.preventDefault)) {
-      this.preventDefault = options.preventDefault as boolean;
-    }
-
+  private merge(options: ScrollKit.Options) {
     if (isBoolean(options.useTransition)) {
-      this.useTransition = options.useTransition as boolean;
+      this.factory.setUseTransition(options.useTransition)
+    }
+    if (isBoolean(options.useTransform)) {
+      this.factory.setUseTransform(options.useTransform)
+    }
+    if (isBoolean(options.HWCompositing)) {
+      this.factory.setHWCompositing(options.HWCompositing)
     }
 
-    if (isBoolean(options.useTransform)) {
-      this.useTransform = options.useTransform as boolean;
+    if (isBoolean(options.tap)) {
+      this.scope.setTapabke(options.tap)
+    }
+
+    if (isBoolean(options.clickable)) {
+      this.scope.setClickable(options.clickable)
+    }
+
+    if (isBoolean(options.bounce)) {
+      this.scope.setBounce(options.bounce)
+    }
+
+    if (isNumber(options.bounceTime)) {
+      this.scope.setBounceTime(options.bounceTime)
+    }
+
+    if (options.preventDefault) {
+      this.preventDefault = options.preventDefault
     }
 
     if (isBoolean(options.bindToWrapper)) {
-      this.bindToWrapper = options.bindToWrapper as boolean;
+      this.bindToWrapper = options.bindToWrapper
+    }
+
+    if (options.preventDefaultException) {
+      this.preventDefaultException = options.preventDefaultException
+    }
+
+    if (isNumber(options.resizePolling)) {
+      this.resizePolling = options.resizePolling
+    }
+
+    if (isNumber(options.probe)) {
+      this.scope.setProbe(options.probe)
+    }
+
+    if (isNumber(options.eventPassthrough)) {
+      this.scope.setScrollMode(options.eventPassthrough)
+    }
+
+    if (isNumber(options.directionLockThreshold)) {
+      this.scope.setDirectionLockThreshold(options.directionLockThreshold)
+    }
+
+    if (isNumber(options.specifiedIndex)) {
+      this.scope.setContentSpecifiedIndex(options.specifiedIndex)
+    }
+
+    if (isBoolean(options.momentum)) {
+      this.scope.setMomentum(options.momentum)
+    }
+
+    if (isNumber(options.momentumLimitDistance)) {
+      this.scope.setMomentumThreshold(options.momentumLimitDistance)
+    }
+    if (isNumber(options.momentumLimitTime)) {
+      this.scope.setMomentumPeroid(options.momentumLimitTime)
+    }
+
+    if (isNumber(options.deceleration)) {
+      this.scope.setDeceleration(options.deceleration)
+    }
+
+    if (options.mouseWheel) {
+      this.mouseWheel = options.mouseWheel
+    }
+
+    if (isNumber(options.mouseWheelSpeed)) {
+      this.scope.setMouseWheelSpeed(options.mouseWheelSpeed)
     }
 
     this.scope.setScrollX(options.scrollX ? 1 : 0)
-    this.scope.setScrollY(options.scrollY === false ? 0 : 1)
-    this.scope.setScrollZ(options.freeScroll ? 1 : 0)
+    this.scope.setScrollY(isUndefined(options.scrollY) || options.scrollY ? 1 : 0)
+    this.scope.setScrollZ(options.freeScroll && this.scope.isNoPrevent() ? 1 : 0)
+    this.scope.setMouseWheelDirection(isUndefined(options.invertWheelDirection) || (!options.invertWheelDirection) ? 1 : -1)
+
+    if (this.scope.isYPrevent()) {
+      this.scope.setScrollY(0)
+      this.scope.setDirectionLockThreshold(0)
+      this.preventDefault = false
+    }
+
+    if (this.scope.isXPrevent()) {
+      this.scope.setScrollX(0)
+      this.scope.setDirectionLockThreshold(0)
+      this.preventDefault = false
+    }
+
+
     this.context.setStart(options.startX || 0, options.startY || 0)
+
   }
 
   private isSupport(e: string, context: any): boolean {
     return e in context
-  }
-
-  private isSuportTransform(): boolean {
-    return PrefixStyle.has('transform') && this.useTransform
-  }
-
-  private isSuportTransition(): boolean {
-    return PrefixStyle.has('transition') && this.useTransition
   }
 
   private isSupportTouch(): boolean {
@@ -131,7 +150,7 @@ export default class IRoll {
   }
 
   private isWheelEnabled() {
-    return this.scope.isWheelEnabled()
+    return this.mouseWheel
   }
 
   private addEventListener(el: HTMLElement, type: string, fn: EventListenerOrEventListenerObject, capture: boolean) {
@@ -142,47 +161,71 @@ export default class IRoll {
     el.removeEventListener(type, fn, capture)
   }
 
-  private stopPreventDefault(e: Event): void {
+  private preventDefaultFilter(el: any, exceptions: ScrollKit.Exception): boolean {
+    for (let key in exceptions) {
+      if (exceptions[key].test(el[key])) {
+        return true
+      }
+    }
+    return false
+  }
+
+  private beforeStart(e: Event) {
+    if (this.preventDefault && !ToolKit.isBadAndroid() && !this.preventDefaultFilter(e.target, this.preventDefaultException)) {
+      e.preventDefault()
+    }
+    if (this.stopPropagation) {
+      e.stopPropagation()
+    }
+  }
+  private beforeStop(e: Event) {
+    if (this.preventDefault && !this.preventDefaultFilter(e.target, this.preventDefaultException)) {
+      e.preventDefault()
+    }
+  }
+
+  private beforeMove(e: Event) {
     if (this.preventDefault) {
       e.preventDefault()
     }
   }
 
+
   private handleStart(e: Event) {
-    this.context.setContext(RollStart);
-    this.stopPreventDefault(e);
-    this.context.execute(e)
+    this.beforeStart(e);
+    this.context.execute(e, 'start')
   }
 
   private handleStop(e: Event) {
-    this.context.setContext(RollStop)
-    this.stopPreventDefault(e);
-    this.context.execute(e)
+    this.beforeStop(e)
+    this.context.execute(e, 'stop')
   }
 
   private resize(e: Event) {
-    this.context.setContext(RollRefresh);
-    this.stopPreventDefault(e);
-    this.context.execute(e);
+    const that = this
+    clearTimeout(this.resizeTimeoutId)
+
+    this.resizeTimeoutId = setTimeout(function () {
+			that.context.execute(e, 'refresh');();
+		}, this.resizePolling);
+    
   }
   private handleTransitionEnd(e: Event) {
-    this.context.setContext(RollFinish);
-    this.stopPreventDefault(e);
-    this.context.execute(e);
+    this.context.execute(e, 'finish');
   }
 
-  private wheel(e: MouseEvent) {
-    // this.context.setContext();
+  private wheel(e: Event) {
+    this.context.execute(e, 'wheel');
   }
 
   private handleMove(e: Event) {
-    this.context.setContext(RollMove);
-    this.stopPreventDefault(e);
-    this.context.execute(e);
+    this.beforeMove(e);
+    this.context.execute(e, 'move');
   }
 
   private handleClick(e: Event) {
-
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   protected handleEvent(e: Event) {
@@ -214,7 +257,7 @@ export default class IRoll {
       case 'wheel':
       case 'DOMMouseScroll':
       case 'mousewheel':
-        this.wheel(e as MouseEvent);
+        this.wheel(e);
         break;
       case 'click':
         this.handleClick(e);
@@ -283,21 +326,9 @@ export default class IRoll {
     listener(this.scope.getScrollElement(), 'oTransitionEnd', this);
     listener(this.scope.getScrollElement(), 'MSTransitionEnd', this);
   }
+
   private initRoll() {
-    const circular = new Circular();
-    if (this.isSuportTransition()) {
-      if (this.isSuportTransform()) {
-        this.rollProxy.build(new TransitionTranslateRoll(this.scope, circular.style()))
-      } else {
-        this.rollProxy.build(new TransitionRoll(this.scope, circular.style()))
-      }
-    } else {
-      if (this.isSuportTransform()) {
-        this.rollProxy.build(new AnimationTranslateRoll(this.scope, circular.algorithm, this.notify))
-      } else {
-        this.rollProxy.build(new AnimationRoll(this.scope, circular.algorithm, this.notify))
-      }
-    }
+    this.rollProxy.build(this.factory.build(this.scope))
   }
 
   /**
@@ -305,8 +336,8 @@ export default class IRoll {
    */
   private initializer() {
     this.addEvents();
-    this.initRoll();
-    this.scrollTo(this.context.getStartX(), this.context.getStartY(), 0)
+    this.initRoll()
+    this.scrollTo(this.context.getStartX(), this.context.getStartY(), 0, this.rollProxy.getAnimation())
   }
 
   /**
@@ -316,10 +347,7 @@ export default class IRoll {
    * @param time 
    * @param ease 
    */
-  public scrollTo(x: number, y: number, time: number) {
-    this.rollProxy.scrollTo(x, y, time);
+  public scrollTo(x: number, y: number, time: number, ease: string | ScrollKit.Algorithm) {
+    this.rollProxy.scrollTo(x, y, time, ease);
   }
-
-
-
 }

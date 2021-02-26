@@ -6,6 +6,7 @@
 import Axis from "../axis/Axis"
 import Feature from "./feature/Feature";
 import Momentum from "./momentum/Momentum";
+import Wheel from "./wheel/Wheel";
 
 export default class Scope {
     /**
@@ -20,7 +21,7 @@ export default class Scope {
      * @description roll direction
      * @see Feature class
      */
-    private scroll: Feature;
+    private feature: Feature;
     /**
      * @description content index
      * @default 0
@@ -46,6 +47,12 @@ export default class Scope {
      * @name momentum
      */
     private momentum: Momentum;
+
+    private clickable: boolean
+
+    private tapable: boolean
+
+    private wheel:Wheel
     /**
      * @constructor
      * @param el 
@@ -53,12 +60,15 @@ export default class Scope {
     constructor(el: HTMLElement) {
         this.rootElement = el;
         this.axis = new Axis();
-        this.scroll = new Feature();
+        this.feature = new Feature();
         this.bounce = true
         this.bounceTime = 800;
         this.specifiedIndex = 0;
         this.probe = 1;
-        this.momentum = new Momentum()
+        this.momentum = new Momentum();
+        this.clickable = false
+        this.tapable = false
+        this.wheel = new Wheel()
     }
     /**
      * @method getScrollOffsetWidth
@@ -99,7 +109,7 @@ export default class Scope {
      * @returns number
      */
     private getMaxScrollWidth(): number {
-        if (!this.isLockXScroll()) {
+        if (!this.isHScroll()) {
             return 0;
         }
         return this.getClientWidth() - this.getScrollOffsetWidth()
@@ -110,7 +120,7 @@ export default class Scope {
      * @returns number
      */
     private getMaxScrollHeight(): number {
-        if (!this.isLockYScroll()) {
+        if (!this.isVScroll()) {
             return 0
         }
         return this.getClientHeight() - this.getScrollOffsetHeight()
@@ -130,28 +140,17 @@ export default class Scope {
     private getClientHeight(): number {
         return this.rootElement.clientHeight;
     }
-
-    /**
-     *@method getScrollWidth
-     * @returns number 
-     */
-    private getScrollWidth(): number {
-        if (!this.isLockXScroll()) {
-            return this.getClientWidth()
-        }
-        return this.getScrollOffsetWidth()
-    }
-    /**
-     * @method getScrollHeight
-     * @returns number
-     */
-    private getScrollHeight(): number {
-        if (!this.isLockYScroll()) {
-            return this.getClientHeight()
-        }
-        return this.getScrollOffsetHeight()
+    private getComputedHMomentum(start: number, duration: number, pos: number): ScrollKit.Momentun {
+        return this.isHScroll() ? this.momentum.getComputedMomentum(this.getPosition().x, start, duration, this.getMaxScrollWidth(), this.isBounce() ? this.getClientWidth() : 0) : { destination: pos, duration: 0 };
     }
 
+    private getComputedVMomentum(start: number, duration: number, pos: number): ScrollKit.Momentun {
+        return this.isVScroll() ? this.momentum.getComputedMomentum(this.getPosition().y, start, duration, this.getMaxScrollHeight(), this.isBounce() ? this.getClientHeight() : 0) : { destination: pos, duration: 0 };
+    }
+    
+    setContentSpecifiedIndex(specifiedIndex:number):void{
+        this.specifiedIndex = specifiedIndex
+    }
     /**
      * @method getProbe
      * @description get probe
@@ -168,13 +167,25 @@ export default class Scope {
         this.probe = probe
     }
 
+    setScrollX(x: number): void {
+        this.feature.setScrollX(x)
+    }
+
+    setScrollY(y: number): void {
+        this.feature.setScrollY(y)
+    }
+
+    setScrollZ(x: number): void {
+        this.feature.setScrollZ(x)
+    }
+
     /**
      * @method setScrollMode
      * @param mode
      * @returns undefined
      */
     setScrollMode(mode: number): void {
-        this.scroll.setMode(mode)
+        this.feature.setMode(mode)
     }
 
     /**
@@ -183,15 +194,7 @@ export default class Scope {
      * @returns undefined
      */
     setScrollPreventState(state: number): void {
-        this.scroll.setPrevent(state)
-    }
-    /**
-     * @method setAutoScroll
-     * @param automatic
-     * @returns undefined
-     */
-    setAutoScroll(automatic: boolean): void {
-        this.scroll.setAutomatic(automatic)
+        this.feature.setPrevent(state)
     }
     /**
      * 
@@ -199,7 +202,7 @@ export default class Scope {
      * @param y 
      */
     setScrollDirection(x: number, y: number): void {
-        this.scroll.setDirection(x, y)
+        this.feature.setDirection(x, y)
     }
 
     /**
@@ -238,7 +241,7 @@ export default class Scope {
      * @returns boolean
      */
     isLockScrollX(): boolean {
-        return this.scroll.getMode() === 1
+        return this.feature.getScrollX() === 1
     }
     /**
      * @method isLockScrollY
@@ -246,11 +249,11 @@ export default class Scope {
      * @returns boolean
      */
     isLockScrollY(): boolean {
-        return this.scroll.getMode() === 2
+        return this.feature.getScrollY() === 1
     }
 
     isNoLocked() {
-        return this.scroll.getMode() === 0
+        return this.feature.getMode() === 0
     }
     /**
      * @method isFreeScroll
@@ -258,20 +261,24 @@ export default class Scope {
      * @returns boolean
      */
     isFreeScroll(): boolean {
-        return this.scroll.isAutomatic()
+        return this.feature.getScrollZ() === 1
     }
     /**
      * @method isXPrevent
      */
     isXPrevent(): boolean {
-        return this.scroll.getPrevent() === 1
+        return this.feature.getPrevent() === 1
     }
 
     /**
      * @method isYPrevent
      */
     isYPrevent(): boolean {
-        return this.scroll.getPrevent() === 2
+        return this.feature.getPrevent() === 2
+    }
+
+    isNoPrevent():boolean{
+        return this.feature.getPrevent() === 0
     }
     /**
      * @method isBounce
@@ -350,30 +357,100 @@ export default class Scope {
      * @method getDirectionLockThreshold
      */
     getDirectionLockThreshold(): number {
-        return this.scroll.getThreshold()
+        return this.feature.getThreshold()
     }
 
+    setDirectionLockThreshold(threshold:number): void{
+        return this.feature.setThreshold(threshold)
+    }
+    /**
+     * @method getMomentumThreshold
+     * @description get moment limit distance
+     */
     getMomentumThreshold(): number {
         return this.momentum.getThreshold()
     }
-
+    /**
+     * @method setMomentumThreshold
+     * @param dist
+     * @description set moment limit distance 
+     */
     setMomentumThreshold(dist: number): void {
         this.momentum.setThreshold(dist)
     }
-
+    /**
+     * @method getMomentumPeroid
+     * @description get momentum limit time
+     */
     getMomentumPeroid(): number {
         return this.momentum.getPeriod()
     }
-
+    /**
+     * @method setMomentumPeroid
+     * @param time 
+     * @description set momentum limit time
+     */
     setMomentumPeroid(time: number): void {
         this.momentum.setPeriod(time)
     }
-
+    /**
+     * @method setMomentum
+     * @param flag 
+     * @description use momentum or not
+     */
     setMomentum(flag: boolean) {
         this.momentum.setEnableFlag(flag)
     }
 
+    /**
+     * @method isEnableMomentum
+     */
     isEnableMomentum(): boolean {
         return this.momentum.enabled()
     }
+
+    setDeceleration(deceleration: number): void {
+        this.momentum.setDeceleration(deceleration)
+    }
+
+    getDeceleration(): number {
+        return this.momentum.getDeceleration()
+    }
+
+    setTapabke(tapable: boolean): void {
+        this.tapable = tapable
+    }
+
+    isTapable(): boolean {
+        return this.tapable
+    }
+
+    setClickable(clickable: boolean) {
+        this.clickable = clickable
+    }
+
+    isClickable(): boolean {
+        return this.clickable
+    }
+
+    getComputedMomontum(start: number, duration: number, pos: number, isVertical: boolean): ScrollKit.Momentun {
+        return isVertical ? this.getComputedHMomentum(start, duration, pos) : this.getComputedVMomentum(start, duration, pos);
+    }
+
+    setMouseWheelSpeed(speed:number): void {
+      this.wheel.setWheelSpeed(speed)
+    }
+
+    setMouseWheelDirection(dir:number): void {
+        this.wheel.setWheelDirection(dir)
+    }
+
+    getMouseWheelSpeed(): number {
+        return this.wheel.getWheelSpeed()
+    }
+
+    getMouseWheelDirection(): number {
+        return this.wheel.getWheelDirection()
+    }
+
 }

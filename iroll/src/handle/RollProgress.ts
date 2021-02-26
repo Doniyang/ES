@@ -119,8 +119,10 @@ export default class RollProgress implements Digitalizer {
             newY = scope.isBounce() ? pos.y + y / 3 : (this.isLarger(newY, 0) ? 0 : maxDist.y)
         }
 
+        scope.setScrollDirection(deltaX > 0 ? -1 : deltaX < 0 ? 1 : 0,deltaY > 0 ? -1 : deltaY < 0 ? 1 : 0)
 
-        if (attrs.getState() !== 2) {
+        
+        if (attrs.getState() === 1) {
             proxy.trigger('scroll:start', pos)
         }
 

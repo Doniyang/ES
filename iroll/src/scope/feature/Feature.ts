@@ -15,6 +15,15 @@ export default class Feature {
      */
     private mode: number;
     /**
+         * @name roll
+         * @description scroll or not
+         * @example 
+         *    x=1 ------ allow x scroll
+         *    y=1 ------ allow y scroll
+         *    z=1 ------ free scroll 
+         */
+    private roll: Axis;
+    /**
      * @name direction
      * @description scroll direction
      */
@@ -25,7 +34,7 @@ export default class Feature {
      * @example
      *     0 ---- free
      *     1 --- x-prevent
-     *      2--- y-prevent 
+     *     2--- y-prevent 
      */
     private prevent: number;
     /**
@@ -38,17 +47,44 @@ export default class Feature {
      * @description scroll direction threshold
      */
     private threshold: number
+    /**
+     * @constructor
+     */
     constructor() {
         this.mode = 2
         this.direction = new Axis();
         this.prevent = 0
         this.automatic = false
         this.threshold = 5
+        this.roll = new Axis()
+    }
+
+    setScrollX(x: number): void {
+        this.roll.setAxisX(x)
+    }
+
+    getScrollX(): number {
+        return this.roll.getAxisX()
+    }
+
+    setScrollY(y: number): void {
+        this.roll.setAxisY(y)
+    }
+
+    getScrollY(): number {
+        return this.roll.getAxisY()
+    }
+    setScrollZ(x: number): void {
+        this.roll.setAxisZ(x)
+    }
+    getScrollZ(): number {
+        return this.roll.getAxisZ()
     }
 
     setMode(mode: number): void {
         this.mode = mode
     }
+
     getMode(): number {
         return this.mode
     }
@@ -71,14 +107,6 @@ export default class Feature {
 
     getPrevent(): number {
         return this.prevent
-    }
-
-    setAutomatic(automatic: boolean): void {
-        this.automatic = automatic
-    }
-
-    isAutomatic(): boolean {
-        return this.automatic
     }
 
     getThreshold(): number {

@@ -1,46 +1,46 @@
-import { LinkedQueue } from "@niyang-es/toolkit";
-import Attribute from "./attribute/Attribute";
-import EventDigitalizer from "./EventDigitalizer";
+import RollFactory from "src/handle/RollFactory";
+import Attribute from "../attribute/Attribute";
+import Digitalizer from "../handle/Digitalizer";
 import RollProxy from "../translate/RollProxy";
 
 export default class Context {
     private attrs: Attribute;
-    private context: LinkedQueue<EventDigitalizer>;
+    private facotry: RollFactory;
     private proxy: RollProxy;
     constructor(proxy: RollProxy) {
         this.attrs = new Attribute();
-        this.context = new LinkedQueue<EventDigitalizer>();
+        this.facotry = new RollFactory();
         this.proxy = proxy;
     }
 
     setStart(x: number, y: number) {
-        this.attrs.setStart(x, y)
+        this.attrs.setOrigin(x, y)
     }
 
     getStartX(): number {
-        return this.attrs.getStartX()
+        return this.attrs.getOriginX()
     }
 
     getStartY(): number {
-        return this.attrs.getStartY()
+        return this.attrs.getOriginY()
     }
 
     setState(state: number) {
         this.attrs.setState(state)
     }
 
-    setMode(m: number) {
-        this.attrs.setMode(m)
+    getState(): number {
+        return this.attrs.getState()
     }
 
-    setContext(Digitalizer: ({ new(): EventDigitalizer; })): void {
-        this.context.push(new Digitalizer())
-    }
-
-    execute(e: Event) {
-        while (!this.context.isEmpty()) {
-            const digitalizer: EventDigitalizer = this.context.pop();
-            digitalizer.execute(e, this.attrs, this.proxy)
+    execute(e: Event, cmd: string) {
+        let handle: Digitalizer = this.facotry.build(cmd)
+        if (handle.attain(this.getState())) {
+            handle.execute(e, this.attrs, this.proxy)
         }
+    }
+
+    destroy() {
+        this.facotry.destroy()
     }
 }

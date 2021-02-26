@@ -9,7 +9,7 @@ export default class Transform implements Variate {
         this.HWCompositing = HWCompositing
     }
     private isSupportPerspective(): boolean {
-        return PrefixStyle.style('perspective') in document.createElement('div').style
+        return PrefixStyle.has(PrefixStyle.style('perspective'))
     }
 
     private isSupportQuicken():boolean {

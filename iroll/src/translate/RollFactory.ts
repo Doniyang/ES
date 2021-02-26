@@ -5,6 +5,7 @@ import Transition from "./transition/Transition";
 import Animation from './animation/Animation'
 import Variate from "./Variate";
 import Notify from "../notify/Notify";
+import RollDigitalizer from "./RollDigitalizer";
 
 export default class RollFactory {
     private useTransition: boolean;
@@ -33,7 +34,7 @@ export default class RollFactory {
         this.HWCompositing = HWCompositing
     }
 
-    build(scope: Scope) {
+    build(scope: Scope):RollDigitalizer {
         return this.useTransition ? new Transition(scope, this.roll()) : new Animation(scope, this.roll(), this.notify)
     }
 

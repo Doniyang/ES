@@ -1,66 +1,91 @@
+import { isString, Quadratic } from "@niyang-es/toolkit";
 import Attribute from "../attribute/Attribute";
 import Scope from "../scope/Scope";
-import { DateKit } from "../shared";
+import { DateKit, EventKit } from "../shared";
 import RollProxy from "../translate/RollProxy";
 import Digitalizer from "./Digitalizer";
 
-export default class RollStop implements Digitalizer{
+export default class RollStop implements Digitalizer {
+  readonly delay: number
+  constructor() {
+    this.delay = 300
+  }
 
-   private isOutBoundary(prev:ScrollKit.Point,next:ScrollKit.Point){
-      return !(prev.x===next.x && prev.y===next.y)  
-   }
-    attain(state: number): boolean {
-        return state ===2||state===1;
+  private isOutBoundary(prev: ScrollKit.Point, next: ScrollKit.Point) {
+    return !(prev.x === next.x && prev.y === next.y)
+  }
+
+  private isFastMoving(duration: number) {
+    return duration < this.delay
+  }
+
+  private equal(a: number, b: number) {
+    return a === b
+  }
+
+  private isLarger(a: number, b: number) {
+    return a > b
+  }
+
+  attain(state: number): boolean {
+    return state === 2 || state === 1;
+  }
+  execute(e: TouchEvent | MouseEvent, attrs: Attribute, proxy: RollProxy): void {
+    let pos: ScrollKit.Point = proxy.getPosition(),
+      scope: Scope = proxy.getScope(),
+      duration = DateKit.getTime() - attrs.getStartTime(),
+      newX = Math.round(pos.x),
+      newY = Math.round(pos.y),
+      time = 0,
+      easing: Quadratic,
+      momentumX: ScrollKit.Momentun,
+      momentumY: ScrollKit.Momentun;
+
+    proxy.setState(0)
+    attrs.setEndTime(Date.now())
+
+    if (this.isOutBoundary(pos, scope.getCrisisPosition())) {
+      proxy.resetPosition();
+      return void 0;
     }
-    execute(e: Event, attrs: Attribute, proxy: RollProxy): void {
-        let pos:ScrollKit.Point = proxy.getPosition(),
-        scope:Scope = proxy.getScope(),
-        duration = DateKit.getTime() - attrs.getStartTime(),
-        newX = Math.round(pos.x),
-        newY = Math.round(pos.y),
-        time = 0,
-        easing,
-        momentumX,
-        momentumY;
-  
-      attrs.setEndTime(Date.now())
-  
-      if (this.isOutBoundary(pos,scope.getCrisisPosition())) {
-        proxy.resetPosition();
-        return void 0;
+
+    proxy.scrollTo(newX, newY, 0, proxy.getAnimation());
+
+    if (attrs.getState() === 1) {
+      if (scope.isTapable()) {
+        EventKit.tap(e, 'tap')
       }
-  
-      proxy.scrollTo(newX, newY, 0,proxy.getAnimation());
-  
-      if (attrs.getState() != 2) {
-        if (proxy.isTapable()) {
-          EventKit.tap(e, 'tap')
-        }
-        if (proxy.isClickable()) {
-          EventKit.click(e, 'click')
-        }
-        proxy.trigger('scroll:cancel', pos)
-        return
+      if (scope.isClickable()) {
+        EventKit.click(e, 'click')
       }
-  
-      if (proxy.isOnRush() && this.isLarge(300, duration)) {
-        momentumX = proxy.isHScroll() ? this.momentum(pos.x, attrs.getStartX(), duration, proxy.getMaxScroll().x, proxy.isResilient() ? proxy.getSize().x : 0, proxy.getDeceleration()) : { destination: newX, duration: 0 };
-        momentumY = proxy.isVScroll() ? this.momentum(pos.y, attrs.getStartY(), duration, proxy.getMaxScroll().y, proxy.isResilient() ? proxy.getSize().y : 0, proxy.getDeceleration()) : { destination: newY, duration: 0 }
-        newX = momentumX.destination;
-        newY = momentumY.destination;
-        time = Math.max(momentumX.duration, momentumY.duration);
-        proxy.setState(1)
-      }
-  
-      if (this.isunven(newX, pos.x) || this.isunven(newY, pos.y)) {
-        if (this.isLarge(newX, 0) || this.isLarge(proxy.getMaxScroll().x, newX) || this.isLarge(newY, 0) || this.isLarge(proxy.getMaxScroll().y, newY)) {
-          easing = new Quadratic();
-          proxy.isTransition() ? proxy.setAnimation(easing.style()) : proxy.setAnimation(easing.algorithm)
-        }
-        proxy.scrollTo(newX, newY, time);
-        return;
-      }
-      proxy.trigger('scroll:end', pos)
+      proxy.trigger('scroll:cancel', pos)
+      return void 0;
     }
-    
+
+    if (scope.isEnableMomentum() && this.isFastMoving(duration)) {
+      momentumX = scope.getComputedMomontum(attrs.getOriginX(), duration, newX, false)
+      momentumY = scope.getComputedMomontum(attrs.getOriginY(), duration, newY, true)
+      newX = momentumX.destination;
+      newY = momentumY.destination;
+      time = Math.max(momentumX.duration, momentumY.duration);
+      proxy.setState(1)
+    }
+
+    if (!this.equal(newX, pos.x) || !this.equal(newY, pos.y)) {
+      if (this.isLarger(newX, 0) || this.isLarger(scope.getMaxDistance().x, newX) || this.isLarger(newY, 0) || this.isLarger(scope.getMaxDistance().y, newY)) {
+        easing = new Quadratic();
+        if (isString(proxy.getAnimation())) {
+          proxy.scrollTo(newX, newY, time, easing.style());
+        } else {
+          proxy.scrollTo(newX, newY, time, easing.algorithm);
+        }
+      } else {
+        proxy.scrollTo(newX, newY, time, proxy.getAnimation());
+      }
+
+      return void 0;
+    }
+    proxy.trigger('scroll:end', pos)
+  }
+
 }

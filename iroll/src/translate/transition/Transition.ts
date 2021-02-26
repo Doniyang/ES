@@ -3,6 +3,7 @@ import Scope from 'src/scope/Scope';
 import RollDigitalizer from '../RollDigitalizer';
 import Roll from '../Roll';
 import Variate from '../Variate';
+import { ToolKit } from 'src/shared';
 export default class Transition extends Roll implements RollDigitalizer{
     /**
      * @constructor
@@ -12,24 +13,7 @@ export default class Transition extends Roll implements RollDigitalizer{
     constructor(scope:Scope,roll:Variate) {
         super(scope,roll);
     }
-    /**
-     * @method isBadAndroid
-     * @description 
-     */
-    private isBadAndroid(): boolean {
-        let appVersion = window.navigator.appVersion;
-        // Android browser is not a chrome browser.
-        if (/Android/.test(appVersion) && !(/Chrome\/\d/.test(appVersion))) {
-            let safariVersion = appVersion.match(/Safari\/(\d+.\d)/);
-            if (safariVersion && typeof safariVersion === "object" && safariVersion.length >= 2) {
-                return parseFloat(safariVersion[1]) < 535.19;
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
-    }
+    
     /**
      * @method duration
      * @param time 
@@ -43,7 +27,7 @@ export default class Transition extends Roll implements RollDigitalizer{
         if (time === 0) {
             this.setState(1);
         }
-        if (time === 0 && this.isBadAndroid()) {
+        if (time === 0 && ToolKit.isBadAndroid()) {
             scrollStyle.setProperty(duration, '0.0001ms');
             scrollStyle.setProperty('transition-duration', '0.0001ms')
             requestAnimationFrame(() => {

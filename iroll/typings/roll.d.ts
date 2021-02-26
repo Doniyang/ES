@@ -8,13 +8,7 @@ declare namespace ScrollKit {
         className?: RegExp
     }
 
-    export interface WheelParams {
-        speed?: number
-        invert?: boolean
-        enable?: boolean
-    }
-
-    export interface scrollOptions {
+    export interface Options {
         startX?: number
         startY?: number
         scrollX?: boolean
@@ -24,11 +18,21 @@ declare namespace ScrollKit {
         clickable?: boolean
         tap?: boolean
         bounce?: boolean
+        bounceTime?:number
+        directionLockThreshold?:number
+        resizePolling?:number
+        mouseWheel?:boolean
+        mouseWheelSpeed?:number
+        invertWheelDirection?:boolean
         momentum?: boolean
+        momentumLimitTime?:number
+        momentumLimitDistance?:number
+        deceleration?:number
         probe?: number
-        wheel?: WheelParams,
+        specifiedIndex?:number
+        stopPropagation?:boolean
         preventDefault?: boolean
-        preventDefaultFilter?: ElementFilter
+        preventDefaultException?: Exception
         HWCompositing?: boolean
         useTransition?: boolean
         useTransform?: boolean
@@ -44,13 +48,7 @@ declare namespace ScrollKit {
         duration: number
     }
 
-    export interface Cache<T> {
-        [key: string]: T
-    }
-
-    export interface VisitorCallback<T> {
-        (arg: T): void
-    }
+    
 
     export interface CustomEvent extends Event {
         pageX?: number
@@ -64,6 +62,7 @@ declare namespace ScrollKit {
         clientX?: number
         clientY?: number
     }
+
     export interface Algorithm {
         (k: number): number
     }

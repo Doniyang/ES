@@ -32,6 +32,7 @@ export declare class Broswer {
 export declare class PrefixStyle {
     static prefix(): StylePrefix
     static style(style: string): string
+    static jsStyle(style: string):string
     static has(style: string): boolean
 }
 export declare class Backone implements Factory {
