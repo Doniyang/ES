@@ -32,34 +32,34 @@ declare class Notify {
 }
 
 declare class RollProxy {
-    new(notify: Notify) : RollProxy;
+    new(notify: Notify): RollProxy;
     scrollTo(x: number, y: number, time: number): void;
     translate(x: number, y: number): void;
     getState(): number;
-    getPosition():ScrollKit.Point;
-    getComputedPosition():ScrollKit.Point;
+    getPosition(): ScrollKit.Point;
+    getComputedPosition(): ScrollKit.Point;
     setState(state: number): void;
-    getAnimation():string|ScrollKit.Algorithm;
-    stop():void;
-    resetPosition():void;
+    getAnimation(): string | ScrollKit.Algorithm;
+    stop(): void;
+    resetPosition(): void;
 }
 
-declare class Axis{
+declare class Axis {
     private axisX: number;
     private axisY: number;
     private axisZ: number;
-    new():Axis
+    new(): Axis
 }
 
-declare class Attribute{
-     /**
-     * 开始点
-     */
+declare class Attribute {
+    /**
+    * 开始点
+    */
     private start: Axis;
     /**
      * 绝对开始的
      */
-    private absStart:Axis
+    private absStart: Axis
     /**
      * 移动点
      */
@@ -70,8 +70,8 @@ declare class Attribute{
     private direction: Axis;
     /**
      * 用来记录手指接触屏幕的点或者鼠标滚动开始的点
-     */ 
-    private point:Axis;
+     */
+    private point: Axis;
     /**
      * 开始时间，单位毫秒
      */
@@ -90,35 +90,48 @@ declare class Attribute{
      * 1 --- 锁定X
      * 2 --- 锁定Y
      */
-    private mode:number;
-    new () :Attribute
+    private mode: number;
+    new(): Attribute
 }
 
-declare interface EventDigitalizer{
+declare interface EventDigitalizer {
     execute(e: Event, attrs: Attribute, proxy: RollProxy): void
 }
 declare class Context {
     private attrs: Attribute;
-    private context: LinkedQueue<EventDigitalizer>;
+    private facotry: RollFactory;
     private proxy: RollProxy;
-    new(proxy: RollProxy):Context; 
+    new(proxy: RollProxy): Context;
+
+    setStart(x: number, y: number): void
+
+    getStartX(): number
+
+    getStartY(): number
+
+    setState(state: number): void
+
+    getState(): number
+
+    execute(e: Event, cmd: string): void
+
+    destroy(): void
+
 }
 
 export declare class IRoll {
-    new(wrapper: ScrollKit.ElementWrapper, options: ScrollKit.scrollOptions): IRoll
-    readonly directionLockThreshold: number
-    readonly bounceTime: number
-    readonly deceleration: number
-    private preventDefault: boolean
-
-    private useTransition: boolean
-
-    private useTransform: boolean
-
-    private bindToWrapper: boolean
-
     private scope: Scope;
     private rollProxy: RollProxy;
     private context: Context;
     private notify: Notify;
+    private factory: RollFactory;
+    private bindToWrapper: boolean
+    private preventDefault: boolean
+    private preventDefaultException: ScrollKit.Exception
+    private resizePolling: number
+    private stopPropagation: boolean
+    private mouseWheel: boolean
+    private resizeTimeoutId: number
+    new(wrapper: ScrollKit.ElementWrapper, options: ScrollKit.scrollOptions): IRoll
+    scrollTo(x: number, y: number, time: number, ease: string | ScrollKit.Algorithm): void
 }
