@@ -1,47 +1,93 @@
 import { ClassicEvent, Notifier } from 'typings/@niyang-es/notify';
-import { LinkedQueue } from "typings/@niyang-es/toolkit";
 
 export * from './roll'
 
 declare class Scope {
     new(el: HTMLElement): Scope;
     readonly rootElement: HTMLElement;
-    private deceleration: number;
-    private passthrough: number;
-    private threshold: number;
-    private time: number;
-    private bounce: boolean;
-    private momentum: boolean;
     private axis: Axis;
-    private scroll: Axis;
-    private clickable: boolean;
-    private tap: boolean;
-    private HWCompositing: boolean
+    private feature: Feature;
+    private specifiedIndex: number;
+    private bounce: boolean;
+    private bounceTime: number;
+    private probe: number;
+    private momentum: Momentum;
+    private clickable: boolean
+    private tapable: boolean
+    private wheel:Wheel
+    setContentSpecifiedIndex(specifiedIndex:number):void
+    getProbe(): number 
+    setProbe(probe: number): void 
+    setScrollX(x: number): void
+    setScrollY(y: number): void
+    setScrollZ(x: number): void 
+    setScrollMode(mode: number): void 
+    setScrollPreventState(state: number): void 
+    setScrollDirection(x: number, y: number): void 
+    setBounce(bounce: boolean): void
+    setBounceTime(time: number): void
+    getPosition(): ScrollKit.Point
+    setPosition(x: number, y: number): void 
+    isLockScrollX(): boolean
+    isLockScrollY(): boolean
+    isNoLocked()
+    isFreeScroll(): boolean 
+    isXPrevent(): boolean
+    isYPrevent(): boolean
+    isNoPrevent():boolean
+    isBounce(): boolean 
+    getBounceTime(): number 
+    isHScroll(): boolean 
+    isVScroll(): boolean
+    getWrapElement(): HTMLElement 
+    getScrollElement(): HTMLElement
+    getCrisisPosition(): ScrollKit.Point
+    getMaxDistance(): ScrollKit.Point 
+    getDirectionLockThreshold(): number 
+    setDirectionLockThreshold(threshold:number): void
+    getMomentumThreshold(): number
+    setMomentumThreshold(dist: number): void 
+    getMomentumPeroid(): number 
+    setMomentumPeroid(time: number): void 
+    setMomentum(flag: boolean)
+    isEnableMomentum(): boolean 
+    setDeceleration(deceleration: number): void
+    getDeceleration(): number 
+    setTapabke(tapable: boolean): void
+    isTapable(): boolean
+    setClickable(clickable: boolean) 
+    isClickable(): boolean
+    getComputedMomontum(start: number, duration: number, pos: number, isVertical: boolean): ScrollKit.Momentun
+    setMouseWheelSpeed(speed:number): void
+    setMouseWheelDirection(dir:number): void
+    getMouseWheelSpeed(): number
+    getMouseWheelDirection(): number 
 }
 
 declare class Notify {
     private notify: Notifier;
-
     new(): Notify;
-
     public on(name: string, fn: ScrollKit.NotifyCallback<ClassicEvent>): void;
-
     public off(name: string, fn?: ScrollKit.NotifyCallback<ClassicEvent>): void;
-
     public trigger(e: string | ClassicEvent, ...args: Array<ScrollKit.NotifyParams>): void;
 }
 
 declare class RollProxy {
     new(notify: Notify): RollProxy;
-    scrollTo(x: number, y: number, time: number): void;
-    translate(x: number, y: number): void;
-    getState(): number;
-    getPosition(): ScrollKit.Point;
-    getComputedPosition(): ScrollKit.Point;
-    setState(state: number): void;
-    getAnimation(): string | ScrollKit.Algorithm;
-    stop(): void;
-    resetPosition(): void;
+    private roll: null | RollDigitalizer;
+    private notify: Notify;
+    build(roll: RollDigitalizer): void
+    trigger(e: string | ClassicEvent, ...args: Array<ScrollKit.NotifyParams>) 
+    scrollTo(x: number, y: number, time: number, easing: string | ScrollKit.Algorithm): void 
+    translate(x: number, y: number): void 
+    getState(): number 
+    setState(state: number): void
+    getComputedPosition(): ScrollKit.Point 
+    getPosition(): ScrollKit.Point 
+    stop(): void
+    resetPosition(): void 
+    getAnimation(): string | ScrollKit.Algorithm 
+    getScope(): Scope 
 }
 
 declare class Axis {
@@ -52,50 +98,67 @@ declare class Axis {
 }
 
 declare class Attribute {
-    /**
-    * 开始点
-    */
-    private start: Axis;
-    /**
-     * 绝对开始的
-     */
-    private absStart: Axis
-    /**
-     * 移动点
-     */
+    private origin: Axis;
+    
+    private destination: Axis;
+   
     private delta: Axis;
-    /**
-     * 位移点
-     */
-    private direction: Axis;
-    /**
-     * 用来记录手指接触屏幕的点或者鼠标滚动开始的点
-     */
+    
+    private state: number;
+    
+    private startTime: number;
+    
+    private endTime: number;
     private point: Axis;
-    /**
-     * 开始时间，单位毫秒
-     */
-    private starttime: number;
-    /**
-     * 结束时间 单位ms
-     */
-    private endtime: number
-    /**
-     * 状态
-     */
-    private state: number
-    /**
-     * 锁定方向
-     * 0 --- 未锁定
-     * 1 --- 锁定X
-     * 2 --- 锁定Y
-     */
-    private mode: number;
+
+    private absOrigin: Axis;
+    public getOriginX() 
+    public getOriginY(): number
+    public setOrigin(x: number, y: number): void 
+    public getDestinationX(): number 
+    public getDestinationY(): number
+    public setDestination(x: number, y: number): void 
+    public getDeltaX(): number
+    public getDeltaY(): number
+    public setDelta(x: number, y: number): void
+    getState(): number 
+    setState(state: number): void
+    getStartTime(): number 
+    setStartTime(time: number): void 
+    getEndTime(): number 
+    setEndTime(time: number): void 
+    getPointX(): number 
+    getPointY(): number 
+    setPoint(x: number, y: number): void 
+    getAbsOriginX():number
+    getAbsOriginY():number
+    setAbsOrigin(x: number, y: number): void 
     new(): Attribute
 }
-
-declare interface EventDigitalizer {
+declare interface Digitalizer{
+    attain(state:number):boolean;
     execute(e: Event, attrs: Attribute, proxy: RollProxy): void
+}
+declare class RollFactory{
+    private store: Map<string, Digitalizer>
+    new():RollFactory
+
+    build(cmd: string): Digitalizer
+
+    destroy():void
+}
+
+declare interface RollDigitalizer {
+    scrollTo(x: number, y: number, time: number,easing?:string|ScrollKit.Algorithm): void;
+    translate(x: number, y: number): void;
+    getState(): number;
+    setState(state:number): void;
+    getScope():Scope;
+    getPosition():ScrollKit.Point;
+    getComputedPosition():ScrollKit.Point;
+    getAnimation():string|ScrollKit.Algorithm;
+    stop():void;
+    resetPosition():void
 }
 declare class Context {
     private attrs: Attribute;
@@ -119,12 +182,32 @@ declare class Context {
 
 }
 
+export declare class Factory{
+    private useTransition: boolean;
+
+    private useTransform: boolean;
+
+    private HWCompositing: boolean;
+
+    private notify: Notify;
+
+    new(notify: Notify): Factory
+    
+    setUseTransition(useTransition: boolean): void;
+    
+    setUseTransform(useTransform: boolean):void;
+
+    setHWCompositing(HWCompositing: boolean):void;
+
+    build(scope: Scope):RollDigitalizer;
+}
+
 export declare class IRoll {
     private scope: Scope;
     private rollProxy: RollProxy;
     private context: Context;
     private notify: Notify;
-    private factory: RollFactory;
+    private factory: Factory;
     private bindToWrapper: boolean
     private preventDefault: boolean
     private preventDefaultException: ScrollKit.Exception

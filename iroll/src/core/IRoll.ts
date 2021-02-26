@@ -3,7 +3,7 @@ import RollProxy from "../translate/RollProxy";
 import Scope from "../scope/Scope";
 import Context from "./Context";
 import Notify from "src/notify/Notify";
-import RollFactory from "src/translate/RollFactory";
+import Factory from "src/translate/Factory";
 import { ToolKit } from "src/shared";
 
 
@@ -12,7 +12,7 @@ export default class IRoll {
   private rollProxy: RollProxy;
   private context: Context;
   private notify: Notify;
-  private factory: RollFactory;
+  private factory: Factory;
   private bindToWrapper: boolean
   private preventDefault: boolean
   private preventDefaultException: ScrollKit.Exception
@@ -20,7 +20,7 @@ export default class IRoll {
   private stopPropagation: boolean
   private mouseWheel: boolean
    private resizeTimeoutId:number
-  constructor(wrapper: ScrollKit.ElementWrapper, options: ScrollKit.scrollOptions) {
+  constructor(wrapper: ScrollKit.ElementWrapper, options: ScrollKit.Options) {
     this.preventDefault = true
     this.preventDefaultException = { tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/ }
     this.bindToWrapper = typeof window.onmousedown === 'undefined';
@@ -32,7 +32,7 @@ export default class IRoll {
     this.scope = new Scope(isString(wrapper) ? document.body.querySelector(wrapper as string) as HTMLElement : wrapper as HTMLElement);
     this.rollProxy = new RollProxy(this.notify);
     this.context = new Context(this.rollProxy);
-    this.factory = new RollFactory(this.notify);
+    this.factory = new Factory(this.notify);
     this.merge(options);
     this.initializer()
   }
@@ -206,7 +206,7 @@ export default class IRoll {
     clearTimeout(this.resizeTimeoutId)
 
     this.resizeTimeoutId = setTimeout(function () {
-			that.context.execute(e, 'refresh');();
+			that.context.execute(e, 'refresh');
 		}, this.resizePolling);
     
   }

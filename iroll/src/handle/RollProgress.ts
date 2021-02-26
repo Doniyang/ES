@@ -94,7 +94,7 @@ export default class RollProgress implements Digitalizer {
         absDistX = Math.abs(attrs.getDeltaX());
         absDistY = Math.abs(attrs.getDeltaY());
 
-        if (this.isFastMove(timestamp, attrs.getEndTime()) && (this.isLarger(scope.getMomentumThreshold(), absDistX) && this.isLarger(scope.getMomentumThreshold(), absDistY))) { return void; }
+        if (this.isFastMove(timestamp, attrs.getEndTime()) && (this.isLarger(scope.getMomentumThreshold(), absDistX) && this.isLarger(scope.getMomentumThreshold(), absDistY))) { return void 0; }
 
         this.scrollModeCalculation(absDistX, absDistY, scope)
 

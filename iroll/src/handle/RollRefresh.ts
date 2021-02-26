@@ -1,6 +1,7 @@
 import Scope from "../scope/Scope";
 import Attribute from "../attribute/Attribute";
 import Digitalizer from "./Digitalizer";
+import RollProxy from "../translate/RollProxy";
 
 export default class RollRefresh implements Digitalizer {
     constructor(){}
