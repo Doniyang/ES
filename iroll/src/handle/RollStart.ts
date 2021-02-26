@@ -1,4 +1,4 @@
-import Scope from "src/scope/Scope";
+import Scope from "../scope/Scope";
 import { DateKit, EventKit, MouseButton } from '../shared'
 import Attribute from "../attribute/Attribute";
 import RollProxy from "../translate/RollProxy";

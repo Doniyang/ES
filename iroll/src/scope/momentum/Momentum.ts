@@ -1,4 +1,4 @@
-import { Direction } from "src/shared";
+import { Direction } from "../../shared";
 
 /**
  * @class Momentum

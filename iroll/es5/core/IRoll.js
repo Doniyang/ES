@@ -2,9 +2,9 @@ import { isString, isNumber, isBoolean, isUndefined } from "@niyang-es/toolkit";
 import RollProxy from "../translate/RollProxy";
 import Scope from "../scope/Scope";
 import Context from "./Context";
-import Notify from "src/notify/Notify";
-import Factory from "src/translate/Factory";
-import { ToolKit } from "src/shared";
+import Notify from "../notify/Notify";
+import Factory from "../translate/Factory";
+import { ToolKit } from "../shared";
 export default class IRoll {
     constructor(wrapper, options) {
         this.preventDefault = true;

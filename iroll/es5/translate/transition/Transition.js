@@ -1,6 +1,6 @@
 import { requestAnimationFrame, PrefixStyle, Circular, isString } from '@niyang-es/toolkit';
 import Roll from '../Roll';
-import { ToolKit } from 'src/shared';
+import { ToolKit } from '../../shared';
 export default class Transition extends Roll {
     /**
      * @constructor

@@ -1,9 +1,9 @@
 import { requestAnimationFrame, PrefixStyle,Circular, isString } from '@niyang-es/toolkit';
-import Scope from 'src/scope/Scope';
+import Scope from '../../scope/Scope';
 import RollDigitalizer from '../RollDigitalizer';
 import Roll from '../Roll';
 import Variate from '../Variate';
-import { ToolKit } from 'src/shared';
+import { ToolKit } from '../../shared';
 export default class Transition extends Roll implements RollDigitalizer{
     /**
      * @constructor

@@ -1,6 +1,6 @@
 
 import { ClassicEvent } from "@niyang-es/notify";
-import Scope from "src/scope/Scope";
+import Scope from "../scope/Scope";
 import Notify from "../notify/Notify";
 import RollDigitalizer from "./RollDigitalizer";
 

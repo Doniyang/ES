@@ -1,4 +1,4 @@
-import RollFactory from "src/handle/RollFactory";
+import RollFactory from "../handle/RollFactory";
 import Attribute from "../attribute/Attribute";
 export default class Context {
     constructor(proxy) {

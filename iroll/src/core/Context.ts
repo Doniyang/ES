@@ -1,4 +1,4 @@
-import RollFactory from "src/handle/RollFactory";
+import RollFactory from "../handle/RollFactory";
 import Attribute from "../attribute/Attribute";
 import Digitalizer from "../handle/Digitalizer";
 import RollProxy from "../translate/RollProxy";

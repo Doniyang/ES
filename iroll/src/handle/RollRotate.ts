@@ -1,6 +1,6 @@
-import Attribute from "src/attribute/Attribute";
-import Scope from "src/scope/Scope";
-import RollProxy from "src/translate/RollProxy";
+import Attribute from "../attribute/Attribute";
+import Scope from "../scope/Scope";
+import RollProxy from "../translate/RollProxy";
 import Digitalizer from "./Digitalizer";
 
 export default class RollRotate implements Digitalizer {

@@ -1,4 +1,4 @@
-import Scope from "src/scope/Scope";
+import Scope from "../scope/Scope";
 import Variate from "./Variate";
 
 /**

@@ -2,9 +2,9 @@ import { isString, isNumber, isBoolean, PrefixStyle, Circular, isUndefined } fro
 import RollProxy from "../translate/RollProxy";
 import Scope from "../scope/Scope";
 import Context from "./Context";
-import Notify from "src/notify/Notify";
-import Factory from "src/translate/Factory";
-import { ToolKit } from "src/shared";
+import Notify from "../notify/Notify";
+import Factory from "../translate/Factory";
+import { ToolKit } from "../shared";
 
 
 export default class IRoll {
