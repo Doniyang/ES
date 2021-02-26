@@ -14,54 +14,54 @@ declare class Scope {
     private momentum: Momentum;
     private clickable: boolean
     private tapable: boolean
-    private wheel:Wheel
-    setContentSpecifiedIndex(specifiedIndex:number):void
-    getProbe(): number 
-    setProbe(probe: number): void 
+    private wheel: Wheel
+    setContentSpecifiedIndex(specifiedIndex: number): void
+    getProbe(): number
+    setProbe(probe: number): void
     setScrollX(x: number): void
     setScrollY(y: number): void
-    setScrollZ(x: number): void 
-    setScrollMode(mode: number): void 
-    setScrollPreventState(state: number): void 
-    setScrollDirection(x: number, y: number): void 
+    setScrollZ(x: number): void
+    setScrollMode(mode: number): void
+    setScrollPreventState(state: number): void
+    setScrollDirection(x: number, y: number): void
     setBounce(bounce: boolean): void
     setBounceTime(time: number): void
     getPosition(): ScrollKit.Point
-    setPosition(x: number, y: number): void 
+    setPosition(x: number, y: number): void
     isLockScrollX(): boolean
     isLockScrollY(): boolean
     isNoLocked()
-    isFreeScroll(): boolean 
+    isFreeScroll(): boolean
     isXPrevent(): boolean
     isYPrevent(): boolean
-    isNoPrevent():boolean
-    isBounce(): boolean 
-    getBounceTime(): number 
-    isHScroll(): boolean 
+    isNoPrevent(): boolean
+    isBounce(): boolean
+    getBounceTime(): number
+    isHScroll(): boolean
     isVScroll(): boolean
-    getWrapElement(): HTMLElement 
+    getWrapElement(): HTMLElement
     getScrollElement(): HTMLElement
     getCrisisPosition(): ScrollKit.Point
-    getMaxDistance(): ScrollKit.Point 
-    getDirectionLockThreshold(): number 
-    setDirectionLockThreshold(threshold:number): void
+    getMaxDistance(): ScrollKit.Point
+    getDirectionLockThreshold(): number
+    setDirectionLockThreshold(threshold: number): void
     getMomentumThreshold(): number
-    setMomentumThreshold(dist: number): void 
-    getMomentumPeroid(): number 
-    setMomentumPeroid(time: number): void 
+    setMomentumThreshold(dist: number): void
+    getMomentumPeroid(): number
+    setMomentumPeroid(time: number): void
     setMomentum(flag: boolean)
-    isEnableMomentum(): boolean 
+    isEnableMomentum(): boolean
     setDeceleration(deceleration: number): void
-    getDeceleration(): number 
+    getDeceleration(): number
     setTapabke(tapable: boolean): void
     isTapable(): boolean
-    setClickable(clickable: boolean) 
+    setClickable(clickable: boolean)
     isClickable(): boolean
     getComputedMomontum(start: number, duration: number, pos: number, isVertical: boolean): ScrollKit.Momentun
-    setMouseWheelSpeed(speed:number): void
-    setMouseWheelDirection(dir:number): void
+    setMouseWheelSpeed(speed: number): void
+    setMouseWheelDirection(dir: number): void
     getMouseWheelSpeed(): number
-    getMouseWheelDirection(): number 
+    getMouseWheelDirection(): number
 }
 
 declare class Notify {
@@ -77,17 +77,17 @@ declare class RollProxy {
     private roll: null | RollDigitalizer;
     private notify: Notify;
     build(roll: RollDigitalizer): void
-    trigger(e: string | ClassicEvent, ...args: Array<ScrollKit.NotifyParams>) 
-    scrollTo(x: number, y: number, time: number, easing: string | ScrollKit.Algorithm): void 
-    translate(x: number, y: number): void 
-    getState(): number 
+    trigger(e: string | ClassicEvent, ...args: Array<ScrollKit.NotifyParams>)
+    scrollTo(x: number, y: number, time: number, easing: string | ScrollKit.Algorithm): void
+    translate(x: number, y: number): void
+    getState(): number
     setState(state: number): void
-    getComputedPosition(): ScrollKit.Point 
-    getPosition(): ScrollKit.Point 
+    getComputedPosition(): ScrollKit.Point
+    getPosition(): ScrollKit.Point
     stop(): void
-    resetPosition(): void 
-    getAnimation(): string | ScrollKit.Algorithm 
-    getScope(): Scope 
+    resetPosition(): void
+    getAnimation(): string | ScrollKit.Algorithm
+    getScope(): Scope
 }
 
 declare class Axis {
@@ -99,66 +99,66 @@ declare class Axis {
 
 declare class Attribute {
     private origin: Axis;
-    
+
     private destination: Axis;
-   
+
     private delta: Axis;
-    
+
     private state: number;
-    
+
     private startTime: number;
-    
+
     private endTime: number;
     private point: Axis;
 
     private absOrigin: Axis;
-    public getOriginX() 
+    public getOriginX()
     public getOriginY(): number
-    public setOrigin(x: number, y: number): void 
-    public getDestinationX(): number 
+    public setOrigin(x: number, y: number): void
+    public getDestinationX(): number
     public getDestinationY(): number
-    public setDestination(x: number, y: number): void 
+    public setDestination(x: number, y: number): void
     public getDeltaX(): number
     public getDeltaY(): number
     public setDelta(x: number, y: number): void
-    getState(): number 
+    getState(): number
     setState(state: number): void
-    getStartTime(): number 
-    setStartTime(time: number): void 
-    getEndTime(): number 
-    setEndTime(time: number): void 
-    getPointX(): number 
-    getPointY(): number 
-    setPoint(x: number, y: number): void 
-    getAbsOriginX():number
-    getAbsOriginY():number
-    setAbsOrigin(x: number, y: number): void 
+    getStartTime(): number
+    setStartTime(time: number): void
+    getEndTime(): number
+    setEndTime(time: number): void
+    getPointX(): number
+    getPointY(): number
+    setPoint(x: number, y: number): void
+    getAbsOriginX(): number
+    getAbsOriginY(): number
+    setAbsOrigin(x: number, y: number): void
     new(): Attribute
 }
-declare interface Digitalizer{
-    attain(state:number):boolean;
+declare interface Digitalizer {
+    attain(state: number): boolean;
     execute(e: Event, attrs: Attribute, proxy: RollProxy): void
 }
-declare class RollFactory{
+declare class RollFactory {
     private store: Map<string, Digitalizer>
-    new():RollFactory
+    new(): RollFactory
 
     build(cmd: string): Digitalizer
 
-    destroy():void
+    destroy(): void
 }
 
 declare interface RollDigitalizer {
-    scrollTo(x: number, y: number, time: number,easing?:string|ScrollKit.Algorithm): void;
+    scrollTo(x: number, y: number, time: number, easing?: string | ScrollKit.Algorithm): void;
     translate(x: number, y: number): void;
     getState(): number;
-    setState(state:number): void;
-    getScope():Scope;
-    getPosition():ScrollKit.Point;
-    getComputedPosition():ScrollKit.Point;
-    getAnimation():string|ScrollKit.Algorithm;
-    stop():void;
-    resetPosition():void
+    setState(state: number): void;
+    getScope(): Scope;
+    getPosition(): ScrollKit.Point;
+    getComputedPosition(): ScrollKit.Point;
+    getAnimation(): string | ScrollKit.Algorithm;
+    stop(): void;
+    resetPosition(): void
 }
 declare class Context {
     private attrs: Attribute;
@@ -182,7 +182,7 @@ declare class Context {
 
 }
 
-export declare class Factory{
+export declare class Factory {
     private useTransition: boolean;
 
     private useTransform: boolean;
@@ -192,14 +192,14 @@ export declare class Factory{
     private notify: Notify;
 
     new(notify: Notify): Factory
-    
+
     setUseTransition(useTransition: boolean): void;
-    
-    setUseTransform(useTransform: boolean):void;
 
-    setHWCompositing(HWCompositing: boolean):void;
+    setUseTransform(useTransform: boolean): void;
 
-    build(scope: Scope):RollDigitalizer;
+    setHWCompositing(HWCompositing: boolean): void;
+
+    build(scope: Scope): RollDigitalizer;
 }
 
 export declare class IRoll {
