@@ -58,7 +58,7 @@ export default class RollProgress {
      * @description execute scroll move  or not
      */
     attain(state) {
-        return state === 1;
+        return state === 1 || state === 2;
     }
     /**
      * @method execute
@@ -69,7 +69,7 @@ export default class RollProgress {
      */
     execute(e, attrs, proxy) {
         if (proxy.disabled) {
-            return;
+            return void 0;
         }
         let point = EventKit.isTouchEvent(e) ? e.touches[0] : e, scope = proxy.getScope(), pos = proxy.getPosition(), maxDist = scope.getMaxDistance(), timestamp = DateKit.getTime(), deltaX = point.pageX - attrs.getPointX(), deltaY = point.pageY - attrs.getPointY(), newX, newY, absDistX, absDistY;
         attrs.setPoint(point.pageX, point.pageY);

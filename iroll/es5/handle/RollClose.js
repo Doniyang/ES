@@ -6,7 +6,7 @@ export default class RollClose {
         return el.isSameNode(ol);
     }
     attain(state) {
-        throw state === 0;
+        return state === 0;
     }
     execute(e, attrs, proxy) {
         let scope = proxy.getScope();

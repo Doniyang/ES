@@ -185,7 +185,7 @@ export default class Scope {
      * @returns boolean
      */
     isLockScrollX() {
-        return this.feature.getScrollX() === 1;
+        return this.feature.getMode() === 1;
     }
     /**
      * @method isLockScrollY
@@ -193,10 +193,16 @@ export default class Scope {
      * @returns boolean
      */
     isLockScrollY() {
-        return this.feature.getScrollY() === 1;
+        return this.feature.getMode() === 2;
     }
     isNoLocked() {
         return this.feature.getMode() === 0;
+    }
+    isScrollX() {
+        return this.feature.getScrollX() === 1;
+    }
+    isScrollY() {
+        return this.feature.getScrollY() === 1;
     }
     /**
      * @method isFreeScroll
@@ -240,7 +246,7 @@ export default class Scope {
      * @returns boolean
      */
     isHScroll() {
-        return this.isLockScrollX() && this.rollable(this.getClientWidth(), this.getScrollOffsetWidth());
+        return this.isScrollX() && this.rollable(this.getClientWidth(), this.getScrollOffsetWidth());
     }
     /**
      * @method isVScroll
@@ -248,7 +254,7 @@ export default class Scope {
      * @returns boolean
      */
     isVScroll() {
-        return this.isLockScrollY() && this.rollable(this.getClientHeight(), this.getScrollOffsetHeight());
+        return this.isScrollY() && this.rollable(this.getClientHeight(), this.getScrollOffsetHeight());
     }
     /**
      * @method getWrapElement
@@ -367,7 +373,7 @@ export default class Scope {
         return this.clickable;
     }
     getComputedMomontum(start, duration, pos, isVertical) {
-        return isVertical ? this.getComputedHMomentum(start, duration, pos) : this.getComputedVMomentum(start, duration, pos);
+        return isVertical ? this.getComputedVMomentum(start, duration, pos) : this.getComputedHMomentum(start, duration, pos);
     }
     setMouseWheelSpeed(speed) {
         this.wheel.setWheelSpeed(speed);

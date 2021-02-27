@@ -40,7 +40,7 @@ export default abstract class Roll {
      * @returns root element
     */
     protected getElement():HTMLElement{
-        return this.scope.getWrapElement()
+        return this.scope.getScrollElement()
     }
     /**
      * @method getScope
@@ -79,6 +79,7 @@ export default abstract class Roll {
      */
     translate(x: number, y: number): void{
         this.roll.translate(x,y,this.getElement().style); 
+        this.scope.setPosition(x,y);
     };
     /**
      * @method getPosion

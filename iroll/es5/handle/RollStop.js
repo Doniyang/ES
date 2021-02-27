@@ -25,6 +25,7 @@ export default class RollStop {
         attrs.setEndTime(Date.now());
         if (this.isOutBoundary(pos, scope.getCrisisPosition())) {
             proxy.resetPosition();
+            attrs.setState(0);
             return void 0;
         }
         proxy.scrollTo(newX, newY, 0, proxy.getAnimation());
@@ -36,6 +37,7 @@ export default class RollStop {
                 EventKit.click(e, 'click');
             }
             proxy.trigger('scroll:cancel', pos);
+            attrs.setState(0);
             return void 0;
         }
         if (scope.isEnableMomentum() && this.isFastMoving(duration)) {
@@ -59,8 +61,10 @@ export default class RollStop {
             else {
                 proxy.scrollTo(newX, newY, time, proxy.getAnimation());
             }
+            attrs.setState(0);
             return void 0;
         }
+        attrs.setState(0);
         proxy.trigger('scroll:end', pos);
     }
 }

@@ -13,7 +13,7 @@ export default class RollClose implements Digitalizer {
         return el.isSameNode(ol)
     }
     attain(state: number): boolean {
-        throw state === 0;
+        return state === 0;
     }
     execute(e: Event, attrs: Attribute, proxy: RollProxy): void {
         let scope: Scope = proxy.getScope()

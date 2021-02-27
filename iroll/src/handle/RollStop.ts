@@ -46,6 +46,7 @@ export default class RollStop implements Digitalizer {
 
     if (this.isOutBoundary(pos, scope.getCrisisPosition())) {
       proxy.resetPosition();
+      attrs.setState(0)
       return void 0;
     }
 
@@ -59,6 +60,7 @@ export default class RollStop implements Digitalizer {
         EventKit.click(e, 'click')
       }
       proxy.trigger('scroll:cancel', pos)
+      attrs.setState(0)
       return void 0;
     }
 
@@ -82,10 +84,13 @@ export default class RollStop implements Digitalizer {
       } else {
         proxy.scrollTo(newX, newY, time, proxy.getAnimation());
       }
-
+      attrs.setState(0)
       return void 0;
     }
+
+    attrs.setState(0)
     proxy.trigger('scroll:end', pos)
+  
   }
 
 }

@@ -19,7 +19,7 @@ export default class Roll {
      * @returns root element
     */
     getElement() {
-        return this.scope.getWrapElement();
+        return this.scope.getScrollElement();
     }
     /**
      * @method getScope
@@ -48,6 +48,7 @@ export default class Roll {
      */
     translate(x, y) {
         this.roll.translate(x, y, this.getElement().style);
+        this.scope.setPosition(x, y);
     }
     ;
     /**

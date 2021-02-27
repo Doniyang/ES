@@ -66,7 +66,7 @@ export default class RollProgress implements Digitalizer {
      * @description execute scroll move  or not
      */
     attain(state: number): boolean {
-        return state === 1
+        return state === 1||state === 2
     }
     /**
      * @method execute
@@ -76,7 +76,7 @@ export default class RollProgress implements Digitalizer {
      * @description execute roll move
      */
     execute(e: TouchEvent | MouseEvent, attrs: Attribute, proxy: RollProxy): void {
-        if (proxy.disabled) { return; }
+        if (proxy.disabled) { return void 0; }
         let point = EventKit.isTouchEvent(e) ? e.touches[0] : e,
             scope: Scope = proxy.getScope(),
             pos: ScrollKit.Point = proxy.getPosition(),

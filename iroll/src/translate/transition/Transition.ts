@@ -31,7 +31,7 @@ export default class Transition extends Roll implements RollDigitalizer{
             scrollStyle.setProperty(duration, '0.0001ms');
             scrollStyle.setProperty('transition-duration', '0.0001ms')
             requestAnimationFrame(() => {
-                if ((scrollStyle.getPropertyValue(duration) || scrollStyle.getPropertyValue('transitionDuration')) === '0.0001ms') {
+                if ((scrollStyle.getPropertyValue(duration) || scrollStyle.getPropertyValue('transition-duration')) === '0.0001ms') {
                     scrollStyle.setProperty(duration, '0s');
                     scrollStyle.setProperty('transition-duration', '0ms')
                 }
