@@ -47,11 +47,17 @@ export default class Scope {
      * @name momentum
      */
     private momentum: Momentum;
-
+    /**
+     * @name clickable
+     */    
     private clickable: boolean
-
+    /**
+     * @name tapable
+     */   
     private tapable: boolean
-
+    /**
+     * @name wheel
+     */   
     private wheel:Wheel
     /**
      * @constructor
@@ -140,14 +146,32 @@ export default class Scope {
     private getClientHeight(): number {
         return this.rootElement.clientHeight;
     }
-    private getComputedHMomentum(start: number, duration: number, pos: number): ScrollKit.Momentun {
+    /**
+     * @method getComputedHorizontalMomentum
+     * @param start 
+     * @param duration 
+     * @param pos 
+     * @description compute momentum  of horizontal
+     */
+    private getComputedHorizontalMomentum(start: number, duration: number, pos: number): ScrollKit.Momentum {
         return this.isHScroll() ? this.momentum.getComputedMomentum(this.getPosition().x, start, duration, this.getMaxScrollWidth(), this.isBounce() ? this.getClientWidth() : 0) : { destination: pos, duration: 0 };
     }
 
-    private getComputedVMomentum(start: number, duration: number, pos: number): ScrollKit.Momentun {
+    /**
+     * @method getComputedVerticalMomentum
+     * @param start 
+     * @param duration 
+     * @param pos 
+     * @description compute momentum  of vertical
+     */
+    private getComputedVerticalMomentum(start: number, duration: number, pos: number): ScrollKit.Momentum {
         return this.isVScroll() ? this.momentum.getComputedMomentum(this.getPosition().y, start, duration, this.getMaxScrollHeight(), this.isBounce() ? this.getClientHeight() : 0) : { destination: pos, duration: 0 };
     }
-    
+    /**
+     * @method setContentSpecifiedIndex
+     * @param specifiedIndex 
+     * @description  set scroll element index of root element
+     */
     setContentSpecifiedIndex(specifiedIndex:number):void{
         this.specifiedIndex = specifiedIndex
     }
@@ -166,17 +190,29 @@ export default class Scope {
     setProbe(probe: number): void {
         this.probe = probe
     }
-
+    /**
+     * @method setScrollX
+     * @param x 
+     * @description set scroll x-axis or not 
+     */
     setScrollX(x: number): void {
         this.feature.setScrollX(x)
     }
-
+    /**
+     * @method setScrollY
+     * @param y 
+     * @description set scroll y-axis or not 
+     */
     setScrollY(y: number): void {
         this.feature.setScrollY(y)
     }
-
-    setScrollZ(x: number): void {
-        this.feature.setScrollZ(x)
+    /**
+     * @method setScrollZ
+     * @param z
+     * @description  set free scroll or not 
+     */
+    setScrollZ(z: number): void {
+        this.feature.setScrollZ(z)
     }
 
     /**
@@ -241,7 +277,7 @@ export default class Scope {
      * @returns boolean
      */
     isLockScrollX(): boolean {
-        return this.feature.getScrollX() === 1
+        return this.feature.getMode() === 1
     }
     /**
      * @method isLockScrollY
@@ -249,11 +285,25 @@ export default class Scope {
      * @returns boolean
      */
     isLockScrollY(): boolean {
-        return this.feature.getScrollY() === 1
+        return this.feature.getMode() === 2
     }
-
+    /**
+     * @method isNoLocked
+     */
     isNoLocked() {
         return this.feature.getMode() === 0
+    }
+    /**
+     * @method isScrollX
+     */  
+    isScrollX():boolean{
+       return this.feature.getScrollX() === 1 
+    }
+    /**
+     * @method isScrollY
+     */
+    isScrollY(){
+        return this.feature.getScrollY() === 1
     }
     /**
      * @method isFreeScroll
@@ -276,7 +326,9 @@ export default class Scope {
     isYPrevent(): boolean {
         return this.feature.getPrevent() === 2
     }
-
+    /**
+     * @method isNoPrevent
+     */  
     isNoPrevent():boolean{
         return this.feature.getPrevent() === 0
     }
@@ -299,7 +351,7 @@ export default class Scope {
      * @returns boolean
      */
     isHScroll(): boolean {
-        return this.isLockScrollX() && this.rollable(this.getClientWidth(), this.getScrollOffsetWidth());
+        return this.isScrollX() && this.rollable(this.getClientWidth(), this.getScrollOffsetWidth());
     }
     /**
      * @method isVScroll
@@ -307,7 +359,7 @@ export default class Scope {
      * @returns boolean
      */
     isVScroll(): boolean {
-        return this.isLockScrollY() && this.rollable(this.getClientHeight(), this.getScrollOffsetHeight());
+        return this.isScrollY() && this.rollable(this.getClientHeight(), this.getScrollOffsetHeight());
     }
     /**
      * @method getWrapElement
@@ -359,7 +411,10 @@ export default class Scope {
     getDirectionLockThreshold(): number {
         return this.feature.getThreshold()
     }
-
+    /**
+     * @method setDirectionLockThreshold
+     * @param threshold 
+     */ 
     setDirectionLockThreshold(threshold:number): void{
         return this.feature.setThreshold(threshold)
     }
@@ -403,52 +458,93 @@ export default class Scope {
     }
 
     /**
-     * @method isEnableMomentum
+     * @method shouldMomentum
      */
-    isEnableMomentum(): boolean {
+    shouldMomentum(): boolean {
         return this.momentum.enabled()
     }
-
+    /**
+     * @method setDeceleration
+     * @param deceleration 
+     * @description set deceleration of momentum
+     */
     setDeceleration(deceleration: number): void {
         this.momentum.setDeceleration(deceleration)
     }
-
+    /**
+     * @method getDeceleration
+     * @description get deceleration of momentum
+     */  
     getDeceleration(): number {
         return this.momentum.getDeceleration()
     }
-
-    setTapabke(tapable: boolean): void {
+    /**
+     * @method setTapable
+     * @param tapable 
+     * @description set use tap event or not
+     */
+    setTapable(tapable: boolean): void {
         this.tapable = tapable
     }
-
+    /**
+     * @method isTapable
+     * @description tab event is enabled or not
+     */
     isTapable(): boolean {
         return this.tapable
     }
-
+    /**
+     * @method setClickable
+     * @param clickable 
+     * @description set use click event or not 
+     */
     setClickable(clickable: boolean) {
         this.clickable = clickable
     }
-
+    /**
+     * @method isClickable
+     * @description click event is enabled or not
+     */
     isClickable(): boolean {
         return this.clickable
     }
-
-    getComputedMomontum(start: number, duration: number, pos: number, isVertical: boolean): ScrollKit.Momentun {
-        return isVertical ? this.getComputedHMomentum(start, duration, pos) : this.getComputedVMomentum(start, duration, pos);
+    /**
+     * @method getComputedMomontum
+     * @param start 
+     * @param duration 
+     * @param pos 
+     * @param isVertical 
+     * @description get moentum distance 
+     */
+    getComputedMomontum(start: number, duration: number, pos: number, isVertical: boolean): ScrollKit.Momentum {
+        return isVertical ? this.getComputedVerticalMomentum(start, duration, pos) : this.getComputedHorizontalMomentum(start, duration, pos);
     }
-
+    /**
+     * @method setMouseWheelSpeed
+     * @param speed 
+     * @description set mouse wheel speed
+     */
     setMouseWheelSpeed(speed:number): void {
       this.wheel.setWheelSpeed(speed)
     }
-
+     /**
+      * @method setMouseWheelDirection
+      * @param dir 
+      * @description set mouse wheel direction
+      */
     setMouseWheelDirection(dir:number): void {
         this.wheel.setWheelDirection(dir)
     }
-
+    
+    /**
+     * @method getMouseWheelSpeed
+     */
     getMouseWheelSpeed(): number {
         return this.wheel.getWheelSpeed()
     }
-
+    /**
+     * @method getMouseWheelDirection
+     */
     getMouseWheelDirection(): number {
         return this.wheel.getWheelDirection()
     }

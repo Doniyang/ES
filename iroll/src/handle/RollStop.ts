@@ -31,21 +31,22 @@ export default class RollStop implements Digitalizer {
     return state === 2 || state === 1;
   }
   execute(e: TouchEvent | MouseEvent, attrs: Attribute, proxy: RollProxy): void {
-    let pos: ScrollKit.Point = proxy.getPosition(),
+    const pos: ScrollKit.Point = proxy.getPosition(),
       scope: Scope = proxy.getScope(),
-      duration = DateKit.getTime() - attrs.getStartTime(),
-      newX = Math.round(pos.x),
+      duration = DateKit.getTime() - attrs.getStartTime();
+    let newX = Math.round(pos.x),
       newY = Math.round(pos.y),
       time = 0,
       easing: Quadratic,
-      momentumX: ScrollKit.Momentun,
-      momentumY: ScrollKit.Momentun;
+      momentumX: ScrollKit.Momentum,
+      momentumY: ScrollKit.Momentum;
 
     proxy.setState(0)
     attrs.setEndTime(Date.now())
 
     if (this.isOutBoundary(pos, scope.getCrisisPosition())) {
       proxy.resetPosition();
+      attrs.setState(0)
       return void 0;
     }
 
@@ -59,10 +60,11 @@ export default class RollStop implements Digitalizer {
         EventKit.click(e, 'click')
       }
       proxy.trigger('scroll:cancel', pos)
+      attrs.setState(0)
       return void 0;
     }
 
-    if (scope.isEnableMomentum() && this.isFastMoving(duration)) {
+    if (scope.shouldMomentum() && this.isFastMoving(duration)) {
       momentumX = scope.getComputedMomontum(attrs.getOriginX(), duration, newX, false)
       momentumY = scope.getComputedMomontum(attrs.getOriginY(), duration, newY, true)
       newX = momentumX.destination;
@@ -82,10 +84,13 @@ export default class RollStop implements Digitalizer {
       } else {
         proxy.scrollTo(newX, newY, time, proxy.getAnimation());
       }
-
+      attrs.setState(0)
       return void 0;
     }
+
+    attrs.setState(0)
     proxy.trigger('scroll:end', pos)
+
   }
 
 }

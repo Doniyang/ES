@@ -1,4 +1,4 @@
-import { Direction } from "src/shared";
+import { Direction } from "../../shared";
 
 /**
  * @class Momentum
@@ -23,7 +23,7 @@ export default class Momentum {
     /**
      * @name deceleration
      */
-    private deceleration:number
+    private deceleration: number
     /**
      * @constructor
      */
@@ -34,16 +34,16 @@ export default class Momentum {
         this.enable = true
     }
 
-    private speedCalculation(dist:number,tm:number) {
-        return Math.abs(dist)/tm
+    private speedCalculation(dist: number, tm: number) {
+        return Math.abs(dist) / tm
     }
 
-    private directionCalculation(dist:number){
-        return dist<0?Direction.Negative:Direction.Positive
+    private directionCalculation(dist: number) {
+        return dist < 0 ? Direction.Negative : Direction.Positive
     }
-    
-    private durationCalculation(dist:number,speed:number){
-        return dist/speed
+
+    private durationCalculation(dist: number, speed: number) {
+        return dist / speed
     }
     /**
      * @method getPeriod
@@ -82,39 +82,39 @@ export default class Momentum {
         this.enable = flag
     }
 
-    setDeceleration(deceleration:number):void{
+    setDeceleration(deceleration: number): void {
         this.deceleration = deceleration
     }
 
-    getDeceleration():number{
+    getDeceleration(): number {
         return this.deceleration
     }
 
-    getComputedMomentum(current:number,start:number,time:number,margin:number,size:number):ScrollKit.Momentun{
-        let dist:number= current - start,
-        speed:number = this.speedCalculation(dist,time),
-        deceleration = this.getDeceleration(),
-        direction = this.directionCalculation(dist),
-        destination,
-        duration;
+    getComputedMomentum(current: number, start: number, time: number, margin: number, size: number): ScrollKit.Momentum {
+        let dist: number = current - start,
+            speed: number = this.speedCalculation(dist, time),
+            deceleration = this.getDeceleration(),
+            direction = this.directionCalculation(dist),
+            destination,
+            duration;
 
 
-    destination = current + ( speed * speed ) / ( 2 * deceleration ) * direction;
-    duration = speed / deceleration;
+        destination = current + (speed * speed) / (2 * deceleration) * direction;
+        duration = speed / deceleration;
 
-    if ( destination < margin ) {
-        destination = size ? margin - ( size / 2.5 * ( speed / 8 ) ) : margin;
-        dist = Math.abs(destination - current);
-        duration = dist / speed;
-    } else if ( destination > 0 ) {
-        destination = size ? size / 2.5 * ( speed / 8 ) : 0;
-        dist = Math.abs(current) + destination;
-        duration = dist / speed;
-    }
+        if (destination < margin) {
+            destination = size ? margin - (size / 2.5 * (speed / 8)) : margin;
+            dist = Math.abs(destination - current);
+            duration = dist / speed;
+        } else if (destination > 0) {
+            destination = size ? size / 2.5 * (speed / 8) : 0;
+            dist = Math.abs(current) + destination;
+            duration = dist / speed;
+        }
 
-    return {
-        destination: Math.round(destination),
-        duration: duration
-    };
+        return {
+            destination: Math.round(destination),
+            duration: duration
+        };
     }
 }

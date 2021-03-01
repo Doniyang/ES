@@ -20,7 +20,7 @@ export default class IRoll {
   private stopPropagation: boolean
   private mouseWheel: boolean
    private resizeTimeoutId:number
-  constructor(wrapper: ScrollKit.ElementWrapper, options: ScrollKit.scrollOptions) {
+  constructor(wrapper: ScrollKit.ElementWrapper, options: ScrollKit.Options) {
     this.preventDefault = true
     this.preventDefaultException = { tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/ }
     this.bindToWrapper = typeof window.onmousedown === 'undefined';
@@ -49,7 +49,7 @@ export default class IRoll {
     }
 
     if (isBoolean(options.tap)) {
-      this.scope.setTapabke(options.tap)
+      this.scope.setTapable(options.tap)
     }
 
     if (isBoolean(options.clickable)) {
@@ -206,7 +206,7 @@ export default class IRoll {
     clearTimeout(this.resizeTimeoutId)
 
     this.resizeTimeoutId = setTimeout(function () {
-			that.context.execute(e, 'refresh');();
+			that.context.execute(e, 'refresh');
 		}, this.resizePolling);
     
   }

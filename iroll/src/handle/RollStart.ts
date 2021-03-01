@@ -1,4 +1,4 @@
-import Scope from "src/scope/Scope";
+import Scope from "../scope/Scope";
 import { DateKit, EventKit, MouseButton } from '../shared'
 import Attribute from "../attribute/Attribute";
 import RollProxy from "../translate/RollProxy";
@@ -49,7 +49,7 @@ export default class RollStart implements Digitalizer {
      * @param proxy 
      */
     execute(e: MouseEvent | TouchEvent, attrs: Attribute, proxy: RollProxy): void {
-        let point = EventKit.isTouchEvent(e) ? e.touches[0] : e,
+        const point = EventKit.isTouchEvent(e) ? e.touches[0] : e,
             pos: ScrollKit.Point = proxy.getPosition(),
             scope: Scope = proxy.getScope();
 

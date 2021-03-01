@@ -1,4 +1,4 @@
-import Scope from "src/scope/Scope";
+import Scope from "../scope/Scope";
 
 export default interface RollDigitalizer {
     scrollTo(x: number, y: number, time: number,easing?:string|ScrollKit.Algorithm): void;

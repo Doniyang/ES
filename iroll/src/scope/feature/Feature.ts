@@ -1,4 +1,4 @@
-import Axis from "src/axis/Axis";
+import Axis from "../../axis/Axis";
 
 /**
  * @class Feature

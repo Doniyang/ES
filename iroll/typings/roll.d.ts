@@ -43,7 +43,7 @@ declare namespace ScrollKit {
         y: number
     }
 
-    export interface Momentun {
+    export interface Momentum {
         destination: number
         duration: number
     }

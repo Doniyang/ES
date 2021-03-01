@@ -1,6 +1,7 @@
 import Scope from "../scope/Scope";
 import Attribute from "../attribute/Attribute";
 import Digitalizer from "./Digitalizer";
+import RollProxy from "../translate/RollProxy";
 
 export default class RollRefresh implements Digitalizer {
     constructor(){}
@@ -11,7 +12,7 @@ export default class RollRefresh implements Digitalizer {
        return state === 0;
     }
     execute(e: Event, attrs: Attribute, proxy: RollProxy): void {
-        let scope:Scope = proxy.getScope()
+        const scope:Scope = proxy.getScope()
         attrs.setEndTime(0);
         scope.setScrollDirection(0, 0);
 

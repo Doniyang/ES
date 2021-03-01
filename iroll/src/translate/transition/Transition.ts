@@ -1,9 +1,9 @@
 import { requestAnimationFrame, PrefixStyle,Circular, isString } from '@niyang-es/toolkit';
-import Scope from 'src/scope/Scope';
+import Scope from '../../scope/Scope';
 import RollDigitalizer from '../RollDigitalizer';
 import Roll from '../Roll';
 import Variate from '../Variate';
-import { ToolKit } from 'src/shared';
+import { ToolKit } from '../../shared';
 export default class Transition extends Roll implements RollDigitalizer{
     /**
      * @constructor
@@ -31,7 +31,7 @@ export default class Transition extends Roll implements RollDigitalizer{
             scrollStyle.setProperty(duration, '0.0001ms');
             scrollStyle.setProperty('transition-duration', '0.0001ms')
             requestAnimationFrame(() => {
-                if ((scrollStyle.getPropertyValue(duration) || scrollStyle.getPropertyValue('transitionDuration')) === '0.0001ms') {
+                if ((scrollStyle.getPropertyValue(duration) || scrollStyle.getPropertyValue('transition-duration')) === '0.0001ms') {
                     scrollStyle.setProperty(duration, '0s');
                     scrollStyle.setProperty('transition-duration', '0ms')
                 }

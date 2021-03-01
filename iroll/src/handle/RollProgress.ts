@@ -66,7 +66,7 @@ export default class RollProgress implements Digitalizer {
      * @description execute scroll move  or not
      */
     attain(state: number): boolean {
-        return state === 1
+        return state === 1||state === 2
     }
     /**
      * @method execute
@@ -76,13 +76,14 @@ export default class RollProgress implements Digitalizer {
      * @description execute roll move
      */
     execute(e: TouchEvent | MouseEvent, attrs: Attribute, proxy: RollProxy): void {
-        if (proxy.disabled) { return; }
-        let point = EventKit.isTouchEvent(e) ? e.touches[0] : e,
+        if (proxy.disabled) { return void 0; }
+        const point = EventKit.isTouchEvent(e) ? e.touches[0] : e,
             scope: Scope = proxy.getScope(),
             pos: ScrollKit.Point = proxy.getPosition(),
             maxDist: ScrollKit.Point = scope.getMaxDistance(),
-            timestamp = DateKit.getTime(),
-            deltaX = point.pageX - attrs.getPointX(),
+            timestamp = DateKit.getTime();
+
+            let deltaX = point.pageX - attrs.getPointX(),
             deltaY = point.pageY - attrs.getPointY(),
             newX, newY,
             absDistX, absDistY;
@@ -94,7 +95,7 @@ export default class RollProgress implements Digitalizer {
         absDistX = Math.abs(attrs.getDeltaX());
         absDistY = Math.abs(attrs.getDeltaY());
 
-        if (this.isFastMove(timestamp, attrs.getEndTime()) && (this.isLarger(scope.getMomentumThreshold(), absDistX) && this.isLarger(scope.getMomentumThreshold(), absDistY))) { return void; }
+        if (this.isFastMove(timestamp, attrs.getEndTime()) && (this.isLarger(scope.getMomentumThreshold(), absDistX) && this.isLarger(scope.getMomentumThreshold(), absDistY))) { return void 0; }
 
         this.scrollModeCalculation(absDistX, absDistY, scope)
 
