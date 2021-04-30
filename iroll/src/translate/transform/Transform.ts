@@ -1,18 +1,19 @@
-import { PrefixStyle } from "@niyang-es/toolkit";
+import {PrefixStyle} from "@niyang-es/toolkit";
 import Variate from "../Variate";
 
 export default class Transform implements Variate {
 
     private HWCompositing: boolean;
 
-    constructor(HWCompositing:boolean) {
+    constructor(HWCompositing: boolean) {
         this.HWCompositing = HWCompositing
     }
+
     private isSupportPerspective(): boolean {
         return PrefixStyle.has(PrefixStyle.style('perspective'))
     }
 
-    private isSupportQuicken():boolean {
+    private isSupportQuicken(): boolean {
         return this.HWCompositing && this.isSupportPerspective()
     }
 
@@ -30,6 +31,6 @@ export default class Transform implements Variate {
         let matrixs: string[] = transform.split(')')[0].split(', ')
         x = +(matrixs[12] || matrixs[4]);
         y = +(matrixs[13] || matrixs[5]);
-        return { x, y }
+        return {x, y}
     }
 }

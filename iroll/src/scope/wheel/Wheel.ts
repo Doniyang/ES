@@ -1,8 +1,8 @@
 /**
  * @class Wheel
  * @classdesc some feature of wheel
- * @example 
- *   speed  direction 
+ * @example
+ *   speed  direction
  */
 export default class Wheel {
     /**
@@ -11,18 +11,20 @@ export default class Wheel {
     private speed: number
     /**
      * @name direction
-     * @example 
+     * @example
      *  1 is positive
      *   -1 is negative
      */
     private direction: number
+
     /**
      * @constructor
-     */ 
+     */
     constructor() {
         this.speed = 20
         this.direction = 1
     }
+
     /**
      * @method getWheelSpeed
      * @description get speed of wheel
@@ -30,23 +32,26 @@ export default class Wheel {
     getWheelSpeed(): number {
         return this.speed;
     }
+
     /**
      * @method setWheelSpeed
-     * @param speed 
+     * @param speed
      * @description set speed of wheel
      */
     setWheelSpeed(speed: number): void {
         this.speed = speed
     }
+
     /**
      * @method setWheelDirection
-     * @param direction 
+     * @param direction
      * @description set direction of wheel
-     * @example  
-     */ 
+     * @example
+     */
     setWheelDirection(direction: number): void {
         this.direction = direction
     }
+
     /**
      * @method getWheelDirection
      */

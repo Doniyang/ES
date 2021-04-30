@@ -1,1 +1,1 @@
-export { default as IRoll } from './core/IRoll';
+export {default as IRoll} from './core/IRoll';

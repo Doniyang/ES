@@ -6,6 +6,7 @@ import Digitalizer from "./Digitalizer";
 export default class RollRotate implements Digitalizer {
     private tId: number
     readonly delay: number
+
     constructor() {
         this.tId = 0;
         this.delay = 400
@@ -71,7 +72,8 @@ export default class RollRotate implements Digitalizer {
         }
 
         deltaX = this.calculate(deltaX, 1, scope.getMouseWheelDirection());
-        deltaY = this.calculate(deltaY, 1, scope.getMouseWheelDirection());;
+        deltaY = this.calculate(deltaY, 1, scope.getMouseWheelDirection());
+        ;
 
         if (!scope.isVScroll()) {
             deltaY = deltaY;
@@ -84,11 +86,11 @@ export default class RollRotate implements Digitalizer {
 
         scope.setScrollDirection(deltaX > 0 ? -1 : deltaX < 0 ? 1 : 0, deltaY > 0 ? -1 : deltaY < 0 ? 1 : 0)
 
-        
-        newX = this.median(0,newX,scope.getMaxDistance().x)
-        newY = this.median(0,newY,scope.getMaxDistance().y)
-     
-        proxy.scrollTo(newX, newY, 0,proxy.getAnimation());
+
+        newX = this.median(0, newX, scope.getMaxDistance().x)
+        newY = this.median(0, newY, scope.getMaxDistance().y)
+
+        proxy.scrollTo(newX, newY, 0, proxy.getAnimation());
     }
 
-} 
+}

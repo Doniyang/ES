@@ -1,5 +1,4 @@
-
-import { ClassicEvent } from "@niyang-es/notify";
+import {ClassicEvent} from "@niyang-es/notify";
 import Scope from "../scope/Scope";
 import Notify from "../notify/Notify";
 import RollDigitalizer from "./RollDigitalizer";
@@ -7,6 +6,7 @@ import RollDigitalizer from "./RollDigitalizer";
 export default class RollProxy implements RollDigitalizer {
     private roll: null | RollDigitalizer;
     private notify: Notify;
+
     constructor(notify: Notify) {
         this.roll = null
         this.notify = notify
@@ -27,6 +27,7 @@ export default class RollProxy implements RollDigitalizer {
     scrollTo(x: number, y: number, time: number, easing: string | ScrollKit.Algorithm): void {
         this.roll?.scrollTo(x, y, time, easing);
     }
+
     translate(x: number, y: number): void {
         this.roll?.translate(x, y);
     }
@@ -34,6 +35,7 @@ export default class RollProxy implements RollDigitalizer {
     getState(): number {
         return (this.roll as RollDigitalizer).getState();
     }
+
     setState(state: number): void {
         this.roll?.setState(state);
     }
@@ -41,6 +43,7 @@ export default class RollProxy implements RollDigitalizer {
     getComputedPosition(): ScrollKit.Point {
         return (this.roll as RollDigitalizer).getComputedPosition()
     }
+
     getPosition(): ScrollKit.Point {
         return (this.roll as RollDigitalizer).getPosition();
     }
@@ -53,6 +56,7 @@ export default class RollProxy implements RollDigitalizer {
     resetPosition(): void {
         this.roll?.resetPosition()
     }
+
     getAnimation(): string | ScrollKit.Algorithm {
         return (this.roll as RollDigitalizer).getAnimation()
     }

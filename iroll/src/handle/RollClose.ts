@@ -12,9 +12,11 @@ export default class RollClose implements Digitalizer {
     private isSameElement(el: Element, ol: HTMLElement) {
         return el.isSameNode(ol)
     }
+
     attain(state: number): boolean {
         return state === 0;
     }
+
     execute(e: Event, attrs: Attribute, proxy: RollProxy): void {
         const scope: Scope = proxy.getScope()
         if (!this.isSameElement(e.target as Element, scope.getScrollElement()) && proxy.getState() === 1) {

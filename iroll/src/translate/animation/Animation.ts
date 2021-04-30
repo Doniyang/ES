@@ -1,9 +1,9 @@
 /**
  * @class Animation
  * @classdesc scroll by animation
- * @author niyang 
+ * @author niyang
  */
-import { requestAnimationFrame, cancelAnimationFrame, Circular } from "@niyang-es/toolkit";
+import {requestAnimationFrame, cancelAnimationFrame, Circular} from "@niyang-es/toolkit";
 import Notify from "../../notify/Notify";
 import Scope from "../../scope/Scope";
 import {DateKit} from "../../shared";
@@ -18,20 +18,20 @@ export default class Animation extends Roll implements RollDigitalizer {
     private rafId: number;
     /**
      * @name rafTime
-     * @description the animation dispatch time 
+     * @description the animation dispatch time
      */
     private rafTime: number;
     /**
      * @name notify
-     * @description notification 
+     * @description notification
      */
     private notify: Notify;
 
     /**
      * @constructor
-     * @param scope 
-     * @param roll 
-     * @param notify 
+     * @param scope
+     * @param roll
+     * @param notify
      */
     constructor(scope: Scope, roll: Variate, notify: Notify) {
         super(scope, roll);
@@ -47,14 +47,16 @@ export default class Animation extends Roll implements RollDigitalizer {
     private getRafTime(): number {
         return this.rafTime;
     }
+
     /**
      * @method setRafTime
-     * @param tm 
+     * @param tm
      * @description set requestAnimationFrame time
      */
     private setRafTime(tm: number): void {
         this.rafTime = tm
     }
+
     /**
      * @method isPrending
      * @description roll is in animation
@@ -62,6 +64,7 @@ export default class Animation extends Roll implements RollDigitalizer {
     private isPrending(): boolean {
         return this.getState() === 1;
     }
+
     /**
      * @method isRealtime
      * @description roll trigger scroll realtime
@@ -69,18 +72,20 @@ export default class Animation extends Roll implements RollDigitalizer {
     private isRealtime(): boolean {
         return this.getScope().getProbe() === 3
     }
+
     /**
      * @method isTimeout
-     * @param now 
-     * @param duration 
+     * @param now
+     * @param duration
      * @description animation is over
      */
     private isTimeout(now: number, duration: number) {
         return now >= duration
     }
+
     /**
-     * @method finish 
-     * @param pos 
+     * @method finish
+     * @param pos
      * @description finish roll
      */
     private finish(pos: ScrollKit.Point) {
@@ -89,20 +94,24 @@ export default class Animation extends Roll implements RollDigitalizer {
         }
         this.notify.trigger('scroll:end', pos)
     }
+
     /**
      * @method stopAnimationFrame
      * @description sop animation
      */
     private stopAnimationFrame() {
-        if (this.rafId) { cancelAnimationFrame(this.rafId) }
+        if (this.rafId) {
+            cancelAnimationFrame(this.rafId)
+        }
     }
+
     /**
      * @method animationFrameStep
-     * @param start 
-     * @param dest 
-     * @param duration 
-     * @param startTime 
-     * @param algorithm 
+     * @param start
+     * @param dest
+     * @param duration
+     * @param startTime
+     * @param algorithm
      */
     private animationFrameStep(start: ScrollKit.Point, dest: ScrollKit.Point, duration: number, startTime: number, algorithm: ScrollKit.Algorithm): void {
         let destTime = startTime + duration, now = this.getRafTime(), newX, newY, easing;
@@ -122,7 +131,7 @@ export default class Animation extends Roll implements RollDigitalizer {
         newY = (dest.y - start.y) * easing + start.y;
         this.translate(newX, newY);
         if (this.isRealtime()) {
-            this.notify.trigger('scroll', { x: newX, y: newY })
+            this.notify.trigger('scroll', {x: newX, y: newY})
         }
         if (this.isPrending()) {
             this.animate(function (tm) {
@@ -131,19 +140,21 @@ export default class Animation extends Roll implements RollDigitalizer {
             })
         }
     }
+
     /**
      * @method animate
-     * @param callback 
+     * @param callback
      */
     private animate(callback: FrameRequestCallback) {
         this.rafId = requestAnimationFrame(callback)
     }
+
     /**
      * @method scrollTo
-     * @param x 
-     * @param y 
-     * @param time 
-     * @param easing 
+     * @param x
+     * @param y
+     * @param time
+     * @param easing
      * @description scroll to some point
      */
     scrollTo(x: number, y: number, time: number, easing: ScrollKit.Algorithm): void {
@@ -151,8 +162,9 @@ export default class Animation extends Roll implements RollDigitalizer {
         let position = this.getPosition();
         this.setState(1);
         this.setRafTime(now)
-        this.animationFrameStep(position, { x, y }, time, now, easing);
+        this.animationFrameStep(position, {x, y}, time, now, easing);
     }
+
     /**
      * @method stop
      * @description roll is over
@@ -161,6 +173,7 @@ export default class Animation extends Roll implements RollDigitalizer {
         this.setState(0);
         this.stopAnimationFrame()
     }
+
     /**
      * @method getAnimation
      */

@@ -8,20 +8,20 @@ export default class Feature {
     /**
      * @name mode
      * @description scroll mode
-     * @example 
+     * @example
      *    0 ------ no locked
      *    1 ------ x is loacked
-     *    2 ------ y is locked 
+     *    2 ------ y is locked
      */
     private mode: number;
     /**
-         * @name roll
-         * @description scroll or not
-         * @example 
-         *    x=1 ------ allow x scroll
-         *    y=1 ------ allow y scroll
-         *    z=1 ------ free scroll 
-         */
+     * @name roll
+     * @description scroll or not
+     * @example
+     *    x=1 ------ allow x scroll
+     *    y=1 ------ allow y scroll
+     *    z=1 ------ free scroll
+     */
     private roll: Axis;
     /**
      * @name direction
@@ -34,7 +34,7 @@ export default class Feature {
      * @example
      *     0 ---- free
      *     1 --- x-prevent
-     *     2--- y-prevent 
+     *     2--- y-prevent
      */
     private prevent: number;
     /**
@@ -47,6 +47,7 @@ export default class Feature {
      * @description scroll direction threshold
      */
     private threshold: number
+
     /**
      * @constructor
      */
@@ -74,9 +75,11 @@ export default class Feature {
     getScrollY(): number {
         return this.roll.getAxisY()
     }
+
     setScrollZ(x: number): void {
         this.roll.setAxisZ(x)
     }
+
     getScrollZ(): number {
         return this.roll.getAxisZ()
     }
@@ -97,6 +100,7 @@ export default class Feature {
     getDirectionX(): number {
         return this.direction.getAxisX()
     }
+
     getDirectionY(): number {
         return this.direction.getAxisY()
     }

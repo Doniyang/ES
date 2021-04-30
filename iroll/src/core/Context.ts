@@ -7,6 +7,7 @@ export default class Context {
     private attrs: Attribute;
     private facotry: RollFactory;
     private proxy: RollProxy;
+
     constructor(proxy: RollProxy) {
         this.attrs = new Attribute();
         this.facotry = new RollFactory();

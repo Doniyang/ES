@@ -14,7 +14,7 @@ export default class Scope {
      */
     readonly rootElement: HTMLElement;
     /**
-     * @description roll point 
+     * @description roll point
      */
     private axis: Axis;
     /**
@@ -39,7 +39,7 @@ export default class Scope {
      */
     private bounceTime: number;
     /**
-     * @name probe 
+     * @name probe
      * @description the scroll event dispatch mode
      */
     private probe: number;
@@ -49,19 +49,20 @@ export default class Scope {
     private momentum: Momentum;
     /**
      * @name clickable
-     */    
+     */
     private clickable: boolean
     /**
      * @name tapable
-     */   
+     */
     private tapable: boolean
     /**
      * @name wheel
-     */   
-    private wheel:Wheel
+     */
+    private wheel: Wheel
+
     /**
      * @constructor
-     * @param el 
+     * @param el
      */
     constructor(el: HTMLElement) {
         this.rootElement = el;
@@ -76,6 +77,7 @@ export default class Scope {
         this.tapable = false
         this.wheel = new Wheel()
     }
+
     /**
      * @method getScrollOffsetWidth
      * @description get offset width of scroll element
@@ -84,34 +86,36 @@ export default class Scope {
     private getScrollOffsetWidth(): number {
         return this.getScrollElement().offsetWidth;
     }
+
     /**
-      * @method getScrollOffsetHeight
-      * @description get offset height of scroll element
-      * @returns number
-      */
+     * @method getScrollOffsetHeight
+     * @description get offset height of scroll element
+     * @returns number
+     */
     private getScrollOffsetHeight(): number {
         return this.getScrollElement().offsetHeight;
     }
 
     /**
      * @method rollable
-     * @param wapper 
-     * @param content 
+     * @param wapper
+     * @param content
      * @description make sure it is rollable with two number
-     * @example 
+     * @example
      *      if x-scroll need:
      *          rollable(wapperWidth，contentWidth)
      *      if y-scroll need:
-     *        rollable(wapperHeight，contentHeight)   
-     *            
+     *        rollable(wapperHeight，contentHeight)
+     *
      * @returns boolean
      */
     private rollable(wapper: number, content: number): boolean {
         return wapper < content
     }
+
     /**
      * @method getMaxScrollWidth
-     * @description the max width of scroll 
+     * @description the max width of scroll
      * @returns number
      */
     private getMaxScrollWidth(): number {
@@ -120,9 +124,10 @@ export default class Scope {
         }
         return this.getClientWidth() - this.getScrollOffsetWidth()
     }
+
     /**
      * @method getMaxScrollHeight
-     * @description the max height of scroll 
+     * @description the max height of scroll
      * @returns number
      */
     private getMaxScrollHeight(): number {
@@ -133,48 +138,58 @@ export default class Scope {
     }
 
     /**
-    * @method getClientWidth
-    * @returns number
-    */
+     * @method getClientWidth
+     * @returns number
+     */
     private getClientWidth(): number {
         return this.rootElement.clientWidth;
     }
+
     /**
-      * @method getClientWidth
-      * @returns number
-      */
+     * @method getClientWidth
+     * @returns number
+     */
     private getClientHeight(): number {
         return this.rootElement.clientHeight;
     }
+
     /**
      * @method getComputedHorizontalMomentum
-     * @param start 
-     * @param duration 
-     * @param pos 
+     * @param start
+     * @param duration
+     * @param pos
      * @description compute momentum  of horizontal
      */
     private getComputedHorizontalMomentum(start: number, duration: number, pos: number): ScrollKit.Momentum {
-        return this.isHScroll() ? this.momentum.getComputedMomentum(this.getPosition().x, start, duration, this.getMaxScrollWidth(), this.isBounce() ? this.getClientWidth() : 0) : { destination: pos, duration: 0 };
+        return this.isHScroll() ? this.momentum.getComputedMomentum(this.getPosition().x, start, duration, this.getMaxScrollWidth(), this.isBounce() ? this.getClientWidth() : 0) : {
+            destination: pos,
+            duration: 0
+        };
     }
 
     /**
      * @method getComputedVerticalMomentum
-     * @param start 
-     * @param duration 
-     * @param pos 
+     * @param start
+     * @param duration
+     * @param pos
      * @description compute momentum  of vertical
      */
     private getComputedVerticalMomentum(start: number, duration: number, pos: number): ScrollKit.Momentum {
-        return this.isVScroll() ? this.momentum.getComputedMomentum(this.getPosition().y, start, duration, this.getMaxScrollHeight(), this.isBounce() ? this.getClientHeight() : 0) : { destination: pos, duration: 0 };
+        return this.isVScroll() ? this.momentum.getComputedMomentum(this.getPosition().y, start, duration, this.getMaxScrollHeight(), this.isBounce() ? this.getClientHeight() : 0) : {
+            destination: pos,
+            duration: 0
+        };
     }
+
     /**
      * @method setContentSpecifiedIndex
-     * @param specifiedIndex 
+     * @param specifiedIndex
      * @description  set scroll element index of root element
      */
-    setContentSpecifiedIndex(specifiedIndex:number):void{
+    setContentSpecifiedIndex(specifiedIndex: number): void {
         this.specifiedIndex = specifiedIndex
     }
+
     /**
      * @method getProbe
      * @description get probe
@@ -185,31 +200,34 @@ export default class Scope {
 
     /**
      * @method setProbe
-     * @param probe 
+     * @param probe
      */
     setProbe(probe: number): void {
         this.probe = probe
     }
+
     /**
      * @method setScrollX
-     * @param x 
-     * @description set scroll x-axis or not 
+     * @param x
+     * @description set scroll x-axis or not
      */
     setScrollX(x: number): void {
         this.feature.setScrollX(x)
     }
+
     /**
      * @method setScrollY
-     * @param y 
-     * @description set scroll y-axis or not 
+     * @param y
+     * @description set scroll y-axis or not
      */
     setScrollY(y: number): void {
         this.feature.setScrollY(y)
     }
+
     /**
      * @method setScrollZ
      * @param z
-     * @description  set free scroll or not 
+     * @description  set free scroll or not
      */
     setScrollZ(z: number): void {
         this.feature.setScrollZ(z)
@@ -232,10 +250,11 @@ export default class Scope {
     setScrollPreventState(state: number): void {
         this.feature.setPrevent(state)
     }
+
     /**
-     * 
-     * @param x 
-     * @param y 
+     *
+     * @param x
+     * @param y
      */
     setScrollDirection(x: number, y: number): void {
         this.feature.setDirection(x, y)
@@ -243,34 +262,38 @@ export default class Scope {
 
     /**
      * @method setBounce
-     * @param bounce 
+     * @param bounce
      */
     setBounce(bounce: boolean): void {
         this.bounce = bounce
     }
+
     /**
      * @method setBounceTime
-     * @param time 
+     * @param time
      */
     setBounceTime(time: number): void {
         this.bounceTime = time
     }
+
     /**
      * @method getPosition
-     *@description get scroll point 
+     *@description get scroll point
      */
     getPosition(): ScrollKit.Point {
-        return { x: this.axis.getAxisX(), y: this.axis.getAxisY() }
+        return {x: this.axis.getAxisX(), y: this.axis.getAxisY()}
     }
+
     /**
      * @method setPosition
-     * @param x 
-     * @param y 
+     * @param x
+     * @param y
      */
     setPosition(x: number, y: number): void {
         this.axis.setAxisX(x);
         this.axis.setAxisY(y);
     }
+
     /**
      * @method isLockScrollX
      * @description x-scroll  or not
@@ -279,6 +302,7 @@ export default class Scope {
     isLockScrollX(): boolean {
         return this.feature.getMode() === 1
     }
+
     /**
      * @method isLockScrollY
      * @description y-scroll  or not
@@ -287,24 +311,28 @@ export default class Scope {
     isLockScrollY(): boolean {
         return this.feature.getMode() === 2
     }
+
     /**
      * @method isNoLocked
      */
     isNoLocked() {
         return this.feature.getMode() === 0
     }
+
     /**
      * @method isScrollX
-     */  
-    isScrollX():boolean{
-       return this.feature.getScrollX() === 1 
+     */
+    isScrollX(): boolean {
+        return this.feature.getScrollX() === 1
     }
+
     /**
      * @method isScrollY
      */
-    isScrollY(){
+    isScrollY() {
         return this.feature.getScrollY() === 1
     }
+
     /**
      * @method isFreeScroll
      * @description scroll  or not
@@ -313,6 +341,7 @@ export default class Scope {
     isFreeScroll(): boolean {
         return this.feature.getScrollZ() === 1
     }
+
     /**
      * @method isXPrevent
      */
@@ -326,12 +355,14 @@ export default class Scope {
     isYPrevent(): boolean {
         return this.feature.getPrevent() === 2
     }
+
     /**
      * @method isNoPrevent
-     */  
-    isNoPrevent():boolean{
+     */
+    isNoPrevent(): boolean {
         return this.feature.getPrevent() === 0
     }
+
     /**
      * @method isBounce
      * @returns boolean
@@ -339,12 +370,14 @@ export default class Scope {
     isBounce(): boolean {
         return this.bounce
     }
+
     /**
      * @method getBounceTime
      */
     getBounceTime(): number {
         return this.bounceTime;
     }
+
     /**
      * @method isHScroll
      * @description x scroll  or not
@@ -353,6 +386,7 @@ export default class Scope {
     isHScroll(): boolean {
         return this.isScrollX() && this.rollable(this.getClientWidth(), this.getScrollOffsetWidth());
     }
+
     /**
      * @method isVScroll
      * @description  y scroll  or not
@@ -361,6 +395,7 @@ export default class Scope {
     isVScroll(): boolean {
         return this.isScrollY() && this.rollable(this.getClientHeight(), this.getScrollOffsetHeight());
     }
+
     /**
      * @method getWrapElement
      * @returns this root element
@@ -368,10 +403,11 @@ export default class Scope {
     getWrapElement(): HTMLElement {
         return this.rootElement;
     }
+
     /**
-    * @method getScrollElement
-    * @returns this scroll element
-    */
+     * @method getScrollElement
+     * @returns this scroll element
+     */
     getScrollElement(): HTMLElement {
         return this.rootElement.children.item(this.specifiedIndex) as HTMLElement
     }
@@ -395,29 +431,33 @@ export default class Scope {
         } else if (pos.y < this.getMaxScrollHeight()) {//bottom
             y = this.getMaxScrollHeight()
         }
-        return { x, y }
+        return {x, y}
     }
+
     /**
      * @method getMaxDistance
      * @description get max scroll distance
      * @returns {x,y}
      */
     getMaxDistance(): ScrollKit.Point {
-        return { x: this.getMaxScrollWidth(), y: this.getMaxScrollHeight() }
+        return {x: this.getMaxScrollWidth(), y: this.getMaxScrollHeight()}
     }
+
     /**
      * @method getDirectionLockThreshold
      */
     getDirectionLockThreshold(): number {
         return this.feature.getThreshold()
     }
+
     /**
      * @method setDirectionLockThreshold
-     * @param threshold 
-     */ 
-    setDirectionLockThreshold(threshold:number): void{
+     * @param threshold
+     */
+    setDirectionLockThreshold(threshold: number): void {
         return this.feature.setThreshold(threshold)
     }
+
     /**
      * @method getMomentumThreshold
      * @description get moment limit distance
@@ -425,14 +465,16 @@ export default class Scope {
     getMomentumThreshold(): number {
         return this.momentum.getThreshold()
     }
+
     /**
      * @method setMomentumThreshold
      * @param dist
-     * @description set moment limit distance 
+     * @description set moment limit distance
      */
     setMomentumThreshold(dist: number): void {
         this.momentum.setThreshold(dist)
     }
+
     /**
      * @method getMomentumPeroid
      * @description get momentum limit time
@@ -440,17 +482,19 @@ export default class Scope {
     getMomentumPeroid(): number {
         return this.momentum.getPeriod()
     }
+
     /**
      * @method setMomentumPeroid
-     * @param time 
+     * @param time
      * @description set momentum limit time
      */
     setMomentumPeroid(time: number): void {
         this.momentum.setPeriod(time)
     }
+
     /**
      * @method setMomentum
-     * @param flag 
+     * @param flag
      * @description use momentum or not
      */
     setMomentum(flag: boolean) {
@@ -463,29 +507,33 @@ export default class Scope {
     shouldMomentum(): boolean {
         return this.momentum.enabled()
     }
+
     /**
      * @method setDeceleration
-     * @param deceleration 
+     * @param deceleration
      * @description set deceleration of momentum
      */
     setDeceleration(deceleration: number): void {
         this.momentum.setDeceleration(deceleration)
     }
+
     /**
      * @method getDeceleration
      * @description get deceleration of momentum
-     */  
+     */
     getDeceleration(): number {
         return this.momentum.getDeceleration()
     }
+
     /**
      * @method setTapable
-     * @param tapable 
+     * @param tapable
      * @description set use tap event or not
      */
     setTapable(tapable: boolean): void {
         this.tapable = tapable
     }
+
     /**
      * @method isTapable
      * @description tab event is enabled or not
@@ -493,14 +541,16 @@ export default class Scope {
     isTapable(): boolean {
         return this.tapable
     }
+
     /**
      * @method setClickable
-     * @param clickable 
-     * @description set use click event or not 
+     * @param clickable
+     * @description set use click event or not
      */
     setClickable(clickable: boolean) {
         this.clickable = clickable
     }
+
     /**
      * @method isClickable
      * @description click event is enabled or not
@@ -508,40 +558,44 @@ export default class Scope {
     isClickable(): boolean {
         return this.clickable
     }
+
     /**
      * @method getComputedMomontum
-     * @param start 
-     * @param duration 
-     * @param pos 
-     * @param isVertical 
-     * @description get moentum distance 
+     * @param start
+     * @param duration
+     * @param pos
+     * @param isVertical
+     * @description get moentum distance
      */
     getComputedMomontum(start: number, duration: number, pos: number, isVertical: boolean): ScrollKit.Momentum {
         return isVertical ? this.getComputedVerticalMomentum(start, duration, pos) : this.getComputedHorizontalMomentum(start, duration, pos);
     }
+
     /**
      * @method setMouseWheelSpeed
-     * @param speed 
+     * @param speed
      * @description set mouse wheel speed
      */
-    setMouseWheelSpeed(speed:number): void {
-      this.wheel.setWheelSpeed(speed)
+    setMouseWheelSpeed(speed: number): void {
+        this.wheel.setWheelSpeed(speed)
     }
-     /**
-      * @method setMouseWheelDirection
-      * @param dir 
-      * @description set mouse wheel direction
-      */
-    setMouseWheelDirection(dir:number): void {
+
+    /**
+     * @method setMouseWheelDirection
+     * @param dir
+     * @description set mouse wheel direction
+     */
+    setMouseWheelDirection(dir: number): void {
         this.wheel.setWheelDirection(dir)
     }
-    
+
     /**
      * @method getMouseWheelSpeed
      */
     getMouseWheelSpeed(): number {
         return this.wheel.getWheelSpeed()
     }
+
     /**
      * @method getMouseWheelDirection
      */

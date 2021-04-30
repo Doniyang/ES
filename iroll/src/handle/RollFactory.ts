@@ -5,15 +5,18 @@ import RollRefresh from "./RollRefresh";
 import RollRotate from "./RollRotate";
 import RollStart from "./RollStart";
 import RollStop from "./RollStop";
+
 /**
  * @class RollFactory
  * @description create roll action
  */
 export default class RollFactory {
     private store: Map<string, Digitalizer>
+
     constructor() {
         this.store = new Map<string, Digitalizer>();
     }
+
     private create(cmd: string): Digitalizer {
         let handle: Digitalizer;
         switch (cmd) {

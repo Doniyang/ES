@@ -1,8 +1,8 @@
 export default class ToolKit {
     /**
-   * @method isBadAndroid
-   * @description 
-   */
+     * @method isBadAndroid
+     * @description
+     */
     static isBadAndroid(): boolean {
         let appVersion = window.navigator.appVersion;
         // Android browser is not a chrome browser.

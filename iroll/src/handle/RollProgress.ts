@@ -2,7 +2,8 @@ import Scope from "../scope/Scope";
 import Attribute from "../attribute/Attribute";
 import RollProxy from "../translate/RollProxy";
 import Digitalizer from "./Digitalizer";
-import { DateKit, EventKit, Probe } from "../shared";
+import {DateKit, EventKit, Probe} from "../shared";
+
 /**
  * @class RollProgress
  * @classdesc roll move
@@ -14,17 +15,19 @@ export default class RollProgress implements Digitalizer {
      * @description the gap of event
      */
     readonly delay: number;
+
     /**
      * @constructor
      */
     constructor() {
         this.delay = 300
     }
+
     /**
-     * @method scrollModeCalculation 
-     * @param absDistX 
-     * @param absDistY 
-     * @param scope 
+     * @method scrollModeCalculation
+     * @param absDistX
+     * @param absDistY
+     * @param scope
      * @description compute the scroll mode
      */
     private scrollModeCalculation(absDistX: number, absDistY: number, scope: Scope): void {
@@ -40,16 +43,21 @@ export default class RollProgress implements Digitalizer {
 
     private deltaCalculation(deltaX: number, deltaY: number, scope: Scope): ScrollKit.Point {
         let x: number = deltaX, y: number = deltaY;
-        if (scope.isLockScrollX()) { y = 0 }
-        if (scope.isLockScrollY()) { x = 0 }
+        if (scope.isLockScrollX()) {
+            y = 0
+        }
+        if (scope.isLockScrollY()) {
+            x = 0
+        }
         x = scope.isHScroll() ? x : 0;
         y = scope.isVScroll() ? y : 0;
-        return { x, y }
+        return {x, y}
     }
+
     /**
      * @method isLarger
-     * @param a 
-     * @param b 
+     * @param a
+     * @param b
      * @description compare a & b
      */
     private isLarger(a: number, b: number) {
@@ -61,29 +69,32 @@ export default class RollProgress implements Digitalizer {
     }
 
     /**
-     * @method attain 
-     * @param state 
+     * @method attain
+     * @param state
      * @description execute scroll move  or not
      */
     attain(state: number): boolean {
-        return state === 1||state === 2
+        return state === 1 || state === 2
     }
+
     /**
      * @method execute
-     * @param e 
-     * @param attrs 
-     * @param proxy 
+     * @param e
+     * @param attrs
+     * @param proxy
      * @description execute roll move
      */
     execute(e: TouchEvent | MouseEvent, attrs: Attribute, proxy: RollProxy): void {
-        if (proxy.disabled) { return void 0; }
+        if (proxy.disabled) {
+            return void 0;
+        }
         const point = EventKit.isTouchEvent(e) ? e.touches[0] : e,
             scope: Scope = proxy.getScope(),
             pos: ScrollKit.Point = proxy.getPosition(),
             maxDist: ScrollKit.Point = scope.getMaxDistance(),
             timestamp = DateKit.getTime();
 
-            let deltaX = point.pageX - attrs.getPointX(),
+        let deltaX = point.pageX - attrs.getPointX(),
             deltaY = point.pageY - attrs.getPointY(),
             newX, newY,
             absDistX, absDistY;
@@ -95,7 +106,9 @@ export default class RollProgress implements Digitalizer {
         absDistX = Math.abs(attrs.getDeltaX());
         absDistY = Math.abs(attrs.getDeltaY());
 
-        if (this.isFastMove(timestamp, attrs.getEndTime()) && (this.isLarger(scope.getMomentumThreshold(), absDistX) && this.isLarger(scope.getMomentumThreshold(), absDistY))) { return void 0; }
+        if (this.isFastMove(timestamp, attrs.getEndTime()) && (this.isLarger(scope.getMomentumThreshold(), absDistX) && this.isLarger(scope.getMomentumThreshold(), absDistY))) {
+            return void 0;
+        }
 
         this.scrollModeCalculation(absDistX, absDistY, scope)
 
@@ -107,7 +120,7 @@ export default class RollProgress implements Digitalizer {
             attrs.setState(0);
             return void 0;
         }
-        const { x, y } = this.deltaCalculation(deltaX, deltaY, scope)
+        const {x, y} = this.deltaCalculation(deltaX, deltaY, scope)
 
         newX = pos.x + x;
         newY = pos.y + y
@@ -120,9 +133,9 @@ export default class RollProgress implements Digitalizer {
             newY = scope.isBounce() ? pos.y + y / 3 : (this.isLarger(newY, 0) ? 0 : maxDist.y)
         }
 
-        scope.setScrollDirection(deltaX > 0 ? -1 : deltaX < 0 ? 1 : 0,deltaY > 0 ? -1 : deltaY < 0 ? 1 : 0)
+        scope.setScrollDirection(deltaX > 0 ? -1 : deltaX < 0 ? 1 : 0, deltaY > 0 ? -1 : deltaY < 0 ? 1 : 0)
 
-        
+
         if (attrs.getState() === 1) {
             proxy.trigger('scroll:start', pos)
         }

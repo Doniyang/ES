@@ -18,10 +18,10 @@ export default class Axis {
      * @description y-coordiante
      */
     private axisY: number;
-   /**
-     * @type number
-     * @description z-coordiante
-     */
+    /**
+      * @type number
+      * @description z-coordiante
+      */
     private axisZ: number;
 
     constructor() {

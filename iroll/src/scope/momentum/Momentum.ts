@@ -1,4 +1,4 @@
-import { Direction } from "../../shared";
+import {Direction} from "../../shared";
 
 /**
  * @class Momentum
@@ -24,6 +24,7 @@ export default class Momentum {
      * @name deceleration
      */
     private deceleration: number
+
     /**
      * @constructor
      */
@@ -45,6 +46,7 @@ export default class Momentum {
     private durationCalculation(dist: number, speed: number) {
         return dist / speed
     }
+
     /**
      * @method getPeriod
      * @description get period
@@ -52,23 +54,26 @@ export default class Momentum {
     getPeriod(): number {
         return this.period
     }
+
     /**
      * @method setPeriod
-     * @param period 
+     * @param period
      */
     setPeriod(period: number): void {
         this.period = period
     }
+
     /**
      * @method getThreshold
      * @description get threshold value
-      */
+     */
     getThreshold(): number {
         return this.threshold
     }
+
     /**
      * @method setThreshold
-     * @param threshold 
+     * @param threshold
      */
     setThreshold(threshold: number): void {
         this.threshold = threshold

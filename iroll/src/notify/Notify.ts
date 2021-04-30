@@ -1,4 +1,5 @@
-import { ClassicEvent, Notifier } from '@niyang-es/notify';
+import {ClassicEvent, Notifier} from '@niyang-es/notify';
+
 /**
  * @class Notify
  * @classdesc costom event
@@ -16,18 +17,18 @@ export default class Notify {
 
     /**
      * @method on
-     * @param name 
-     * @param fn 
+     * @param name
+     * @param fn
      * @description register a notification
      */
     public on(name: string, fn: ScrollKit.NotifyCallback<ClassicEvent>): void {
         this.notify.on(name, fn)
     }
-     
+
     /**
      * @method off
-     * @param name 
-     * @param fn 
+     * @param name
+     * @param fn
      * @description remove notification
      */
     public off(name: string, fn?: ScrollKit.NotifyCallback<ClassicEvent>): void {
@@ -36,8 +37,8 @@ export default class Notify {
 
     /**
      * @method  trigger
-     * @param e 
-     * @param args 
+     * @param e
+     * @param args
      * @description dispatch a notification
      */
     public trigger(e: string | ClassicEvent, ...args: Array<ScrollKit.NotifyParams>): void {

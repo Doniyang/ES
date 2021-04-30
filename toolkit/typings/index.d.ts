@@ -24,6 +24,8 @@ export declare const isNumber: Fortran<number>
 export declare const isNull: Fortran<null>
 export declare const isString: Fortran<string>
 export declare const isUndefined: Fortran<unknown>
+export declare const isObject:Fortran<Object> 
+export declare const isPlainObject:Fortran<Object>
 
 export declare class Broswer {
     static Core(): string

@@ -30,6 +30,7 @@ export default class Factory {
     setUseTransition(useTransition: boolean): void {
         this.useTransition = useTransition
     }
+
     setUseTransform(useTransform: boolean) {
         this.useTransform = useTransform
     }
@@ -38,7 +39,7 @@ export default class Factory {
         this.HWCompositing = HWCompositing
     }
 
-    build(scope: Scope):RollDigitalizer {
+    build(scope: Scope): RollDigitalizer {
         return this.useTransition ? new Transition(scope, this.roll()) : new Animation(scope, this.roll(), this.notify)
     }
 }

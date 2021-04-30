@@ -1,23 +1,24 @@
-import { requestAnimationFrame, PrefixStyle,Circular, isString } from '@niyang-es/toolkit';
+import {requestAnimationFrame, PrefixStyle, Circular, isString} from '@niyang-es/toolkit';
 import Scope from '../../scope/Scope';
 import RollDigitalizer from '../RollDigitalizer';
 import Roll from '../Roll';
 import Variate from '../Variate';
-import { ToolKit } from '../../shared';
-export default class Transition extends Roll implements RollDigitalizer{
+import {ToolKit} from '../../shared';
+
+export default class Transition extends Roll implements RollDigitalizer {
     /**
      * @constructor
-     * @param scope 
-     * @param roll 
+     * @param scope
+     * @param roll
      */
-    constructor(scope:Scope,roll:Variate) {
-        super(scope,roll);
+    constructor(scope: Scope, roll: Variate) {
+        super(scope, roll);
     }
-    
+
     /**
      * @method duration
-     * @param time 
-     * @param scrollStyle 
+     * @param time
+     * @param scrollStyle
      * @description the animation finish time
      */
     private duration(time: number = 0, scrollStyle: CSSStyleDeclaration) {
@@ -38,48 +39,52 @@ export default class Transition extends Roll implements RollDigitalizer{
             });
         }
     }
+
     /**
      * @method animate
-     * @param style 
-     * @param scrollStyle 
+     * @param style
+     * @param scrollStyle
      * @description set transition animation
-     */ 
+     */
     private animate(style: string, scrollStyle: CSSStyleDeclaration) {
         let transitionTimingFunction: string = PrefixStyle.style('transition-timing-function');
         scrollStyle.setProperty(transitionTimingFunction, style)
         scrollStyle.setProperty('transition-timing-function', style)
     }
+
     /**
      * @method scrollTo
-     * @param x 
-     * @param y 
-     * @param time 
-     * @param easing 
+     * @param x
+     * @param y
+     * @param time
+     * @param easing
      * @description scroll to some pont with animation
      */
-    scrollTo(x: number, y: number, time: number,easing:string): void {
-        let scrollStyle:CSSStyleDeclaration = this.getElement().style;
-        let easingStyle = isString(easing)?easing:this.getAnimation()
+    scrollTo(x: number, y: number, time: number, easing: string): void {
+        let scrollStyle: CSSStyleDeclaration = this.getElement().style;
+        let easingStyle = isString(easing) ? easing : this.getAnimation()
         this.setState(1);
         this.duration(time, scrollStyle)
         this.animate(easingStyle, scrollStyle);
         this.translate(x, y);
     }
+
     /**
      * @method stop
      * @description stop
      */
-    stop():void{
+    stop(): void {
         let pos = this.getComputedPosition();
         this.duration(0, this.getElement().style);
         this.translate(pos.x, pos.y);
         this.setState(0);
     }
+
     /**
      * @method getAnimation
      * @description get default animation
      */
-    getAnimation():string{
+    getAnimation(): string {
         return (new Circular()).style()
     }
-} 
+}
