@@ -13,8 +13,8 @@ export default class Animation extends Roll {
      * @param roll
      * @param notify
      */
-    constructor(scope, roll, notify) {
-        super(scope, roll);
+    constructor(scope, vialog, notify) {
+        super(scope, vialog);
         this.rafId = 0;
         this.rafTime = 0;
         this.notify = notify;

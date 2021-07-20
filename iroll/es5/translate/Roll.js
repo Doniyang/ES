@@ -9,15 +9,15 @@ export default class Roll {
      * @param scope
      * @param roll
      */
-    constructor(scope, roll) {
-        this.roll = roll;
+    constructor(scope, vialog) {
+        this.vialog = vialog;
         this.state = 0;
         this.scope = scope;
     }
     /**
      * @method getElement
      * @returns root element
-    */
+     */
     getElement() {
         return this.scope.getScrollElement();
     }
@@ -47,7 +47,7 @@ export default class Roll {
      * @param y
      */
     translate(x, y) {
-        this.roll.translate(x, y, this.getElement().style);
+        this.vialog.translate(x, y, this.getElement().style);
         this.scope.setPosition(x, y);
     }
     ;
@@ -66,7 +66,7 @@ export default class Roll {
      * @returns {x,y}
      */
     getComputedPosition() {
-        return this.roll.getComputedPosition(this.getElement());
+        return this.vialog.getComputedPosition(this.getElement());
     }
     ;
     /**

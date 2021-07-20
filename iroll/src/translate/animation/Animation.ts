@@ -9,7 +9,7 @@ import Scope from "../../scope/Scope";
 import {DateKit} from "../../shared";
 import RollDigitalizer from "../RollDigitalizer";
 import Roll from "../Roll";
-import Variate from "../Variate";
+import Vialog from "../Vialog";
 
 export default class Animation extends Roll implements RollDigitalizer {
     /**
@@ -33,8 +33,8 @@ export default class Animation extends Roll implements RollDigitalizer {
      * @param roll
      * @param notify
      */
-    constructor(scope: Scope, roll: Variate, notify: Notify) {
-        super(scope, roll);
+    constructor(scope: Scope, vialog: Vialog, notify: Notify) {
+        super(scope, vialog);
         this.rafId = 0
         this.rafTime = 0;
         this.notify = notify;

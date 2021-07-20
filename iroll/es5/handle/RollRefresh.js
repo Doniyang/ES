@@ -1,5 +1,6 @@
 export default class RollRefresh {
-    constructor() { }
+    constructor() {
+    }
     isOutBoundary(prev, next) {
         return !(prev.x === next.x && prev.y === next.y);
     }

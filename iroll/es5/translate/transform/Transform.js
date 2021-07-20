@@ -4,7 +4,7 @@ export default class Transform {
         this.HWCompositing = HWCompositing;
     }
     isSupportPerspective() {
-        return PrefixStyle.has(PrefixStyle.style('perspective'));
+        return PrefixStyle.has(PrefixStyle.jsStyle('perspective')) || PrefixStyle.has('perspective');
     }
     isSupportQuicken() {
         return this.HWCompositing && this.isSupportPerspective();

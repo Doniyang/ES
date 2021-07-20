@@ -1,9 +1,10 @@
+import {PrefixStyle} from "@niyang-es/toolkit";
 import Scope from "../scope/Scope";
 import Deviation from "./deviation/Deviation";
 import Transform from "./transform/Transform";
 import Transition from "./transition/Transition";
-import Animation from './animation/Animation'
-import Variate from "./Variate";
+import Animation from './animation/Animation';
+import Vialog from "./Vialog";
 import Notify from "../notify/Notify";
 import RollDigitalizer from "./RollDigitalizer";
 
@@ -22,11 +23,19 @@ export default class Factory {
         this.HWCompositing = true
         this.notify = notify
     }
-
-    private roll(): Variate {
-        return this.useTransform ? new Transform(this.HWCompositing) : new Deviation()
+    
+    private isSupportTransform():boolean{
+        return (PrefixStyle.has(PrefixStyle.jsStyle('transform')) ||PrefixStyle.has('transform')) && this.useTransform;
     }
 
+    private isSupportTransition():boolean{
+        return (PrefixStyle.has(PrefixStyle.jsStyle('transition'))||PrefixStyle.has('transition')) && this.useTransition;
+    }
+
+    private vialog(): Vialog {
+        return this.isSupportTransform() ? new Transform(this.HWCompositing) : new Deviation()
+    }
+     
     setUseTransition(useTransition: boolean): void {
         this.useTransition = useTransition
     }
@@ -40,6 +49,6 @@ export default class Factory {
     }
 
     build(scope: Scope): RollDigitalizer {
-        return this.useTransition ? new Transition(scope, this.roll()) : new Animation(scope, this.roll(), this.notify)
+        return this.isSupportTransition() ? new Transition(scope, this.vialog()) : new Animation(scope, this.vialog(), this.notify)
     }
 }

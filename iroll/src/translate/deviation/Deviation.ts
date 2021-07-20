@@ -1,8 +1,7 @@
-import Variate from "../Variate";
+import Vialog from "../Vialog";
 
-export default class Deviation implements Variate {
-    constructor() {
-    }
+export default class Deviation implements Vialog {
+    constructor() {}
 
     getComputedPosition(el: HTMLElement): ScrollKit.Point {
         let marix: CSSStyleDeclaration = window.getComputedStyle(el, null);

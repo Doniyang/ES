@@ -7,8 +7,8 @@ export default class Transition extends Roll {
      * @param scope
      * @param roll
      */
-    constructor(scope, roll) {
-        super(scope, roll);
+    constructor(scope, vialog) {
+        super(scope, vialog);
     }
     /**
      * @method duration

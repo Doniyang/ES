@@ -5,6 +5,7 @@ export { default as isFunction } from './is/isFunction';
 export { default as isNumber } from './is/isNumber';
 export { default as isNull } from './is/isNull';
 export { default as isString } from './is/isString';
+export { default as isEmptyString } from './is/isEmptyString';
 export { default as isUndefined } from './is/isUndefined';
 export { default as isObject } from './is/isObject';
 export { default as isPlainObject } from './is/isPlainObject';
@@ -28,3 +29,5 @@ export { default as LinkedQueue } from './queue/linked/LinkedQueue';
 export { default as requestAnimationFrame } from './fps/requestAnimationFrame';
 export { default as cancelAnimationFrame } from './fps/cancelAnimationFrame';
 
+export { default as assign } from './helpers/assign';
+export { default as ensure } from './helpers/ensure';

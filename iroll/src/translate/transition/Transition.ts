@@ -2,7 +2,7 @@ import {requestAnimationFrame, PrefixStyle, Circular, isString} from '@niyang-es
 import Scope from '../../scope/Scope';
 import RollDigitalizer from '../RollDigitalizer';
 import Roll from '../Roll';
-import Variate from '../Variate';
+import Vialog from '../Vialog';
 import {ToolKit} from '../../shared';
 
 export default class Transition extends Roll implements RollDigitalizer {
@@ -11,8 +11,8 @@ export default class Transition extends Roll implements RollDigitalizer {
      * @param scope
      * @param roll
      */
-    constructor(scope: Scope, roll: Variate) {
-        super(scope, roll);
+    constructor(scope: Scope, vialog: Vialog) {
+        super(scope, vialog);
     }
 
     /**

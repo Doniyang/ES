@@ -1,10 +1,10 @@
-import {isString, isNumber, isBoolean, PrefixStyle, Circular, isUndefined} from "@niyang-es/toolkit";
+import {isString, isNumber, isBoolean, isUndefined} from "@niyang-es/toolkit";
 import RollProxy from "../translate/RollProxy";
 import Scope from "../scope/Scope";
 import Context from "./Context";
-import Notify from "src/notify/Notify";
-import Factory from "src/translate/Factory";
-import {ToolKit} from "src/shared";
+import Notify from "../notify/Notify";
+import Factory from "../translate/Factory";
+import {ToolKit} from "../shared";
 
 
 export default class IRoll {
@@ -86,7 +86,7 @@ export default class IRoll {
         }
 
         if (isNumber(options.eventPassthrough)) {
-            this.scope.setScrollMode(options.eventPassthrough)
+            this.scope.setScrollPreventState(options.eventPassthrough)
         }
 
         if (isNumber(options.directionLockThreshold)) {
@@ -153,11 +153,11 @@ export default class IRoll {
         return this.mouseWheel
     }
 
-    private addEventListener(el: HTMLElement, type: string, fn: EventListenerOrEventListenerObject, capture: boolean) {
+    private addEventListener(el: HTMLElement, type: string, fn: EventListenerOrEventListenerObject, capture?: boolean|AddEventListenerOptions) {
         el.addEventListener(type, fn, capture);
     }
 
-    private removeEventListener(el: HTMLElement, type: string, fn: EventListenerOrEventListenerObject, capture: boolean) {
+    private removeEventListener(el: HTMLElement, type: string, fn: EventListenerOrEventListenerObject, capture?: boolean | EventListenerOptions) {
         el.removeEventListener(type, fn, capture)
     }
 
@@ -275,22 +275,23 @@ export default class IRoll {
      * addDOMEvents
      */
     private addEvents() {
-        this.initEvents(this.addEventListener)
+        this.makeEvents(this.addEventListener,true)
     }
 
     /**
      * removeDOMEvents
      */
     private removeEvents() {
-        this.initEvents(this.removeEventListener)
+        this.makeEvents(this.removeEventListener,false)
     }
 
     /**
      * makeDOMEvents
      */
-    private initEvents(listener: Function) {
+    private makeEvents(listener: ScrollKit.EventListener,enroll:boolean) {
         const rootElement: HTMLElement = this.scope.getWrapElement();
         const target: HTMLElement | Window = this.bindToWrapper ? rootElement : window;
+        let captureOptions:AddEventListenerOptions = {capture:false}
         listener(window, 'orientationchange', this)
         listener(window, 'resize', this)
 
@@ -310,10 +311,11 @@ export default class IRoll {
          *  touch
          * */
         if (this.isSupportTouch()) {
-            listener(rootElement, 'touchstart', this)
-            listener(target, 'touchmove', this)
-            listener(target, 'touchcancel', this)
-            listener(target, 'touchend', this)
+            if(enroll){captureOptions.passive = false}
+            listener(rootElement, 'touchstart', this,captureOptions)
+            listener(target, 'touchmove', this,captureOptions)
+            listener(target, 'touchcancel', this,captureOptions)
+            listener(target, 'touchend', this,captureOptions)
         }
 
         if (this.isWheelEnabled()) {
@@ -352,4 +354,13 @@ export default class IRoll {
     public scrollTo(x: number, y: number, time: number, ease: string | ScrollKit.Algorithm) {
         this.rollProxy.scrollTo(x, y, time, ease);
     }
+
+    /**
+     * destory
+     */
+    public destory() {
+        this.removeEvents();
+        this.context.destroy();
+    } 
+
 }

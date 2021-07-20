@@ -2,9 +2,9 @@ import { isString, isNumber, isBoolean, isUndefined } from "@niyang-es/toolkit";
 import RollProxy from "../translate/RollProxy";
 import Scope from "../scope/Scope";
 import Context from "./Context";
-import Notify from "src/notify/Notify";
-import Factory from "src/translate/Factory";
-import { ToolKit } from "src/shared";
+import Notify from "../notify/Notify";
+import Factory from "../translate/Factory";
+import { ToolKit } from "../shared";
 export default class IRoll {
     constructor(wrapper, options) {
         this.preventDefault = true;
@@ -60,7 +60,7 @@ export default class IRoll {
             this.scope.setProbe(options.probe);
         }
         if (isNumber(options.eventPassthrough)) {
-            this.scope.setScrollMode(options.eventPassthrough);
+            this.scope.setScrollPreventState(options.eventPassthrough);
         }
         if (isNumber(options.directionLockThreshold)) {
             this.scope.setDirectionLockThreshold(options.directionLockThreshold);
@@ -214,20 +214,21 @@ export default class IRoll {
      * addDOMEvents
      */
     addEvents() {
-        this.initEvents(this.addEventListener);
+        this.makeEvents(this.addEventListener, true);
     }
     /**
      * removeDOMEvents
      */
     removeEvents() {
-        this.initEvents(this.removeEventListener);
+        this.makeEvents(this.removeEventListener, false);
     }
     /**
      * makeDOMEvents
      */
-    initEvents(listener) {
+    makeEvents(listener, enroll) {
         const rootElement = this.scope.getWrapElement();
         const target = this.bindToWrapper ? rootElement : window;
+        let captureOptions = { capture: false };
         listener(window, 'orientationchange', this);
         listener(window, 'resize', this);
         if (this.scope.isClickable()) {
@@ -246,10 +247,13 @@ export default class IRoll {
          *  touch
          * */
         if (this.isSupportTouch()) {
-            listener(rootElement, 'touchstart', this);
-            listener(target, 'touchmove', this);
-            listener(target, 'touchcancel', this);
-            listener(target, 'touchend', this);
+            if (enroll) {
+                captureOptions.passive = false;
+            }
+            listener(rootElement, 'touchstart', this, captureOptions);
+            listener(target, 'touchmove', this, captureOptions);
+            listener(target, 'touchcancel', this, captureOptions);
+            listener(target, 'touchend', this, captureOptions);
         }
         if (this.isWheelEnabled()) {
             listener(rootElement, 'wheel', this);
@@ -281,5 +285,12 @@ export default class IRoll {
      */
     scrollTo(x, y, time, ease) {
         this.rollProxy.scrollTo(x, y, time, ease);
+    }
+    /**
+     * destory
+     */
+    destory() {
+        this.removeEvents();
+        this.context.destroy();
     }
 }

@@ -34,10 +34,10 @@ export default class Scope {
         return this.getScrollElement().offsetWidth;
     }
     /**
-      * @method getScrollOffsetHeight
-      * @description get offset height of scroll element
-      * @returns number
-      */
+     * @method getScrollOffsetHeight
+     * @description get offset height of scroll element
+     * @returns number
+     */
     getScrollOffsetHeight() {
         return this.getScrollElement().offsetHeight;
     }
@@ -80,16 +80,16 @@ export default class Scope {
         return this.getClientHeight() - this.getScrollOffsetHeight();
     }
     /**
-    * @method getClientWidth
-    * @returns number
-    */
+     * @method getClientWidth
+     * @returns number
+     */
     getClientWidth() {
         return this.rootElement.clientWidth;
     }
     /**
-      * @method getClientWidth
-      * @returns number
-      */
+     * @method getClientWidth
+     * @returns number
+     */
     getClientHeight() {
         return this.rootElement.clientHeight;
     }
@@ -101,7 +101,10 @@ export default class Scope {
      * @description compute momentum  of horizontal
      */
     getComputedHorizontalMomentum(start, duration, pos) {
-        return this.isHScroll() ? this.momentum.getComputedMomentum(this.getPosition().x, start, duration, this.getMaxScrollWidth(), this.isBounce() ? this.getClientWidth() : 0) : { destination: pos, duration: 0 };
+        return this.isHScroll() ? this.momentum.getComputedMomentum(this.getPosition().x, start, duration, this.getMaxScrollWidth(), this.isBounce() ? this.getClientWidth() : 0) : {
+            destination: pos,
+            duration: 0
+        };
     }
     /**
      * @method getComputedVerticalMomentum
@@ -111,7 +114,10 @@ export default class Scope {
      * @description compute momentum  of vertical
      */
     getComputedVerticalMomentum(start, duration, pos) {
-        return this.isVScroll() ? this.momentum.getComputedMomentum(this.getPosition().y, start, duration, this.getMaxScrollHeight(), this.isBounce() ? this.getClientHeight() : 0) : { destination: pos, duration: 0 };
+        return this.isVScroll() ? this.momentum.getComputedMomentum(this.getPosition().y, start, duration, this.getMaxScrollHeight(), this.isBounce() ? this.getClientHeight() : 0) : {
+            destination: pos,
+            duration: 0
+        };
     }
     /**
      * @method setContentSpecifiedIndex
@@ -310,9 +316,9 @@ export default class Scope {
         return this.rootElement;
     }
     /**
-    * @method getScrollElement
-    * @returns this scroll element
-    */
+     * @method getScrollElement
+     * @returns this scroll element
+     */
     getScrollElement() {
         return this.rootElement.children.item(this.specifiedIndex);
     }

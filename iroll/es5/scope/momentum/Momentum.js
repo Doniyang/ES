@@ -39,7 +39,7 @@ export default class Momentum {
     /**
      * @method getThreshold
      * @description get threshold value
-      */
+     */
     getThreshold() {
         return this.threshold;
     }

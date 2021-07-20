@@ -23,9 +23,11 @@ export declare const isFunction: Fortran<Function>
 export declare const isNumber: Fortran<number>
 export declare const isNull: Fortran<null>
 export declare const isString: Fortran<string>
+export declare const isEmptyString: Fortran<string>
 export declare const isUndefined: Fortran<unknown>
-export declare const isObject:Fortran<Object> 
-export declare const isPlainObject:Fortran<Object>
+export declare const isObject: Fortran<Object>
+export declare const isPlainObject: Fortran<Object>
+
 
 export declare class Broswer {
     static Core(): string
@@ -34,7 +36,7 @@ export declare class Broswer {
 export declare class PrefixStyle {
     static prefix(): StylePrefix
     static style(style: string): string
-    static jsStyle(style: string):string
+    static jsStyle(style: string): string
     static has(style: string): boolean
 }
 export declare class Backone implements Factory {
@@ -87,5 +89,10 @@ export declare class LinkedQueue<T> implements Queue<T>{
     getFront(): T;
     getRear(): T;
 }
-export declare function requestAnimationFrame(rafCallback: FrameRequestCallback): number
-export declare function cancelAnimationFrame(rafId: number): void
+export declare function requestAnimationFrame(rafCallback: FrameRequestCallback): number;
+export declare function cancelAnimationFrame(rafId: number): void;
+export declare function assign(target: object, ...source: Array<object>): object;
+export declare function ensure(value: any, def: Array<any>): Array<any>;
+
+
+

@@ -1,7 +1,7 @@
 import {PrefixStyle} from "@niyang-es/toolkit";
-import Variate from "../Variate";
+import Vialog from "../Vialog";
 
-export default class Transform implements Variate {
+export default class Transform implements Vialog {
 
     private HWCompositing: boolean;
 
@@ -10,7 +10,7 @@ export default class Transform implements Variate {
     }
 
     private isSupportPerspective(): boolean {
-        return PrefixStyle.has(PrefixStyle.style('perspective'))
+        return PrefixStyle.has(PrefixStyle.jsStyle('perspective'))||PrefixStyle.has('perspective')
     }
 
     private isSupportQuicken(): boolean {

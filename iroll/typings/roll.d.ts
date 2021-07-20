@@ -1,7 +1,7 @@
 declare namespace ScrollKit {
     export type ElementWrapper = string | HTMLElement
     export type NotifyParams = number | string | boolean | object
-
+       
     export interface Exception {
         [key: string]: any
         tagName?: RegExp
@@ -70,4 +70,10 @@ declare namespace ScrollKit {
     export interface NotifyCallback<T> {
         (evt: T, ...args: Array<NotifyParams>): void
     }
+
+    export interface EventListener{
+        (el: HTMLElement|window, type: string, fn: any, capture?: any):void;
+    }
+
+
 }

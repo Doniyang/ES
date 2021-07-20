@@ -30,7 +30,11 @@
     "url": "https://github.com/Doniyang/ES/issues"
   },
   "homepage": "https://github.com/Doniyang/ES#readme",
+  "peerDependencies": {
+    "@niyang-es/toolkit": "latest"
+  },
   "devDependencies": {
+    "@niyang-es/toolkit": "^1.0.8",
     "typescript": "^4.0.5"
   }
 }

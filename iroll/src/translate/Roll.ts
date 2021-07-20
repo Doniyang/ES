@@ -1,5 +1,5 @@
 import Scope from "../scope/Scope";
-import Variate from "./Variate";
+import Vialog from "./Vialog";
 
 /**
  * @class Roll
@@ -11,7 +11,7 @@ export default abstract class Roll {
      * @name roll
      * @type Variate
      */
-    private roll: Variate;
+    private vialog: Vialog;
 
     /**
      * @description roll state
@@ -30,8 +30,8 @@ export default abstract class Roll {
      * @param scope
      * @param roll
      */
-    constructor(scope: Scope, roll: Variate) {
-        this.roll = roll
+    constructor(scope: Scope, vialog: Vialog) {
+        this.vialog = vialog
         this.state = 0
         this.scope = scope;
     }
@@ -82,7 +82,7 @@ export default abstract class Roll {
      * @param y
      */
     translate(x: number, y: number): void {
-        this.roll.translate(x, y, this.getElement().style);
+        this.vialog.translate(x, y, this.getElement().style);
         this.scope.setPosition(x, y);
     };
 
@@ -101,7 +101,7 @@ export default abstract class Roll {
      * @returns {x,y}
      */
     getComputedPosition(): ScrollKit.Point {
-        return this.roll.getComputedPosition(this.getElement());
+        return this.vialog.getComputedPosition(this.getElement());
     };
 
     /**
