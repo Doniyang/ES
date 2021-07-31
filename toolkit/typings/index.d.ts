@@ -93,6 +93,4 @@ export declare function requestAnimationFrame(rafCallback: FrameRequestCallback)
 export declare function cancelAnimationFrame(rafId: number): void;
 export declare function assign(target: object, ...source: Array<object>): object;
 export declare function ensure(value: any, def: Array<any>): Array<any>;
-
-
-
+export declare function group(ary:Array<any>,key:string,sort:CompareCallback):Array<Array<any>>;
