@@ -1,6 +1,6 @@
 import { ClassicEvent, Notifier } from "typings/@niyang-es/notify"
 
-export * from "./roll"
+export * from "./roll.d.ts"
 
 declare class Feature {
     private mode: number;

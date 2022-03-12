@@ -74,6 +74,9 @@ declare namespace ScrollKit {
     export interface EventListener{
         (el: HTMLElement|window, type: string, fn: any, capture?: any):void;
     }
-
+    
+    export interface  Motion{
+        (x:number,y:number):void
+    }
 
 }

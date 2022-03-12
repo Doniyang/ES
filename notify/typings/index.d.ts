@@ -46,11 +46,27 @@ export declare class ClassicEvent {
 }
 
 export declare class Notifier {
-    private map: Map<string, Set<NotifierKit.NotifyEventCallback<ClassicEvent>>>;
-    on(name: string, fn: NotifierKit.NotifyEventCallback<ClassicEvent>): void;
-    off(name: string, fn: NotifierKit.NotifyEventCallback<ClassicEvent>): void;
-    has(name: string, fn: NotifierKit.NotifyEventCallback<ClassicEvent>): boolean;
+    private map: Map<string, Stack<ClassicEvent>>;
+    on(name: string, fn: NotifierKit.NotifyEventCallback<ClassicEvent>,options?:boolean|EventKit.AddEventListenerParms): void ;
+    off(name: string, fn?: NotifierKit.NotifyEventCallback<ClassicEvent>,options?:boolean|EventKit.AddEventListenerParms): void 
+    has(name: string, fn?: NotifierKit.NotifyEventCallback<ClassicEvent>,options?:boolean|EventKit.AddEventListenerParms);
     clean(): void
-    notify(name: string|ClassicEvent, ...args: Array<NotifierKit.NotiyParams>): void
+    notify(name: string | ClassicEvent, ...args: Array<NotifierKit.NotiyParams>): void
     new(): Notifier;
+}
+
+export declare class Target {
+    new(): Target
+    execute(evt: T, ...args: Array<NotifierKit.NotiyParams>): void;
+    equal(target: this): boolean
+    hash(): number
+}
+
+export  class Stack<T>{
+    new():Stack<T>
+   has(target:Target<T>):boolean 
+   add(target:Target<T>):void
+   delete(target:Target<T>):void
+   clear():void
+   forEach(evt:T,args: Array<NotifierKit.NotiyParams>,filter:EventKit.EventFilter<T>):void
 }

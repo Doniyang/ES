@@ -1,35 +1,46 @@
 import Notification from './Notification';
 import ClassicEvent from '../event/ClassicEvent';
+import Stack from './Stack';
+import Target from './Target';
+import { isBoolean } from 'node_modules/@niyang-es/toolkit/typings/index';
 export default class Notifier extends Notification {
     constructor() {
         super();
         this.map = new Map();
+    }
+    parse(options) {
+        if (isBoolean(options)) {
+            return { capture: options };
+        }
+        else {
+            return options;
+        }
     }
     /**
      * add event listener
      * @param name
      * @param fn
      */
-    on(name, fn) {
+    on(name, fn, options) {
         let set = this.map.get(name);
         if (set === undefined) {
-            this.map.set(name, set = new Set());
+            this.map.set(name, set = new Stack());
         }
-        set.add(fn);
+        set.add(new Target(fn, this.parse(options)));
     }
     /**
      * remove event listener
      * @param name
      * @param fn
      */
-    off(name, fn) {
+    off(name, fn, options) {
         if (fn === undefined) {
             this.map.delete(name);
             return;
         }
         const set = this.map.get(name);
         if (!!set) {
-            set.delete(fn);
+            set.delete(new Target(fn, this.parse(options)));
         }
     }
     /**
@@ -37,30 +48,25 @@ export default class Notifier extends Notification {
      * @param name
      * @param fn
      */
-    has(name, fn) {
-        if (fn) {
-            if (this.map.has(name)) {
-                const set = this.map.get(name);
-                if (set === undefined) {
-                    return false;
-                }
-                return set.has(fn);
+    has(name, fn, options) {
+        var _a;
+        if (this.map.has(name)) {
+            if (fn) {
+                return !!((_a = this.map.get(name)) === null || _a === void 0 ? void 0 : _a.has(new Target(fn, this.parse(options))));
             }
             else {
-                return false;
+                return true;
             }
         }
         else {
-            return this.map.has(name);
+            return false;
         }
     }
     /**
     * clear all event
     */
     clean() {
-        this.map.forEach((set) => {
-            set.clear();
-        });
+        this.map.forEach((set) => { set.clear(); });
         this.map.clear();
     }
     /**
@@ -83,11 +89,7 @@ export default class Notifier extends Notification {
      * @param fnset
      * @param args
      */
-    dispatch(evt, fnset, args) {
-        for (let fn of fnset) {
-            fn.apply(this, [evt, ...args]);
-            if (evt.isStopPropagation)
-                break;
-        }
+    dispatch(evt, stack, args) {
+        stack.forEach(evt, args, e => !e.isStopPropagation);
     }
 }

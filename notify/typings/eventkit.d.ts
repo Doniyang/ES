@@ -9,4 +9,9 @@ declare namespace EventKit {
         once?: boolean
         passive?: boolean
     }
+    
+   export interface EventFilter<T>{
+       (target:T):boolean
+   } 
+
 }

@@ -31,3 +31,4 @@ export { default as cancelAnimationFrame } from './fps/cancelAnimationFrame';
 
 export { default as assign } from './helpers/assign';
 export { default as ensure } from './helpers/ensure';
+export { default as pixel } from './helpers/pixel';

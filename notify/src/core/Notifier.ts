@@ -1,59 +1,64 @@
 import Notification from './Notification'
 import ClassicEvent from '../event/ClassicEvent';
+import Stack from './Stack';
+import Target from './Target';
+import { isBoolean } from 'node_modules/@niyang-es/toolkit/typings/index';
 
 export default class Notifier extends Notification<ClassicEvent> {
-  private map: Map<string, Set<NotifierKit.NotifyEventCallback<ClassicEvent>>>;
+  private map: Map<string, Stack<ClassicEvent>>;
   constructor() {
     super();
     this.map = new Map();
+  }
+
+  private parse(options?:boolean|EventKit.AddEventListenerParms):EventKit.AddEventListenerParms|undefined{
+     if(isBoolean(options)){
+       return {capture:options}
+     } else{
+       return options
+     }   
   }
   /**
    * add event listener
    * @param name 
    * @param fn  
    */
-  on(name: string, fn: NotifierKit.NotifyEventCallback<ClassicEvent>): void {
-    let set: Set<NotifierKit.NotifyEventCallback<ClassicEvent>> | undefined = this.map.get(name);
-    if (set === undefined) { this.map.set(name, set = new Set<NotifierKit.NotifyEventCallback<ClassicEvent>>()) }
-    (set as Set<NotifierKit.NotifyEventCallback<ClassicEvent>>).add(fn)
+  on(name: string, fn: NotifierKit.NotifyEventCallback<ClassicEvent>,options?:boolean|EventKit.AddEventListenerParms): void {
+    let set: Stack<ClassicEvent>| undefined = this.map.get(name);
+    if (set === undefined) { this.map.set(name, set = new Stack<ClassicEvent>()) }
+    set.add(new Target<ClassicEvent>(fn,this.parse(options)))     
   }
   /**
    * remove event listener
    * @param name 
    * @param fn
    */
-  off(name: string, fn?: NotifierKit.NotifyEventCallback<ClassicEvent>): void {
+  off(name: string, fn?: NotifierKit.NotifyEventCallback<ClassicEvent>,options?:boolean|EventKit.AddEventListenerParms): void {
     if (fn === undefined) { this.map.delete(name); return; }
-    const set: Set<NotifierKit.NotifyEventCallback<ClassicEvent>> | undefined = this.map.get(name)
-    if (!!set) {
-      (set as Set<NotifierKit.NotifyEventCallback<ClassicEvent>>).delete((fn as NotifierKit.NotifyEventCallback<ClassicEvent>))
-    }
+    const set: Stack<ClassicEvent> | undefined = this.map.get(name)
+    if (!!set) {set.delete(new Target(fn,this.parse(options)))}
   }
   /**
    * event listener or not
    * @param name 
    * @param fn 
    */
-  has(name: string, fn?: NotifierKit.NotifyEventCallback<ClassicEvent>): boolean {
-    if (fn) {
-      if (this.map.has(name)) {
-        const set: Set<NotifierKit.NotifyEventCallback<ClassicEvent>> | undefined = this.map.get(name)
-        if (set === undefined) { return false }
-        return (set as Set<NotifierKit.NotifyEventCallback<ClassicEvent>>).has(fn);
-      } else {
-        return false
-      }
-    } else {
-      return this.map.has(name);
+  has(name: string, fn?: NotifierKit.NotifyEventCallback<ClassicEvent>,options?:boolean|EventKit.AddEventListenerParms): boolean {
+    if(this.map.has(name)){
+          if(fn){
+              return !!this.map.get(name)?.has(new Target(fn,this.parse(options)))  
+          }else{
+            return true
+          }
+    } else{
+      return false
     }
   }
   /**
   * clear all event
   */
   clean(): void {
-    this.map.forEach((set: Set<NotifierKit.NotifyEventCallback<ClassicEvent>>) => {
-      set.clear()
-    })
+    this.map.forEach((set: Stack<ClassicEvent>) => {set.clear()})
     this.map.clear()
   }
   /**
@@ -64,9 +69,9 @@ export default class Notifier extends Notification<ClassicEvent> {
   notify(evt: string | ClassicEvent, ...args: Array<NotifierKit.NotiyParams>) {
     let event: ClassicEvent = ClassicEvent.ensure(this, evt)
     if (this.has(event.name)) {
-      let set: Set<NotifierKit.NotifyEventCallback<ClassicEvent>> | undefined = this.map.get(event.name)
+      let set: Stack<ClassicEvent> = this.map.get(event.name) as Stack<ClassicEvent> 
       if (!event.isStopImmediatePropagation) {
-        this.dispatch(event, set as Set<NotifierKit.NotifyEventCallback<ClassicEvent>>, args)
+        this.dispatch(event, set, args)
       }
     }
   }
@@ -76,11 +81,8 @@ export default class Notifier extends Notification<ClassicEvent> {
    * @param fnset 
    * @param args 
    */
-  dispatch(evt: ClassicEvent, fnset: Set<NotifierKit.NotifyEventCallback<ClassicEvent>>, args: Array<NotifierKit.NotiyParams>): void {
-    for (let fn of fnset) {
-      fn.apply(this, [evt, ...args])
-      if (evt.isStopPropagation) break;
-    }
+  dispatch(evt: ClassicEvent, stack:Stack<ClassicEvent>, args: Array<NotifierKit.NotiyParams>): void {
+    stack.forEach(evt,args,e=>!e.isStopPropagation)
   }
 
 }

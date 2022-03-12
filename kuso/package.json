@@ -1,0 +1,29 @@
+{
+  "name": "backdrop",
+  "version": "0.0.1",
+  "description": "a toolkit of background generator for web application",
+  "main": "dist/index.js",
+  "typings": "typings/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ts:init": "tsc --init",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Doniyang/ES.git",
+    "directory": "backdrop"
+  },
+  "keywords": [
+    "canvas"
+  ],
+  "author": "Niyang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Doniyang/ES/issues"
+  },
+  "homepage": "https://github.com/Doniyang/ES#readme",
+  "devDependencies": {
+    "typescript": "^4.6.2"
+  }
+}
