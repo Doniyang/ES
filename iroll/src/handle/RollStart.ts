@@ -1,7 +1,7 @@
 import Scope from "../scope/Scope";
 import {DateKit, EventKit, MouseButton} from '../shared'
 import Attribute from "../attribute/Attribute";
-import RollProxy from "../translate/RollProxy";
+import RollProxy from "../transform/RollProxy";
 import Digitalizer from "./Digitalizer";
 
 /**

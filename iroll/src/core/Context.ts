@@ -1,7 +1,7 @@
 import RollFactory from "../handle/RollFactory";
 import Attribute from "../attribute/Attribute";
 import Digitalizer from "../handle/Digitalizer";
-import RollProxy from "../translate/RollProxy";
+import RollProxy from "../transform/RollProxy";
 
 export default class Context {
     private attrs: Attribute;

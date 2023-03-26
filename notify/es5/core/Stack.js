@@ -31,11 +31,28 @@ export default class Stack {
         }
     }
     /**
+     *
+     * @param handler
+     * @param options
+     * @returns
+     */
+    includes(handler, options) {
+        return this.map.some(target => target.is(handler, options));
+    }
+    /**
+     * @description 删除
+     * @param handler
+     * @param options
+     */
+    remove(handler, options) {
+        this.map = this.map.filter(target => !target.is(handler, options));
+    }
+    /**
      * @description 剔除某个事件处理函数
      * @param target
      */
     delete(target) {
-        this.map = this.map.filter(a => target.equal(a) === false);
+        this.map = this.map.filter(a => !target.equal(a));
     }
     /**
      * @description 清空事件处理函数

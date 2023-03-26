@@ -77,7 +77,6 @@ export default class Scope {
         this.tapable = false
         this.wheel = new Wheel()
     }
-
     /**
      * @method getScrollOffsetWidth
      * @description get offset width of scroll element
@@ -601,6 +600,16 @@ export default class Scope {
      */
     getMouseWheelDirection(): number {
         return this.wheel.getWheelDirection()
+    }
+    /**
+     * 防止过界
+     * @param pos     
+     * @returns {x,y}
+     */
+    adjustPosition(pos:ScrollKit.Point):ScrollKit.Point{
+        pos.x = pos.x > 0 ? 0 : pos.x < this.getMaxScrollWidth() ? this.getMaxScrollWidth() : pos.x;
+		pos.y  = pos.y  > 0 ? 0 : pos.y  < this.getMaxScrollHeight() ? this.getMaxScrollHeight() : pos.y;
+        return pos
     }
 
 }

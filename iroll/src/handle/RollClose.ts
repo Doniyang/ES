@@ -1,6 +1,6 @@
 import Scope from "../scope/Scope";
 import Attribute from "../attribute/Attribute";
-import RollProxy from "../translate/RollProxy";
+import RollProxy from "../transform/RollProxy";
 import Digitalizer from "./Digitalizer";
 
 export default class RollClose implements Digitalizer {

@@ -67,6 +67,20 @@ export default class Target {
         return target.name === this.name && this.hash() === target.hash();
     }
     /**
+     * 判断是不是同一个target
+     * @param handler
+     * @param options
+     * @returns boolean
+     */
+    is(handler, options) {
+        let name = handler.name || '';
+        let passive = (options === null || options === void 0 ? void 0 : options.passive) || false;
+        let capture = (options === null || options === void 0 ? void 0 : options.capture) || true;
+        let once = (options === null || options === void 0 ? void 0 : options.once) || false;
+        let hashCode = Hash.code(handler.toString());
+        return this.name === name && this.hash() === hashCode && once === this.isOnlyOnce() && capture === this.forward() && passive === this.backward();
+    }
+    /**
      * @description 获取hash
      * @returns Number
      */

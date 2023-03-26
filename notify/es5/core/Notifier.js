@@ -2,7 +2,7 @@ import Notification from './Notification';
 import ClassicEvent from '../event/ClassicEvent';
 import Stack from './Stack';
 import Target from './Target';
-import { isBoolean } from 'node_modules/@niyang-es/toolkit/typings/index';
+import { isBoolean } from '@niyang-es/toolkit';
 export default class Notifier extends Notification {
     constructor() {
         super();
@@ -40,7 +40,7 @@ export default class Notifier extends Notification {
         }
         const set = this.map.get(name);
         if (!!set) {
-            set.delete(new Target(fn, this.parse(options)));
+            set.remove(fn, this.parse(options));
         }
     }
     /**
@@ -52,7 +52,7 @@ export default class Notifier extends Notification {
         var _a;
         if (this.map.has(name)) {
             if (fn) {
-                return !!((_a = this.map.get(name)) === null || _a === void 0 ? void 0 : _a.has(new Target(fn, this.parse(options))));
+                return !!((_a = this.map.get(name)) === null || _a === void 0 ? void 0 : _a.includes(fn, this.parse(options)));
             }
             else {
                 return true;

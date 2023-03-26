@@ -1,10 +1,10 @@
-import {isString, isNumber, isBoolean, isUndefined} from "@niyang-es/toolkit";
-import RollProxy from "../translate/RollProxy";
+import { isNumber, isBoolean, isUndefined} from "@niyang-es/toolkit";
+import { ClassicEvent } from '@niyang-es/notify';
+import RollProxy from "../transform/RollProxy";
 import Scope from "../scope/Scope";
 import Context from "./Context";
 import Notify from "../notify/Notify";
-import Factory from "../translate/Factory";
-import {ToolKit} from "../shared";
+import { ToolKit,DomKit } from "../shared";
 
 
 export default class IRoll {
@@ -12,7 +12,6 @@ export default class IRoll {
     private rollProxy: RollProxy;
     private context: Context;
     private notify: Notify;
-    private factory: Factory;
     private bindToWrapper: boolean
     private preventDefault: boolean
     private preventDefaultException: ScrollKit.Exception
@@ -30,23 +29,22 @@ export default class IRoll {
         this.stopPropagation = false
         this.mouseWheel = false
         this.notify = new Notify()
-        this.scope = new Scope(isString(wrapper) ? document.body.querySelector(wrapper as string) as HTMLElement : wrapper as HTMLElement);
+        this.scope = new Scope(DomKit.getElement(wrapper));
         this.rollProxy = new RollProxy(this.notify);
         this.context = new Context(this.rollProxy);
-        this.factory = new Factory(this.notify);
         this.merge(options);
         this.initializer()
     }
 
     private merge(options: ScrollKit.Options) {
         if (isBoolean(options.useTransition)) {
-            this.factory.setUseTransition(options.useTransition)
+            this.rollProxy.setUseTransition(options.useTransition)
         }
         if (isBoolean(options.useTransform)) {
-            this.factory.setUseTransform(options.useTransform)
+            this.rollProxy.setUseTransform(options.useTransform)
         }
         if (isBoolean(options.HWCompositing)) {
-            this.factory.setHWCompositing(options.HWCompositing)
+            this.rollProxy.setHWCompositing(options.HWCompositing)
         }
 
         if (isBoolean(options.tap)) {
@@ -332,7 +330,7 @@ export default class IRoll {
     }
 
     private initRoll() {
-        this.rollProxy.build(this.factory.build(this.scope))
+        this.rollProxy.build(this.scope)
     }
 
     /**
@@ -343,7 +341,34 @@ export default class IRoll {
         this.initRoll()
         this.scrollTo(this.context.getStartX(), this.context.getStartY(), 0, this.rollProxy.getAnimation())
     }
+    /**
+     * scrollToElement
+     */
+    public scrollToElement(el:ScrollKit.ElementWrapper,time:number,offsetX:ScrollKit.OffsetOption,offsetY:ScrollKit.OffsetOption,ease?:string|ScrollKit.Algorithm) {
+        el = DomKit.getElement(el)
+        
+        let pos:ScrollKit.Point =  DomKit.offset(el)
+        const wrapElement:HTMLElement = this.scope.getWrapElement()
+        const wrapOffset:ScrollKit.Point= DomKit.offset(wrapElement);
+        pos.x  -= wrapOffset.x
+        pos.y -= wrapOffset.y
 
+        if(offsetX === true){
+            offsetX = Math.round(el.offsetWidth / 2 - wrapElement.offsetWidth / 2);
+        }
+        
+        if(offsetY === true){
+            offsetY = Math.round(el.offsetHeight / 2 - wrapElement.offsetHeight / 2);
+        } 
+        
+        pos.x -= offsetX || 0;
+        pos.y -= offsetY || 0;
+        pos = this.scope.adjustPosition(pos);
+        
+        if(!ease){ ease = this.rollProxy.getAnimation() }
+        
+        this.scrollTo(pos.x,pos.y,time,ease)
+    }
     /**
      *
      * @param x
@@ -354,13 +379,33 @@ export default class IRoll {
     public scrollTo(x: number, y: number, time: number, ease: string | ScrollKit.Algorithm) {
         this.rollProxy.scrollTo(x, y, time, ease);
     }
-
+    /**
+     * 
+     * @param x 
+     * @param y 
+     */
+    public translate(x:number,y:number){
+        this.rollProxy.translate(x,y);
+    }
+    /**
+     * on
+     */
+     public on(name:string,fn:ScrollKit.NotifyCallback<ClassicEvent>) {
+        this.notify.on(name,fn)
+    }
+    
+    /**
+     * off
+    */
+    public off(name:string,fn:ScrollKit.NotifyCallback<ClassicEvent>) {
+        this.notify.off(name,fn)
+    }
     /**
      * destory
      */
     public destory() {
         this.removeEvents();
         this.context.destroy();
-    } 
+    }
 
 }

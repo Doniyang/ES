@@ -1,7 +1,8 @@
 declare namespace ScrollKit {
     export type ElementWrapper = string | HTMLElement
     export type NotifyParams = number | string | boolean | object
-       
+    export type OffsetOption = number | boolean
+         
     export interface Exception {
         [key: string]: any
         tagName?: RegExp

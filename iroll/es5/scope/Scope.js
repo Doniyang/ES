@@ -494,4 +494,14 @@ export default class Scope {
     getMouseWheelDirection() {
         return this.wheel.getWheelDirection();
     }
+    /**
+     * 防止过界
+     * @param pos
+     * @returns {x,y}
+     */
+    adjustPosition(pos) {
+        pos.x = pos.x > 0 ? 0 : pos.x < this.getMaxScrollWidth() ? this.getMaxScrollWidth() : pos.x;
+        pos.y = pos.y > 0 ? 0 : pos.y < this.getMaxScrollHeight() ? this.getMaxScrollHeight() : pos.y;
+        return pos;
+    }
 }

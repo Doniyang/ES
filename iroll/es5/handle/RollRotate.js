@@ -61,7 +61,6 @@ export default class RollRotate {
         }
         deltaX = this.calculate(deltaX, 1, scope.getMouseWheelDirection());
         deltaY = this.calculate(deltaY, 1, scope.getMouseWheelDirection());
-        ;
         if (!scope.isVScroll()) {
             deltaY = deltaY;
             deltaY = 0;

@@ -33,6 +33,6 @@ export default class Notify {
      * @description dispatch a notification
      */
     trigger(e, ...args) {
-        this.notify.notify(e, args);
+        this.notify.notify(e, ...args);
     }
 }

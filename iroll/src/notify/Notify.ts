@@ -42,6 +42,6 @@ export default class Notify {
      * @description dispatch a notification
      */
     public trigger(e: string | ClassicEvent, ...args: Array<ScrollKit.NotifyParams>): void {
-        this.notify.notify(e, args)
+        this.notify.notify(e, ...args)
     }
 }

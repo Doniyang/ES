@@ -22,8 +22,8 @@ export default class Target<T>{
     constructor(handler:NotifierKit.NotifyEventCallback<T>,options?:EventKit.AddEventListenerParms){
       this.handler = handler
       this.passive = options?.passive||false
-       this.capture = options?.capture||true
-       this.once = options?.once||false
+      this.capture = options?.capture||true
+      this.once = options?.once||false
     }
     /**
      * @description 获取处理函数名
@@ -68,6 +68,22 @@ export default class Target<T>{
     equal(target:this){
         return target.name === this.name   && this.hash()===target.hash()
     }
+    /**
+     * 判断是不是同一个target
+     * @param handler 
+     * @param options 
+     * @returns boolean
+     */  
+    is(handler:NotifierKit.NotifyEventCallback<T>,options?:EventKit.AddEventListenerParms):boolean{
+          let name = handler.name||''
+          let passive = options?.passive||false
+          let capture = options?.capture||true
+          let once = options?.once||false
+          let hashCode = Hash.code(handler.toString())  
+          
+          return this.name === name && this.hash() ===hashCode && once ===this.isOnlyOnce() && capture === this.forward() && passive === this.backward()
+    }
+    
      /**
       * @description 获取hash
       * @returns Number

@@ -1,10 +1,9 @@
-import { isString, isNumber, isBoolean, isUndefined } from "@niyang-es/toolkit";
-import RollProxy from "../translate/RollProxy";
+import { isNumber, isBoolean, isUndefined } from "@niyang-es/toolkit";
+import RollProxy from "../transform/RollProxy";
 import Scope from "../scope/Scope";
 import Context from "./Context";
 import Notify from "../notify/Notify";
-import Factory from "../translate/Factory";
-import { ToolKit } from "../shared";
+import { ToolKit, DomKit } from "../shared";
 export default class IRoll {
     constructor(wrapper, options) {
         this.preventDefault = true;
@@ -15,22 +14,21 @@ export default class IRoll {
         this.stopPropagation = false;
         this.mouseWheel = false;
         this.notify = new Notify();
-        this.scope = new Scope(isString(wrapper) ? document.body.querySelector(wrapper) : wrapper);
+        this.scope = new Scope(DomKit.getElement(wrapper));
         this.rollProxy = new RollProxy(this.notify);
         this.context = new Context(this.rollProxy);
-        this.factory = new Factory(this.notify);
         this.merge(options);
         this.initializer();
     }
     merge(options) {
         if (isBoolean(options.useTransition)) {
-            this.factory.setUseTransition(options.useTransition);
+            this.rollProxy.setUseTransition(options.useTransition);
         }
         if (isBoolean(options.useTransform)) {
-            this.factory.setUseTransform(options.useTransform);
+            this.rollProxy.setUseTransform(options.useTransform);
         }
         if (isBoolean(options.HWCompositing)) {
-            this.factory.setHWCompositing(options.HWCompositing);
+            this.rollProxy.setHWCompositing(options.HWCompositing);
         }
         if (isBoolean(options.tap)) {
             this.scope.setTapable(options.tap);
@@ -266,7 +264,7 @@ export default class IRoll {
         listener(this.scope.getScrollElement(), 'MSTransitionEnd', this);
     }
     initRoll() {
-        this.rollProxy.build(this.factory.build(this.scope));
+        this.rollProxy.build(this.scope);
     }
     /**
      * initializer
@@ -277,6 +275,30 @@ export default class IRoll {
         this.scrollTo(this.context.getStartX(), this.context.getStartY(), 0, this.rollProxy.getAnimation());
     }
     /**
+     * scrollToElement
+     */
+    scrollToElement(el, time, offsetX, offsetY, ease) {
+        el = DomKit.getElement(el);
+        let pos = DomKit.offset(el);
+        const wrapElement = this.scope.getWrapElement();
+        const wrapOffset = DomKit.offset(wrapElement);
+        pos.x -= wrapOffset.x;
+        pos.y -= wrapOffset.y;
+        if (offsetX === true) {
+            offsetX = Math.round(el.offsetWidth / 2 - wrapElement.offsetWidth / 2);
+        }
+        if (offsetY === true) {
+            offsetY = Math.round(el.offsetHeight / 2 - wrapElement.offsetHeight / 2);
+        }
+        pos.x -= offsetX || 0;
+        pos.y -= offsetY || 0;
+        pos = this.scope.adjustPosition(pos);
+        if (!ease) {
+            ease = this.rollProxy.getAnimation();
+        }
+        this.scrollTo(pos.x, pos.y, time, ease);
+    }
+    /**
      *
      * @param x
      * @param y
@@ -285,6 +307,26 @@ export default class IRoll {
      */
     scrollTo(x, y, time, ease) {
         this.rollProxy.scrollTo(x, y, time, ease);
+    }
+    /**
+     *
+     * @param x
+     * @param y
+     */
+    translate(x, y) {
+        this.rollProxy.translate(x, y);
+    }
+    /**
+     * on
+     */
+    on(name, fn) {
+        this.notify.on(name, fn);
+    }
+    /**
+     * off
+    */
+    off(name, fn) {
+        this.notify.off(name, fn);
     }
     /**
      * destory

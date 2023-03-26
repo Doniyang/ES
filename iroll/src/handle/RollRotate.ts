@@ -1,6 +1,6 @@
 import Attribute from "../attribute/Attribute";
 import Scope from "../scope/Scope";
-import RollProxy from "../translate/RollProxy";
+import RollProxy from "../transform/RollProxy";
 import Digitalizer from "./Digitalizer";
 
 export default class RollRotate implements Digitalizer {
@@ -73,7 +73,6 @@ export default class RollRotate implements Digitalizer {
 
         deltaX = this.calculate(deltaX, 1, scope.getMouseWheelDirection());
         deltaY = this.calculate(deltaY, 1, scope.getMouseWheelDirection());
-        ;
 
         if (!scope.isVScroll()) {
             deltaY = deltaY;

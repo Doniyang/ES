@@ -2,7 +2,7 @@ import {isString, Quadratic} from "@niyang-es/toolkit";
 import Attribute from "../attribute/Attribute";
 import Scope from "../scope/Scope";
 import {DateKit, EventKit} from "../shared";
-import RollProxy from "../translate/RollProxy";
+import RollProxy from "../transform/RollProxy";
 import Digitalizer from "./Digitalizer";
 
 export default class RollStop implements Digitalizer {
@@ -94,5 +94,4 @@ export default class RollStop implements Digitalizer {
         proxy.trigger('scroll:end', pos)
 
     }
-
 }

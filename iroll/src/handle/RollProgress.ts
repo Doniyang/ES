@@ -1,6 +1,6 @@
 import Scope from "../scope/Scope";
 import Attribute from "../attribute/Attribute";
-import RollProxy from "../translate/RollProxy";
+import RollProxy from "../transform/RollProxy";
 import Digitalizer from "./Digitalizer";
 import {DateKit, EventKit, Probe} from "../shared";
 
@@ -143,7 +143,7 @@ export default class RollProgress implements Digitalizer {
         attrs.setState(2);
 
         proxy.translate(newX, newY);
-
+        
         if (this.isLarger((timestamp - attrs.getStartTime()), 300)) {
             attrs.setStartTime(timestamp)
             attrs.setOrigin(pos.x, pos.y)

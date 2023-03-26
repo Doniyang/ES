@@ -2,7 +2,7 @@ import Notification from './Notification'
 import ClassicEvent from '../event/ClassicEvent';
 import Stack from './Stack';
 import Target from './Target';
-import { isBoolean } from 'node_modules/@niyang-es/toolkit/typings/index';
+import { isBoolean } from '@niyang-es/toolkit';
 
 export default class Notifier extends Notification<ClassicEvent> {
   private map: Map<string, Stack<ClassicEvent>>;
@@ -36,7 +36,7 @@ export default class Notifier extends Notification<ClassicEvent> {
   off(name: string, fn?: NotifierKit.NotifyEventCallback<ClassicEvent>,options?:boolean|EventKit.AddEventListenerParms): void {
     if (fn === undefined) { this.map.delete(name); return; }
     const set: Stack<ClassicEvent> | undefined = this.map.get(name)
-    if (!!set) {set.delete(new Target(fn,this.parse(options)))}
+    if (!!set) {set.remove(fn,this.parse(options)) }
   }
   /**
    * event listener or not
@@ -46,7 +46,7 @@ export default class Notifier extends Notification<ClassicEvent> {
   has(name: string, fn?: NotifierKit.NotifyEventCallback<ClassicEvent>,options?:boolean|EventKit.AddEventListenerParms): boolean {
     if(this.map.has(name)){
           if(fn){
-              return !!this.map.get(name)?.has(new Target(fn,this.parse(options)))  
+              return !!this.map.get(name)?.includes(fn,this.parse(options))  
           }else{
             return true
           }
@@ -84,5 +84,4 @@ export default class Notifier extends Notification<ClassicEvent> {
   dispatch(evt: ClassicEvent, stack:Stack<ClassicEvent>, args: Array<NotifierKit.NotiyParams>): void {
     stack.forEach(evt,args,e=>!e.isStopPropagation)
   }
-
 }

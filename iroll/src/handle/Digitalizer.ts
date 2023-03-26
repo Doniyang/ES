@@ -1,4 +1,4 @@
-import RollProxy from "../translate/RollProxy";
+import RollProxy from "../transform/RollProxy";
 import Attribute from "../attribute/Attribute";
 
 /**
