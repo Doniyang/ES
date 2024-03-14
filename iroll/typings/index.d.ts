@@ -1,107 +1,92 @@
-import { ClassicEvent, Notifier } from "typings/@niyang-es/notify"
-
-export * from "./roll.d.ts"
-
-interface Notify{
-   new():Notify
-   on(name: string, fn: ScrollKit.NotifyCallback<ClassicEvent>): void 
-   off(name: string, fn?: ScrollKit.NotifyCallback<ClassicEvent>): void
-    trigger(e: string | ClassicEvent, ...args: Array<ScrollKit.NotifyParams>): void
-}
-
-interface Scope{
-     readonly rootElement: HTMLElement;
-     new (el: HTMLElement):Scope
-     setContentSpecifiedIndex(specifiedIndex: number): void 
-     getProbe(): number 
-     setProbe(probe: number): void 
-     setScrollX(x: number): void 
-     setScrollY(y: number): void 
-     setScrollZ(z: number): void 
-     setScrollMode(mode: number): void 
-     setScrollPreventState(state: number): void 
-     setScrollDirection(x: number, y: number): void 
-     setBounce(bounce: boolean): void 
-     setBounceTime(time: number): void 
-     getPosition(): ScrollKit.Point 
-     setPosition(x: number, y: number): void 
-     isLockScrollX(): boolean
-     isLockScrollY(): boolean 
-     isNoLocked():boolean
-     isScrollX(): boolean
-     isScrollY():boolean
-     isFreeScroll(): boolean 
-     isXPrevent(): boolean
-     isYPrevent(): boolean 
-     isNoPrevent(): boolean
-     isBounce(): boolean 
-     getBounceTime(): number 
-     isHScroll(): boolean 
-     isVScroll(): boolean 
-     getWrapElement(): HTMLElement 
-     getScrollElement(): HTMLElement 
-     getCrisisPosition(): ScrollKit.Point
-     getMaxDistance(): ScrollKit.Point
-     getDirectionLockThreshold(): number 
-     setDirectionLockThreshold(threshold: number): void 
-     getMomentumThreshold(): number 
-     setMomentumThreshold(dist: number): void 
-     getMomentumPeroid(): number 
-     setMomentumPeroid(time: number): void 
-     setMomentum(flag: boolean):void
-     shouldMomentum(): boolean 
-     setDeceleration(deceleration: number): void 
-     getDeceleration(): number
-     setTapable(tapable: boolean): void 
-     isTapable(): boolean
-     setClickable(clickable: boolean)
-     isClickable(): boolean 
-     getComputedMomontum(start: number, duration: number, pos: number, isVertical: boolean): ScrollKit.Momentum
-     setMouseWheelSpeed(speed: number): void 
-     setMouseWheelDirection(dir: number): void 
-     getMouseWheelSpeed(): number 
-     getMouseWheelDirection(): number
- 
-}
-interface Digitalizer { 
-    getScope():Scope;
-    scrollTo(x: number, y: number, time: number, easing?: string | ScrollKit.Algorithm): void;
-    translate(x: number, y: number): void;
-    getState(): number;
+declare class Scope {
+    constructor(el: HTMLElement);
+    merge(options: RollKit.Options): void;
+    getRootElement(): HTMLElement;
+    getRollElement(): HTMLElement;
+    isHorizontalScroll(): boolean;
+    isVerticalScroll(): boolean;
+    getMaxScrollX(): number;
+    getMaxScrollY(): number;
+    setBeta(x: number, y: number): void;
+    getBeta(): RollKit.Point;
+    setDelta(x: number, y: number): void;
+    getDelta(): RollKit.Point;
+    setTheta(x: number, y: number): void;
+    getTheta(): RollKit.Point;
+    setEta(x: number, y: number): void;
+    getEta(): RollKit.Point;
+    setIota(x: number, y: number): void;
+    getIota(): RollKit.Point;
+    setKappa(x: number, y: number): void;
+    getZeta(): RollKit.Point;
+    setZeta(x: number, y: number): void;
+    updateMode(absDeltaX: number, absDeltaY: number): void;
+    setScrollStartTime(t: number): void;
+    setScrollStopTime(t: number): void;
     setState(state: number): void;
-    getPosition(): ScrollKit.Point;
-    getComputedPosition(): ScrollKit.Point;
-    getAnimation(): string | ScrollKit.Algorithm;
-    stop(): void;
-    resetPosition(): void
+    getState(): number;
+    setMode(mode: number): void;
+    setStatus(status: number): void;
+    getStatus(): number;
+    getResizePolling(): number;
+    getMouseWheelSpeed(): number;
+    getMouseWheelFactor(): number;
+    getMouseWheelTime(): number;
+    getProbeType(): number;
+    getTaskTime(): number;
+    getBounceTime():number;
+    directionXCalc(duration: number, destination: number): RollKit.Momentum;
+    directionYCalc(duration: number, destination: number): RollKit.Momentum;
+    isSupportTransition(): boolean;
+    isSupportTransform(): boolean;
+    isSupportHardFast(): boolean;
+    isSpuuort3D(): boolean;
+    isFocusOnWrap(): boolean;
+    isSupportWheel(): any;
+    isSupportPrevent(): any;
+    isLockScrollX(): boolean;
+    isLockScrollY(): boolean;
+    isPreventScrollX(): boolean;
+    isPreventScrollY(): boolean;
+    isStopPropagation(): boolean;
+    isSupportBouce(): boolean;
+    isSupportClick(): boolean;
+    isSupportTap(): boolean;
+    isSupportFlick(duration: number, absDistX: number, absDistY: number): boolean;
+    isSupportMomentum(duration: number, absDistX: number, absDistY: number): boolean;
+    isOutBoundary(): boolean;
+    isInvalidSlip(timestamp: number, absThetaX: number, absThetaY: number): boolean;
+    isValidSlip(timestamp: number): boolean;
+    isSupportSnap(): boolean;
 }
 
-interface IFactory<T>{
-  setUseTransition(useTransition: boolean): void
-  setUseTransform(useTransform: boolean):void
-  setHWCompositing(HWCompositing: boolean):void
-   build(scope:Scope,notify:Notify):T;
+declare interface Transform {
+    translate(x: number, y: number): void;
+    getComputedPosition(): RollKit.Point;
+    destory(): void
 }
 
-interface RollProxy extends IFactory<void>,Digitalizer{}
+declare class Notify {
+    constructor();
+    on(name: string, fn: RollKit.NotifyCallback<any>): void;
+    off(name: string, fn?: RollKit.NotifyCallback<any>): void;
+    trigger(e: string | ClassicEvent, ...args: Array<RollKit.NotifyParams>): void;
+}
+declare class Platform {
+    constructor(scope: Scope);
 
-interface Context{
-    new(proxy: RollProxy):Context
-    setStart(x: number, y: number) 
-    getStartX(): number 
-    getStartY(): number 
-    setState(state: number) 
-    getState(): number 
-    execute(e: Event, cmd: string) 
-    destroy()
+    translate(x: number, y: number): void;
+    scrollTo(x: number, y: number, time: number, ease?: RollKit.Animation)
+    on(name: string, fn: any): void
+    off(name: string, fn?: any): void
+    trigger(e: string, ...args: Array<any>): void
+    stop(): void
+    reset(): void
+}
+
+declare interface Digitalizer {
+    attain(state: number): boolean;
+    execute(e: Event, scope: Scope, platform: Platform): void
 }
 
 
-declare interface IRoll {
-    new(wrapper: ScrollKit.ElementWrapper, options: ScrollKit.Options):IRoll
-    scrollTo(x: number, y: number, time: number, ease: string | ScrollKit.Algorithm);
-    translate(x:number,y:number):void
-    destory():void
-    on(name:string,fn:ScrollKit.NotifyCallback<ClassicEvent>):void
-    off(name:string,fn:ScrollKit.NotifyCallback<ClassicEvent>):void
-}

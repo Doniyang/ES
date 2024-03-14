@@ -1,11 +1,8 @@
-import RollProxy from "../transform/RollProxy";
-import Attribute from "../attribute/Attribute";
 
 /**
  * @description
  */
 export default interface Digitalizer {
     attain(state: number): boolean;
-
-    execute(e: Event, attrs: Attribute, proxy: RollProxy): void
+    execute(e: Event,scope:Scope,platform:Platform): void
 }

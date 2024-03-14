@@ -6,7 +6,7 @@ export default class EventKit {
 
     public static tap(e: TouchEvent | MouseEvent, name: string) {
         let point = this.isTouchEvent(e) ? e.touches.item(0) : e
-        const evt: ScrollKit.CustomEvent = document.createEvent('Event');
+        const evt: RollKit.CustomEvent = document.createEvent('Event');
         evt.initEvent(name, true, true)
         evt.pageX = point?.pageX;
         evt.pageY = point?.pageY;
@@ -14,14 +14,24 @@ export default class EventKit {
     }
 
     public static click(e: MouseEvent | TouchEvent, name: string) {
-        let target: ScrollKit.ElementEventTarget = (e.target as ScrollKit.ElementEventTarget), evt;
+        let target: RollKit.ElementEventTarget = (e.target as RollKit.ElementEventTarget), ev: RollKit.RollCustomEvent;
         if (!(/(SELECT|INPUT|TEXTAREA)/i).test((target.tagName as string))) {
-            evt = document.createEvent('MouseEvents');
-            evt.initMouseEvent(name, true, true, (e?.view as Window), 1,
-                (target.screenX as number), (target.screenY as number), (target.clientX as number), (target.clientY as number),
-                e.ctrlKey, e.altKey, e.shiftKey, e.metaKey,
-                0, null);
-            target?.dispatchEvent(evt);
+            ev  = document.createEvent(window.MouseEvent ? 'MouseEvents' : 'Event');
+			ev.initEvent('click', true, true);
+			ev.view = e.view || window;
+			ev.detail = 1;
+			ev.screenX = target.screenX || 0;
+			ev.screenY = target.screenY || 0;
+			ev.clientX = target.clientX || 0;
+			ev.clientY = target.clientY || 0;
+			ev.ctrlKey = !!e.ctrlKey;
+			ev.altKey = !!e.altKey;
+			ev.shiftKey = !!e.shiftKey;
+			ev.metaKey = !!e.metaKey;
+			ev.button = 0;
+			ev.relatedTarget = null;
+			ev._constructed = true;
+			target.dispatchEvent(ev);
         }
     }
 }

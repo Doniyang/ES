@@ -1,12 +1,3 @@
-/**
- * @module coordinate
- * @package axis
- * @class Axis
- * @constructor
- * @classdesc a series of point in coordinate
- * @author niyang
- * @description {x,y,z}
- */
 export default class Axis {
     constructor() {
         this.axisX = 0;

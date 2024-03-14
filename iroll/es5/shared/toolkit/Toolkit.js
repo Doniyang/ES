@@ -1,11 +1,6 @@
 export default class ToolKit {
-    /**
-     * @method isBadAndroid
-     * @description
-     */
     static isBadAndroid() {
         let appVersion = window.navigator.appVersion;
-        // Android browser is not a chrome browser.
         if (/Android/.test(appVersion) && !(/Chrome\/\d/.test(appVersion))) {
             let safariVersion = appVersion.match(/Safari\/(\d+.\d)/);
             if (safariVersion && typeof safariVersion === "object" && safariVersion.length >= 2) {
@@ -18,5 +13,8 @@ export default class ToolKit {
         else {
             return false;
         }
+    }
+    static isLessThan(a, b) {
+        return a < b;
     }
 }

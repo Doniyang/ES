@@ -12,11 +12,24 @@ export default class EventKit {
         (_a = e.target) === null || _a === void 0 ? void 0 : _a.dispatchEvent(evt);
     }
     static click(e, name) {
-        let target = e.target, evt;
+        let target = e.target, ev;
         if (!(/(SELECT|INPUT|TEXTAREA)/i).test(target.tagName)) {
-            evt = document.createEvent('MouseEvents');
-            evt.initMouseEvent(name, true, true, e === null || e === void 0 ? void 0 : e.view, 1, target.screenX, target.screenY, target.clientX, target.clientY, e.ctrlKey, e.altKey, e.shiftKey, e.metaKey, 0, null);
-            target === null || target === void 0 ? void 0 : target.dispatchEvent(evt);
+            ev = document.createEvent(window.MouseEvent ? 'MouseEvents' : 'Event');
+            ev.initEvent('click', true, true);
+            ev.view = e.view || window;
+            ev.detail = 1;
+            ev.screenX = target.screenX || 0;
+            ev.screenY = target.screenY || 0;
+            ev.clientX = target.clientX || 0;
+            ev.clientY = target.clientY || 0;
+            ev.ctrlKey = !!e.ctrlKey;
+            ev.altKey = !!e.altKey;
+            ev.shiftKey = !!e.shiftKey;
+            ev.metaKey = !!e.metaKey;
+            ev.button = 0;
+            ev.relatedTarget = null;
+            ev._constructed = true;
+            target.dispatchEvent(ev);
         }
     }
 }

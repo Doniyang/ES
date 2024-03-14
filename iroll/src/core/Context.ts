@@ -1,47 +1,44 @@
-import RollFactory from "../handle/RollFactory";
-import Attribute from "../attribute/Attribute";
-import Digitalizer from "../handle/Digitalizer";
-import RollProxy from "../transform/RollProxy";
-
-export default class Context {
-    private attrs: Attribute;
-    private facotry: RollFactory;
-    private proxy: RollProxy;
-
-    constructor(proxy: RollProxy) {
-        this.attrs = new Attribute();
-        this.facotry = new RollFactory();
-        this.proxy = proxy;
+import RollMovingFactory from "../handle/moving/RollMovingFactory";
+import RollStartFactory from "../handle/start/RollStartFactory";
+import RollStopFactory from "../handle/stop/RollStopFactory";
+import RollRefreshFactory from "../handle/refresh/RollRefreshFactory";
+import RollDoneFactory from "../handle/done/RollDoneFactory";
+import RollSpinningFactory from "../handle/spinning/RollSpinningFactory";
+export default class Context{
+    private readonly scope:Scope
+    
+    constructor(scope:Scope){
+        this.scope = scope
     }
 
-    setStart(x: number, y: number) {
-        this.attrs.setOrigin(x, y)
+    execute(e:Event,cmd:string,platform:Platform){
+        switch (cmd) {
+            case 'start':
+                const start:Digitalizer = RollStartFactory.getInstance()
+                if(start.attain(this.scope.getState()))  start.execute(e,this.scope,platform)
+                break
+            case 'move':
+                const move:Digitalizer = RollMovingFactory.getInstance()
+                if(move.attain(this.scope.getState())) move.execute(e,this.scope,platform)
+                break
+            case 'stop':
+                const stop:Digitalizer = RollStopFactory.getInstance()
+                if(stop.attain(this.scope.getState())) stop.execute(e,this.scope,platform)
+                break
+            case 'resize':
+                const refresh:Digitalizer = RollRefreshFactory.getInstance()
+                if(refresh.attain(this.scope.getState()))  refresh.execute(e,this.scope,platform)
+                break
+            case 'done':
+                const done:Digitalizer = RollDoneFactory.getInstance()
+                if(done.attain(this.scope.getState())) done.execute(e,this.scope,platform) 
+                break
+            case 'rolling':
+                const rolling:Digitalizer = RollSpinningFactory.getInstance() 
+                if(rolling.attain(this.scope.getState())) rolling.execute(e,this.scope,platform)
+                break   
+            
+        }       
+               
     }
-
-    getStartX(): number {
-        return this.attrs.getOriginX()
-    }
-
-    getStartY(): number {
-        return this.attrs.getOriginY()
-    }
-
-    setState(state: number) {
-        this.attrs.setState(state)
-    }
-
-    getState(): number {
-        return this.attrs.getState()
-    }
-
-    execute(e: Event, cmd: string) {
-        let handle: Digitalizer = this.facotry.build(cmd)
-        if (handle.attain(this.getState())) {
-            handle.execute(e, this.attrs, this.proxy)
-        }
-    }
-
-    destroy() {
-        this.facotry.destroy()
-    }
-}
+}   

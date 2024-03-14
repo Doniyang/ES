@@ -17,4 +17,13 @@ export default class ToolKit {
             return false;
         }
     }
+    /**
+     * @description a < b
+     * @param a 
+     * @param b 
+     * @returns boolean
+     */ 
+    static isLessThan(a:number,b:number){
+        return a < b
+    }
 }
