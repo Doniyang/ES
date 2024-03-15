@@ -2,6 +2,9 @@ import Feature from "../Feature"
 
 export default class Flick extends Feature{
     private time:number
+    /**
+     * @name distance
+     */
     private distance:number
 
     constructor(){

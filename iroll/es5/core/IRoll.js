@@ -12,6 +12,8 @@ export class IRoll {
     initializer(options) {
         this.scope.merge(options);
         this.attach();
+        const pos = this.scope.getZeta();
+        this.scrollTo(pos.x, pos.y, 0);
     }
     isSupportTouch() {
         return 'ontouchstart' in window;
@@ -128,9 +130,36 @@ export class IRoll {
     off(name, fn) {
         this.platform.off(name, fn);
     }
+    scrollToElement(el, time, offsetX, offsetY, easing) {
+        if (!el) {
+            return void 0;
+        }
+        const rootElement = this.scope.getRootElement();
+        const node = DomKit.getElement(el);
+        let pos = DomKit.offset(node);
+        const wrap = DomKit.offset(rootElement);
+        let newX = pos.x - wrap.x;
+        let newY = pos.y - wrap.y;
+        if (offsetX === true) {
+            offsetX = Math.round(node.offsetWidth / 2 - rootElement.offsetWidth / 2);
+        }
+        if (offsetY === true) {
+            offsetY = Math.round(node.offsetHeight / 2 - rootElement.offsetHeight / 2);
+        }
+        newX -= offsetX || 0;
+        newY -= offsetY || 0;
+        newX = Math.max(this.scope.getMaxScrollX(), Math.min(0, newX));
+        newY = Math.max(this.scope.getMaxScrollY(), Math.min(0, newY));
+        this.scrollTo(newX, newY, time, easing);
+    }
     scrollTo(x, y, time, ease) {
         this.platform.scrollTo(x, y, time, ease);
     }
+    translate(x, y) {
+        this.platform.translate(x, y);
+    }
     destory() {
+        this.platform.destory();
+        this.detach();
     }
 }

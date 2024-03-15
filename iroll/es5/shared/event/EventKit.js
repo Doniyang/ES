@@ -12,24 +12,32 @@ export default class EventKit {
         (_a = e.target) === null || _a === void 0 ? void 0 : _a.dispatchEvent(evt);
     }
     static click(e, name) {
-        let target = e.target, ev;
+        let target = e.target;
         if (!(/(SELECT|INPUT|TEXTAREA)/i).test(target.tagName)) {
-            ev = document.createEvent(window.MouseEvent ? 'MouseEvents' : 'Event');
-            ev.initEvent('click', true, true);
-            ev.view = e.view || window;
-            ev.detail = 1;
-            ev.screenX = target.screenX || 0;
-            ev.screenY = target.screenY || 0;
-            ev.clientX = target.clientX || 0;
-            ev.clientY = target.clientY || 0;
-            ev.ctrlKey = !!e.ctrlKey;
-            ev.altKey = !!e.altKey;
-            ev.shiftKey = !!e.shiftKey;
-            ev.metaKey = !!e.metaKey;
-            ev.button = 0;
-            ev.relatedTarget = null;
-            ev._constructed = true;
-            target.dispatchEvent(ev);
+            if (['mouseup', 'mousecancel'].includes(e.type)) {
+                let ev = new MouseEvent(name, {
+                    view: e.view || window,
+                    detail: 1,
+                    screenX: target.screenX || 0,
+                    screenY: target.screenY || 0,
+                    clientX: target.clientX || 0,
+                    clientY: target.clientY || 0,
+                    ctrlKey: !!e.ctrlKey,
+                    altKey: !!e.altKey,
+                    shiftKey: !!e.shiftKey,
+                    metaKey: !!e.metaKey,
+                    button: 0,
+                    relatedTarget: null
+                });
+                target.dispatchEvent(ev);
+            }
+            else if (['touchend', 'touchcancel'].includes(e.type)) {
+                let ev = new UIEvent(name, {
+                    view: e.view || window,
+                    detail: 1
+                });
+                target.dispatchEvent(ev);
+            }
         }
     }
 }

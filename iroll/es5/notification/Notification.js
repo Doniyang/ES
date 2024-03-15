@@ -12,4 +12,7 @@ export default class Notification {
     trigger(e, ...args) {
         this.notify.notify(e, ...args);
     }
+    destory() {
+        this.notify.clean();
+    }
 }

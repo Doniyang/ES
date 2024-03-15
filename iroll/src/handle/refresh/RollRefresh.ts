@@ -1,24 +1,36 @@
 import { State } from "../../shared";
 
-export default class RollRefresh implements Digitalizer{
+export default class RollRefresh implements Digitalizer {
+    /**
+     * @name timeId
+     */
     private timeId: number
-    
-    constructor(){
+
+    constructor() {
         this.timeId = 0
     }
-
-    attain(state: number): boolean {
+    /**
+     * @method attain
+     * @param state 
+     * @returns 
+     */  
+    public attain(state: number): boolean {
         return state === State.None
     }
-    execute(e: Event, scope: Scope, platform: Platform): void {
-        
+    /**
+     * @method execute
+     * @param e 
+     * @param scope 
+     * @param platform 
+     */
+    public execute(e: Event, scope: Scope, platform: Platform): void {
+
         scope.setState(State.None)
 
         platform.trigger('refresh')
-        
-        if (scope.isOutBoundary()) {
-            platform.reset()
-        }
+        if(this.timeId) clearTimeout(this.timeId)   
+        this.timeId = setTimeout(()=>{
+           platform.reset()
+        },scope.getResizePolling())
     }
-    
 }

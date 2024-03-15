@@ -44,4 +44,10 @@ export default class Notification {
     public trigger(e: string | ClassicEvent, ...args: Array<RollKit.NotifyParams>): void {
         this.notify.notify(e, ...args)
     }
+    /**
+     * @method destory
+     */
+    public destory():void {
+        this.notify.clean()
+    }
 }

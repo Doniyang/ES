@@ -15,6 +15,4 @@ export default class Position {
         rollElement.style.setProperty('top', y + 'px');
         this.scope.setZeta(x, y);
     }
-    destory() {
-    }
 }

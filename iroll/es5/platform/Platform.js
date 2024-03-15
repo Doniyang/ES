@@ -66,4 +66,11 @@ export default class Platform {
             this.buildAnimation();
         (_a = this.animation) === null || _a === void 0 ? void 0 : _a.refresh();
     }
+    destory() {
+        var _a;
+        (_a = this.animation) === null || _a === void 0 ? void 0 : _a.destory();
+        this.transform = null;
+        this.animation = null;
+        this.notify.destory();
+    }
 }

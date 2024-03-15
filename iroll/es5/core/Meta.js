@@ -45,13 +45,14 @@ export default class Meta {
         }
         return this;
     }
-    ready() {
+    ready(callback) {
         if (this.isSupportPrevent()) {
             this.prevent.setSupport(this.eventPassthrough === "none");
         }
         this.scrollX = this.eventPassthrough === "horizontal" ? false : this.scrollX;
         this.scrollY = this.eventPassthrough === "vertical" ? false : this.scrollY;
         this.directionLockThreshold = ["horizontal", "vertical"].some(cde => cde === this.eventPassthrough) ? 0 : this.directionLockThreshold;
+        callback.call(this, this.startX, this.startY);
     }
     getProbeType() {
         return this.probeType;

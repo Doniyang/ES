@@ -69,13 +69,14 @@ export default class Meta{
         return this
     }
 
-    public ready(){
+    public ready(callback:RollKit.Motion){
        if(this.isSupportPrevent()){
           this.prevent.setSupport(this.eventPassthrough === EventPassthrough.None)
        } 
        this.scrollX = this.eventPassthrough === EventPassthrough.Horizontal? false : this.scrollX
         this.scrollY = this.eventPassthrough === EventPassthrough.Vertical ? false : this.scrollY
         this.directionLockThreshold = [EventPassthrough.Horizontal,EventPassthrough.Vertical].some(cde=> cde === this.eventPassthrough) ? 0 : this.directionLockThreshold  
+        callback.call(this,this.startX,this.startY)
     }
     
     public getProbeType():number {

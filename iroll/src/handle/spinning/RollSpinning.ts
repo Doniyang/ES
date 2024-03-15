@@ -4,10 +4,25 @@ import { State, ToolKit, Direction } from "../../shared";
 import Digitalizer from "../Digitalizer";
 
 export default class RollSpinning implements Digitalizer {
+    /**
+     * @name delay
+     */
     private readonly delay: number
+    /**
+     * @name delay
+     */
     private strip: boolean
+    /**
+     * @name regainTId
+     */
     private regainTId: number
+    /**
+     * @name eTId
+     */
     private eTId: number
+    /**
+     * @name propagation
+     */
     private propagation: StopPropagationFilter
     constructor() {
         this.delay = 400
@@ -16,15 +31,26 @@ export default class RollSpinning implements Digitalizer {
         this.eTId = 0
         this.propagation = new StopPropagationFilter()
     }
-
-    private isStrip() {
+    /**
+     * @method isStrip
+     * @returns 
+     */  
+    private isStrip():boolean{
         return this.strip
     }
-
+    /**
+     * @method setStrip
+     * @param strip 
+     */
     private setStrip(strip: boolean) {
         this.strip = strip
     }
-
+    /**
+     * @method regain
+     * @param isActived 
+     * @param pos 
+     * @param platform 
+     */
     private regain(isActived: boolean, pos: RollKit.Point, platform: Platform) {
         clearTimeout(this.regainTId)
         this.regainTId = setTimeout(() => {
@@ -32,6 +58,12 @@ export default class RollSpinning implements Digitalizer {
             this.setStrip(true)
         }, this.delay)
     }
+    /**
+     * @method calculation
+     * @param e 
+     * @param speed 
+     * @returns 
+     */
     private calculation(e: WheelEvent, speed: number): RollKit.Point {
         let wheelDeltaX = 0;
         let wheelDeltaY = 0;
@@ -61,13 +93,21 @@ export default class RollSpinning implements Digitalizer {
         }
         return { x: wheelDeltaX, y: wheelDeltaY }
     }
-
-
-    attain(state: number): boolean {
+    /**
+     * @method attain
+     * @param state 
+     * @returns 
+     */ 
+    public attain(state: number): boolean {
         return state === State.None
     }
-
-    execute(e: WheelEvent, scope: Scope, platform: Platform): void {
+    /**
+     * @method execute
+     * @param e 
+     * @param scope 
+     * @param platform 
+     */
+    public execute(e: WheelEvent, scope: Scope, platform: Platform): void {
 
         e.preventDefault()
         this.propagation.attach(scope)

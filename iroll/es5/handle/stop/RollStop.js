@@ -48,6 +48,7 @@ export default class RollStop {
             return void 0;
         }
         if (scope.isSupportFlick(duration, absDistX, absDistY)) {
+            EventKit.click(e, 'flick');
             scope.setState(0);
             return void 0;
         }

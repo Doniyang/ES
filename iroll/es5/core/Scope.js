@@ -47,7 +47,9 @@ export default class Scope {
         return this.gamma;
     }
     merge(options) {
-        this.meta.chuck(options).ready();
+        this.meta.chuck(options).ready((x, y) => {
+            this.setZeta(x, y);
+        });
     }
     getRootElement() {
         return this.rootElement;

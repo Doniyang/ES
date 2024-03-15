@@ -178,7 +178,9 @@ export default class Scope {
      * @param options 
      */
     public merge(options: RollKit.Options) {
-        this.meta.chuck(options).ready()
+        this.meta.chuck(options).ready((x:number,y:number)=>{
+            this.setZeta(x,y)
+        })
     }
     /**
      * @description get root element

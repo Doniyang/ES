@@ -74,22 +74,6 @@ declare namespace RollKit {
         pageY?: number
     }
 
-    export interface RollCustomEvent extends Event {
-        view?: any
-        detail?: number;
-        screenX?: number;
-        screenY?: number;
-        clientX?: number;
-        clientY?: number;
-        ctrlKey?: boolean;
-        altKey?: boolean;
-        shiftKey?: boolean;
-        metaKey?: boolean;
-        button?: number;
-        relatedTarget?: any;
-        _constructed?: boolean;
-    }
-
     export interface ElementEventTarget extends EventTarget {
         tagName?: string
         screenX?: number

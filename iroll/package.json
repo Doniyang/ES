@@ -1,6 +1,6 @@
 {
   "name": "@niyang-es/iroll",
-  "version": "1.0.20",
+  "version": "2.0.0",
   "description": "scroll for mobile",
   "main": "es5/core/IRoll",
   "typings": "typings/index.d.ts",

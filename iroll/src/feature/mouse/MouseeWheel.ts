@@ -15,7 +15,9 @@ export default class MouseeWheel  extends Feature{
      * @name invert
      */
     private invert: boolean
-
+    /**
+     * @name time
+     */ 
     private time:number
     /**
      * @constructor
@@ -31,20 +33,20 @@ export default class MouseeWheel  extends Feature{
      * @method getWheelSpeed
      * @description get speed of wheel
      */
-    getSpeed(): number {
+    public getSpeed(): number {
         return this.speed;
     }   
     /**
      * @method getFactor
      */
-    getFactor(): number {
+    public getFactor(): number {
         return this.invert ? -1 : 1;
     }
     /**
      * @method getTime
      * @returns 
      */ 
-    getTime():number{
+    public getTime():number{
         return this.time
     }
 }

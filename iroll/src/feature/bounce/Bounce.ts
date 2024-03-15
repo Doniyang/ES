@@ -1,6 +1,9 @@
 import Feature from "../Feature"
 
 export default class Bounce extends Feature{
+    /**
+     * @name time
+     */
     private time:number
 
     constructor(){

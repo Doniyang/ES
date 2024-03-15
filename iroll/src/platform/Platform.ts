@@ -1,4 +1,4 @@
-import {ClassicEvent} from '@niyang-es/notify'
+import { ClassicEvent } from '@niyang-es/notify'
 import { isNull } from "@niyang-es/toolkit"
 import Transform from "../transform/Transform"
 import Animation from "../animation/Animation"
@@ -8,81 +8,119 @@ import Notification from "../notification/Notification"
 import { State } from '../shared'
 
 
-export default class Platform{
-   private readonly scope:Scope
-
-   private transform: Transform| Position | null
-   
+export default class Platform {
+   /**
+    * @name scope
+    */
+   private readonly scope: Scope
+   /**
+    * @name transform
+    */
+   private transform: Transform | Position | null
+   /**
+    * @name animation
+    */
    private animation: Animation | Transition | null
+   /**
+    * @name notify
+    */
+   private notify: Notification
 
-   private notify:Notification
-
-   constructor(scope: Scope){
+   constructor(scope: Scope) {
       this.scope = scope
       this.transform = null
       this.animation = null
       this.notify = new Notification()
    }
-
-   private isSupportTransform():boolean {
+   /**
+    * @method isSupportTransform
+    * @returns 
+    */
+   private isSupportTransform(): boolean {
       return this.scope.isSupportTransform()
    }
-
-   private isSupportTransition ():boolean {
+   /**
+    * @method isSupportTransition
+    * @returns 
+    */
+   private isSupportTransition(): boolean {
       return this.scope.isSupportTransition()
    }
-   
+   /**
+    * @method buildTransform
+    */
    private buildTransform() {
-      this.transform = this.isSupportTransform()? new Transform(this.scope) : new Position(this.scope)
+      this.transform = this.isSupportTransform() ? new Transform(this.scope) : new Position(this.scope)
    }
-
-   private buildAnimation(){
-      if(isNull(this.transform)) this.buildTransform()
-      this.animation = this.isSupportTransition()? new Transition(this.scope,this.transform as NonNullable<Transform|Position>,this.notify) : new Animation(this.scope,this.transform as NonNullable<Transform|Position>,this.notify)   
+   /**
+    * @method buildAnimation
+    */
+   private buildAnimation() {
+      if (isNull(this.transform)) this.buildTransform()
+      this.animation = this.isSupportTransition() ? new Transition(this.scope, this.transform as NonNullable<Transform | Position>, this.notify) : new Animation(this.scope, this.transform as NonNullable<Transform | Position>, this.notify)
    }
-
-   private isNoChange(x:number,y:number) {
+   /**
+    * @method isNoChange
+    * @param x 
+    * @param y 
+    * @returns 
+    */
+   private isNoChange(x: number, y: number) {
       const pos = this.scope.getZeta()
       return x === pos.x && y === pos.y
    }
-
-   public on(name:string,fn:RollKit.NotifyCallback<ClassicEvent>){
-      this.notify.on(name,fn)
+   /**
+    * @method on
+    * @param name 
+    * @param fn 
+    */
+   public on(name: string, fn: RollKit.NotifyCallback<ClassicEvent>) {
+      this.notify.on(name, fn)
    }
-   
-   public off(name:string,fn?:RollKit.NotifyCallback<ClassicEvent>){
-      this.notify.off(name,fn)
+   /**
+  * @method off
+  * @param name 
+  * @param fn 
+  */
+   public off(name: string, fn?: RollKit.NotifyCallback<ClassicEvent>) {
+      this.notify.off(name, fn)
    }
 
    /**
-    * trigger
+    * @method trigger
+    * @param e 
+    * @param args 
     */
    public trigger(e: string | ClassicEvent, ...args: Array<RollKit.NotifyParams>) {
-      this.notify.trigger(e,...args)
+      this.notify.trigger(e, ...args)
    }
-
-   public translate(x:number,y:number){
-      if(isNull(this.transform)) this.buildTransform()
-      this.transform?.translate(x,y)
+   /**
+    * @method translate
+    * @param x 
+    * @param y 
+    */
+   public translate(x: number, y: number) {
+      if (isNull(this.transform)) this.buildTransform()
+      this.transform?.translate(x, y)
    }
 
    /**
     * scrollTo
     */
-   public scrollTo(x:number,y:number,time:number,ease?:RollKit.Animation) {
-      if(this.isNoChange(x,y)){ 
+   public scrollTo(x: number, y: number, time: number, ease?: RollKit.Animation) {
+      if (this.isNoChange(x, y)) {
          this.scope.setState(State.None)
-         return void 0 
+         return void 0
       }
-      if(isNull(this.animation)) this.buildAnimation()
-      this.animation?.scrollTo(x,y,time,ease)
+      if (isNull(this.animation)) this.buildAnimation()
+      this.animation?.scrollTo(x, y, time, ease)
    }
 
    /**
     * stop
     */
    public stop() {
-      if(isNull(this.animation)) this.buildAnimation()
+      if (isNull(this.animation)) this.buildAnimation()
       this.animation?.stop()
    }
 
@@ -90,7 +128,17 @@ export default class Platform{
     * reset
     */
    public reset() {
-      if(isNull(this.animation)) this.buildAnimation()
+      if (isNull(this.animation)) this.buildAnimation()
       this.animation?.refresh()
+   }
+
+   /**
+    * destory
+    */
+   public destory() {
+      this.animation?.destory()
+      this.transform = null
+      this.animation = null
+      this.notify.destory()
    }
 }

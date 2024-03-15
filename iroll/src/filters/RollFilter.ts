@@ -5,7 +5,10 @@ export default abstract class RollFilter{
         this.isAttached = false
     }
 
-
+    /**
+     * isSignal
+     * @param args 
+     */
     protected abstract isSignal(args:unknown):boolean
     /**
      * doFilter

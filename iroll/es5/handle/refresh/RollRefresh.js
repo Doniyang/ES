@@ -8,8 +8,10 @@ export default class RollRefresh {
     execute(e, scope, platform) {
         scope.setState(0);
         platform.trigger('refresh');
-        if (scope.isOutBoundary()) {
+        if (this.timeId)
+            clearTimeout(this.timeId);
+        this.timeId = setTimeout(() => {
             platform.reset();
-        }
+        }, scope.getResizePolling());
     }
 }

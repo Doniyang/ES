@@ -63,7 +63,6 @@ declare class Scope {
 declare interface Transform {
     translate(x: number, y: number): void;
     getComputedPosition(): RollKit.Point;
-    destory(): void
 }
 
 declare class Notify {

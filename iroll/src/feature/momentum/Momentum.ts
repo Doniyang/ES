@@ -43,7 +43,7 @@ export default class Momentum extends Feature {
      * @method getTime
      * @description get period
      */
-    getTime(): number {
+    public getTime(): number {
         return this.time
     }
 
@@ -51,7 +51,7 @@ export default class Momentum extends Feature {
      * @method setPeriod
      * @param period
      */
-    setTime(period: number): void {
+    public setTime(period: number): void {
         this.period = period
     }
 
@@ -59,7 +59,7 @@ export default class Momentum extends Feature {
      * @method getThreshold
      * @description get threshold value
      */
-    getDistance(): number {
+    public getDistance(): number {
         return this.distance
     }
 
@@ -67,18 +67,32 @@ export default class Momentum extends Feature {
      * @method setDistance
      * @param distance
      */
-    setDistance(distance: number): void {
+    public setDistance(distance: number): void {
         this.distance = distance
     }
-
-    setDeceleration(deceleration: number): void {
+    /**
+     * @method setDeceleration
+     * @param deceleration 
+     */ 
+    public setDeceleration(deceleration: number): void {
         this.deceleration = deceleration
     }
-
-    getDeceleration(): number {
+    /**
+     * @method getDeceleration
+     * @returns 
+     */ 
+    public getDeceleration(): number {
         return this.deceleration
     }
-
+    /**
+     * @method calculation
+     * @param current 
+     * @param start 
+     * @param time 
+     * @param margin 
+     * @param size 
+     * @returns 
+     */ 
     calculation(current: number, start: number, time: number, margin: number, size: number): RollKit.Momentum {
         let dist: number = current - start,
             speed: number = this.speed(dist, time),

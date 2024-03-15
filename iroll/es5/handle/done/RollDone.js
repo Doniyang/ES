@@ -1,7 +1,6 @@
 import { DomKit } from "../../shared";
 export default class RollDone {
-    constructor() {
-    }
+    constructor() { }
     attain(state) {
         return [2, 3].includes(state);
     }

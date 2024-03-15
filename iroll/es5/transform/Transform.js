@@ -22,6 +22,4 @@ export default class Transform {
         rollElement.style.setProperty(ruleKey, rule);
         this.scope.setZeta(x, y);
     }
-    destory() {
-    }
 }
