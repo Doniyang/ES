@@ -33,6 +33,12 @@ declare namespace RollKit {
         regular: Partial<Exception>
     }
 
+    export interface FlickOptions{
+        enabled: boolean
+        time: 200,
+        distance: 100,
+    }
+
     export interface Options {
         [key: string]: any,
         startX?: number
@@ -40,7 +46,7 @@ declare namespace RollKit {
         scrollX?: boolean
         scrollY?: boolean
         eventPassthrough?: string
-        clickable?: boolean
+        click?: boolean
         tap?: boolean
         bounce?: boolean | Partial<BounceOption>
         directionLockThreshold?: number
@@ -48,10 +54,11 @@ declare namespace RollKit {
         mouseeWheel?: boolean | Partial<MouseeWheelOption>
         momentum?: boolean | Partial<MomentumOption>
         deceleration?: number
-        probe?: number
+        probeType?: number
         specifiedIndex?: number
         stopPropagation?: boolean
         prevent?: boolean | PreventFilter
+        flick:boolean|FlickOptions
         HWCompositing?: boolean
         useTransition?: boolean
         useTransform?: boolean
