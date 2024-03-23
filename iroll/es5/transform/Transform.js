@@ -12,6 +12,15 @@ export default class Transform {
         y = +(matrixs[13] || matrixs[5]);
         return { x, y };
     }
+    rule() {
+        const ruleKey = 'transition-property';
+        const transition = PrefixStyle.style(ruleKey);
+        const valueKey = 'transform';
+        const transform = PrefixStyle.style(valueKey);
+        const rollElement = this.scope.getRollElement();
+        rollElement.style.setProperty(transition, transform);
+        rollElement.style.setProperty(ruleKey, valueKey);
+    }
     translate(x, y) {
         const ruleKey = 'transform';
         const transform = PrefixStyle.style(ruleKey);

@@ -72,6 +72,7 @@ export default class Transition implements Digitalizer {
         this.scope.setStatus(Status.Transiting)
         this.duration(time)
         this.animate(ease.style())
+        this.transform.rule()
         this.translate(x, y)
         if (this.isRunningRealTime(time)) this.probe()
         if (time === 0) {

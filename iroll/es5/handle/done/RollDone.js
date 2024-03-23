@@ -2,7 +2,7 @@ import { DomKit } from "../../shared";
 export default class RollDone {
     constructor() { }
     attain(state) {
-        return [2, 3].includes(state);
+        return 0 === state;
     }
     execute(e, scope, platform) {
         if (!DomKit.isSameElement(e.target, scope.getRollElement()) && scope.getStatus() !== 1) {

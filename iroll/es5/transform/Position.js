@@ -1,3 +1,4 @@
+import { PrefixStyle } from "@niyang-es/toolkit";
 export default class Position {
     constructor(scope) {
         this.scope = scope;
@@ -8,6 +9,13 @@ export default class Position {
         x = +marix.getPropertyValue('left').replace(/[^-\d.]/g, '');
         y = +marix.getPropertyValue('top').replace(/[^-\d.]/g, '');
         return { x, y };
+    }
+    rule() {
+        const ruleKey = 'transition-property';
+        const transition = PrefixStyle.style(ruleKey);
+        const rollElement = this.scope.getRollElement();
+        rollElement.style.setProperty(transition, 'top,left');
+        rollElement.style.setProperty(ruleKey, 'top,left');
     }
     translate(x, y) {
         const rollElement = this.scope.getRollElement();

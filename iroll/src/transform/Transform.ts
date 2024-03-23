@@ -24,6 +24,18 @@ export default class Transform implements Digitalizer{
         return { x, y }
     }
     /**
+     * set transition-property
+     */
+    public rule(): void {
+        const ruleKey = 'transition-property'
+        const transition = PrefixStyle.style(ruleKey)
+        const valueKey = 'transform'
+        const transform:string = PrefixStyle.style(valueKey);
+        const rollElement = this.scope.getRollElement()
+        rollElement.style.setProperty(transition,transform)
+        rollElement.style.setProperty(ruleKey,valueKey)
+    }
+    /**
      * @method translate
      * @param x 
      * @param y 

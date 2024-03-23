@@ -61,6 +61,7 @@ export default class Transition {
         this.scope.setStatus(1);
         this.duration(time);
         this.animate(ease.style());
+        this.transform.rule();
         this.translate(x, y);
         if (this.isRunningRealTime(time))
             this.probe();

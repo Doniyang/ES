@@ -61,6 +61,7 @@ declare class Scope {
 }
 
 declare interface Transform {
+    rule():void
     translate(x: number, y: number): void;
     getComputedPosition(): RollKit.Point;
 }

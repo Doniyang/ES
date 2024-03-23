@@ -55,7 +55,7 @@ export default class RollStop {
         scope.setState(3);
         platform.scrollTo(newX, newY, 0);
         let time = 0;
-        if (scope.isSupportMomentum(duration, absDistX, absDistX)) {
+        if (scope.isSupportMomentum(duration, absDistX, absDistY)) {
             let momentumX = scope.directionXCalc(duration, newX);
             let momentumY = scope.directionYCalc(duration, newY);
             newX = momentumX.destination;

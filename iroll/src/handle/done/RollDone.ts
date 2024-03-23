@@ -10,7 +10,7 @@ export default class RollDone implements Digitalizer {
      * @returns 
      */
     public attain(state: number): boolean {
-        return [State.Moving, State.Stop].includes(state)
+        return State.None === state
     }
     /**
      * @method execute

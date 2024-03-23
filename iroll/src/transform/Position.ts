@@ -1,3 +1,4 @@
+import { PrefixStyle } from "@niyang-es/toolkit";
 import Digitalizer from "./Digitalizer";
 
 export default class Position implements Digitalizer {
@@ -16,6 +17,16 @@ export default class Position implements Digitalizer {
     x = +marix.getPropertyValue('left').replace(/[^-\d.]/g, '');
     y = +marix.getPropertyValue('top').replace(/[^-\d.]/g, '');
     return { x, y }
+  }
+  /**
+   * set transition-property
+   */
+  public rule(): void {
+    const ruleKey = 'transition-property'
+    const transition = PrefixStyle.style(ruleKey)
+    const rollElement = this.scope.getRollElement()
+    rollElement.style.setProperty(transition, 'top,left')
+    rollElement.style.setProperty(ruleKey, 'top,left')
   }
   /**
     * @description translate to x,y
